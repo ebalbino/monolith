@@ -53,7 +53,7 @@ impl<T: Copy + PartialEq> Pool<T> {
 
     pub fn intern(&mut self, value: &T) -> Option<Intern<T>> {
         for intern in &self.lookup {
-            if unsafe { &*(intern.data as *const T) } == value {
+            if unsafe { *(intern.data as *const T) } == *value {
                 return Some(*intern);
             }
         }
@@ -91,8 +91,11 @@ impl StrPool {
 
     pub fn intern(&mut self, value: &str) -> Option<StrIntern> {
         for intern in &self.lookup {
-            if &**intern == value {
-                return Some(*intern);
+            if intern.len == value.len() {
+                let slice = unsafe { core::slice::from_raw_parts(intern.data, intern.len) };
+                if slice == value.as_bytes() {
+                    return Some(*intern);
+                }
             }
         }
 
@@ -143,9 +146,15 @@ mod tests {
         let c_intern = pool.intern(&a).unwrap();
         let d_intern = pool.intern(&b).unwrap();
 
-        assert_eq!(a_intern, c_intern);
-        assert_eq!(b_intern, d_intern);
-        assert_ne!(c_intern, d_intern);
+        assert_eq!(a_intern.data, c_intern.data);
+        assert_eq!(b_intern.data, d_intern.data);
+        assert_ne!(c_intern.data, d_intern.data);
+
+        let e = Test { x: 1, y: 2 };
+        let e_intern = pool.intern(&e).unwrap();
+        assert_eq!(a_intern.data, e_intern.data);
+        assert_eq!(c_intern.data, e_intern.data);
+        assert_eq!(*e_intern, e);
     }
 
     #[test]
@@ -157,13 +166,13 @@ mod tests {
         let a_intern = pool.intern(a).unwrap();
         let b_intern = pool.intern(b).unwrap();
 
-        assert_ne!(a_intern, b_intern);
+        assert_ne!(a_intern.data, b_intern.data);
 
         let c_intern = pool.intern(a).unwrap();
         let d_intern = pool.intern(b).unwrap();
 
-        assert_eq!(a_intern, c_intern);
-        assert_eq!(b_intern, d_intern);
-        assert_ne!(c_intern, d_intern);
+        assert_eq!(a_intern.data, c_intern.data);
+        assert_eq!(b_intern.data, d_intern.data);
+        assert_ne!(c_intern.data, d_intern.data);
     }
 }
