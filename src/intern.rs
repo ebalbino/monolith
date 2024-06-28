@@ -1,15 +1,35 @@
 use crate::arena::Arena;
-use core::ops::{Deref, DerefMut};
+use core::ops::{Deref};
+use std::cmp::PartialEq;
 
-pub struct StrInterner {
+pub struct Pool<T> {
     arena: Arena,
-    strings: Vec<StrIntern>,
+    lookup: Vec<Intern<T>>,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
+pub struct Intern<T> {
+    data: *const u8,
+    phantom: core::marker::PhantomData<T>,
+}
+
+pub struct StrPool {
+    arena: Arena,
+    lookup: Vec<StrIntern>,
+}
+
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct StrIntern {
-    str: *const u8,
+    data: *const u8,
     len: usize,
+}
+
+impl<T> Deref for Intern<T> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        unsafe { &*(self.data as *const T) }
+    }
 }
 
 impl Deref for StrIntern {
@@ -17,56 +37,85 @@ impl Deref for StrIntern {
 
     fn deref(&self) -> &Self::Target {
         unsafe {
-            let slice = std::slice::from_raw_parts(self.str, self.len);
+            let slice = core::slice::from_raw_parts(self.data, self.len);
             std::str::from_utf8_unchecked(slice)
         }
     }
 }
 
-impl DerefMut for StrIntern {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        unsafe {
-            let slice = std::slice::from_raw_parts_mut(self.str as *mut u8, self.len);
-            std::str::from_utf8_unchecked_mut(slice)
-        }
-    }
-}
-
-impl StrInterner {
-    pub fn new(size: usize) -> StrInterner {
-        StrInterner {
+impl<T: Copy + PartialEq> Pool<T> {
+    pub fn new(size: usize) -> Pool<T> {
+        Pool {
             arena: Arena::new(size),
-            strings: Vec::new(),
+            lookup: Vec::new(),
         }
     }
 
-    pub fn intern(&mut self, s: &str) -> StrIntern {
-        for intern in self.strings.iter() {
-            unsafe {
-                let slice = std::slice::from_raw_parts(intern.str, intern.len);
-                if slice == s.as_bytes() {
-                    return *intern;
-                }
+    pub fn intern(&mut self, value: &T) -> Option<Intern<T>> {
+        for intern in &self.lookup {
+            if unsafe { &*(intern.data as *const T) } == value {
+                return Some(*intern);
             }
         }
 
-        let len = s.len();
-        let mut ptr = self.arena.allocate::<u8>(len).unwrap();
+        let len = core::mem::size_of::<T>();
+        let ptr = self.arena.allocate(len)?;
 
-        ptr.copy_from_slice(s.as_bytes());
+        unsafe {
+            let data = ptr.as_ptr() as *mut T;
+            data.write(*value);
+        }
 
-        let intern = StrIntern {
-            str: ptr.as_ptr(),
-            len,
+        let intern = Intern {
+            data: ptr.as_ptr() as *const u8,
+            phantom: core::marker::PhantomData,
         };
 
-        self.strings.push(intern);
-        intern
+        self.lookup.push(intern);
+        Some(intern)
     }
 
     pub fn clear(&mut self) {
         self.arena.clear();
-        unsafe { self.strings.set_len(0) };
+        self.lookup.clear();
+    }
+}
+
+impl StrPool {
+    pub fn new(size: usize) -> StrPool {
+        StrPool {
+            arena: Arena::new(size),
+            lookup: Vec::new(),
+        }
+    }
+
+    pub fn intern(&mut self, value: &str) -> Option<StrIntern> {
+        for intern in &self.lookup {
+            if &**intern == value {
+                return Some(*intern);
+            }
+        }
+
+        let len = value.len();
+        let ptr = self.arena.allocate(len)?;
+
+        unsafe {
+            let data = ptr.as_ptr() as *mut u8;
+            data.copy_from(value.as_ptr(), len);
+        }
+
+        let intern = StrIntern {
+            data: ptr.as_ptr(),
+            len,
+        };
+
+        self.lookup.push(intern);
+        Some(intern)
+    }
+
+    pub fn clear(&mut self) {
+        self.arena.clear();
+        self.lookup.clear();
     }
 }
 
@@ -74,33 +123,47 @@ impl StrInterner {
 mod tests {
     use super::*;
 
+    #[derive(Debug, PartialEq, Clone, Copy)]
+    struct Test {
+        x: i32,
+        y: i32,
+    }
+
     #[test]
-    fn test_str_interner() {
-        let mut interner = StrInterner::new(1024);
+    fn test_pool() {
+        let mut pool = Pool::new(1024);
+        let a = Test { x: 1, y: 2 };
+        let b = Test { x: 3, y: 4 };
 
-        let s1 = interner.intern("hello");
-        let s2 = interner.intern("world");
+        let a_intern = pool.intern(&a).unwrap();
+        let b_intern = pool.intern(&b).unwrap();
 
-        assert_ne!(s1, s2);
+        assert_ne!(a_intern, b_intern);
 
-        let s3 = interner.intern("hello");
-        let s4 = interner.intern("world");
+        let c_intern = pool.intern(&a).unwrap();
+        let d_intern = pool.intern(&b).unwrap();
 
-        assert_eq!(s1, s3);
-        assert_eq!(s2, s4);
+        assert_eq!(a_intern, c_intern);
+        assert_eq!(b_intern, d_intern);
+        assert_ne!(c_intern, d_intern);
+    }
 
-        interner.clear();
+    #[test]
+    fn test_str_pool() {
+        let mut pool = StrPool::new(1024);
+        let a = "hello";
+        let b = "world";
 
-        let s5 = interner.intern("new");
-        let s6 = interner.intern("string");
+        let a_intern = pool.intern(a).unwrap();
+        let b_intern = pool.intern(b).unwrap();
 
-        assert_ne!(s1, s5);
-        assert_ne!(s2, s6);
+        assert_ne!(a_intern, b_intern);
 
-        let s7 = interner.intern("new");
-        let s8 = interner.intern("string");
+        let c_intern = pool.intern(a).unwrap();
+        let d_intern = pool.intern(b).unwrap();
 
-        assert_eq!(s5, s7);
-        assert_eq!(s6, s8);
+        assert_eq!(a_intern, c_intern);
+        assert_eq!(b_intern, d_intern);
+        assert_ne!(c_intern, d_intern);
     }
 }
