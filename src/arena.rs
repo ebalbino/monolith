@@ -43,10 +43,7 @@ impl Arena {
             let ptr = &mut self.data[offset] as *mut u8 as *mut T;
             self.offset = new_offset;
 
-            Some(ArenaHandle {
-                ptr: unsafe { NonNull::new_unchecked(ptr) },
-                len: count,
-            })
+            Some(ArenaHandle { ptr: unsafe { NonNull::new_unchecked(ptr) }, len: count })
         } else {
             None
         }
@@ -149,5 +146,58 @@ mod tests {
 
         assert!(p6.is_none());
         assert!(arena.is_full());
+    }
+
+    #[test]
+    fn test_arena_clear() {
+        let mut arena = Arena::new(1024);
+
+        let mut p1 : ArenaHandle<Point> = arena.allocate(1).unwrap();
+        let mut p2 : ArenaHandle<Point> = arena.allocate(1).unwrap();
+
+        p1[0] = Point { x: 1.0, y: 2.0 };
+        p2[0] = Point { x: 3.0, y: 4.0 };
+
+        assert_eq!(p1[0].x, 1.0);
+        assert_eq!(p1[0].y, 2.0);
+
+        assert_eq!(p2[0].x, 3.0);
+        assert_eq!(p2[0].y, 4.0);
+
+        assert_eq!(arena.occupied(), std::mem::size_of::<Point>() * 2);
+
+        arena.clear();
+        assert_eq!(arena.occupied(), 0);
+
+        let mut p3 : ArenaHandle<Point> = arena.allocate(1).unwrap();
+        let mut p4 : ArenaHandle<Point> = arena.allocate(1).unwrap();
+
+        p3[0] = Point { x: 5.0, y: 6.0 };
+        p4[0] = Point { x: 7.0, y: 8.0 };
+
+        assert_eq!(p3[0].x, 5.0);
+        assert_eq!(p3[0].y, 6.0);
+
+        assert_eq!(p4[0].x, 7.0);
+        assert_eq!(p4[0].y, 8.0);
+
+        assert_eq!(arena.occupied(), std::mem::size_of::<Point>() * 2);
+    }
+
+    #[test]
+    fn test_arena_handle_mut() {
+        let mut arena = Arena::new(1024);
+
+        let mut p : ArenaHandle<Point> = arena.allocate(1).unwrap();
+
+        for point in p.iter_mut() {
+            point.x = 1.0;
+            point.y = 2.0;
+        }
+
+        for point in p.iter() {
+            assert_eq!(point.x, 1.0);
+            assert_eq!(point.y, 2.0);
+        }
     }
 }

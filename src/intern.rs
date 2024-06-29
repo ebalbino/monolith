@@ -1,15 +1,18 @@
+use core::ops::Deref;
+use core::cmp::PartialEq;
+
 use crate::arena::Arena;
-use core::ops::{Deref};
-use std::cmp::PartialEq;
 
 pub struct Pool<T> {
     arena: Arena,
     lookup: Vec<Intern<T>>,
+    generation: u64,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Intern<T> {
     data: *const u8,
+    generation: u64,
     phantom: core::marker::PhantomData<T>,
 }
 
@@ -48,6 +51,7 @@ impl<T: Copy + PartialEq> Pool<T> {
         Pool {
             arena: Arena::new(size),
             lookup: Vec::new(),
+            generation: 0,
         }
     }
 
@@ -68,6 +72,7 @@ impl<T: Copy + PartialEq> Pool<T> {
 
         let intern = Intern {
             data: ptr.as_ptr() as *const u8,
+            generation: self.generation,
             phantom: core::marker::PhantomData,
         };
 
@@ -78,6 +83,15 @@ impl<T: Copy + PartialEq> Pool<T> {
     pub fn clear(&mut self) {
         self.arena.clear();
         self.lookup.clear();
+        self.generation += 1;
+    }
+
+    pub fn occupied(&self) -> usize {
+        self.arena.occupied()
+    }
+
+    pub fn len(&self) -> usize {
+        self.lookup.len()
     }
 }
 
@@ -120,6 +134,14 @@ impl StrPool {
         self.arena.clear();
         self.lookup.clear();
     }
+
+    pub fn occupied(&self) -> usize {
+        self.arena.occupied()
+    }
+
+    pub fn len(&self) -> usize {
+        self.lookup.len()
+    }
 }
 
 #[cfg(test)]
@@ -146,15 +168,28 @@ mod tests {
         let c_intern = pool.intern(&a).unwrap();
         let d_intern = pool.intern(&b).unwrap();
 
-        assert_eq!(a_intern.data, c_intern.data);
-        assert_eq!(b_intern.data, d_intern.data);
-        assert_ne!(c_intern.data, d_intern.data);
+        assert_eq!(a_intern, c_intern);
+        assert_eq!(b_intern, d_intern);
+        assert_ne!(c_intern, d_intern);
 
         let e = Test { x: 1, y: 2 };
         let e_intern = pool.intern(&e).unwrap();
-        assert_eq!(a_intern.data, e_intern.data);
-        assert_eq!(c_intern.data, e_intern.data);
+
+        assert_eq!(a_intern.deref(), e_intern.deref());
+        assert_eq!(c_intern.deref(), e_intern.deref());
         assert_eq!(*e_intern, e);
+
+        assert_eq!(pool.len(), 2);
+        assert_eq!(pool.occupied(), 16);
+
+        pool.clear();
+
+        assert_eq!(pool.len(), 0);
+        assert_eq!(pool.occupied(), 0);
+
+        let f = Test { x: 5, y: 6 };
+        let f_intern = pool.intern(&f).unwrap();
+        assert_ne!(a_intern, f_intern);
     }
 
     #[test]
@@ -166,13 +201,31 @@ mod tests {
         let a_intern = pool.intern(a).unwrap();
         let b_intern = pool.intern(b).unwrap();
 
-        assert_ne!(a_intern.data, b_intern.data);
+        assert_ne!(a_intern.deref(), b_intern.deref());
 
         let c_intern = pool.intern(a).unwrap();
         let d_intern = pool.intern(b).unwrap();
 
-        assert_eq!(a_intern.data, c_intern.data);
-        assert_eq!(b_intern.data, d_intern.data);
-        assert_ne!(c_intern.data, d_intern.data);
+        assert_eq!(a_intern.deref(), c_intern.deref());
+        assert_eq!(b_intern.deref(), d_intern.deref());
+        assert_ne!(c_intern.deref(), d_intern.deref());
+
+        assert_eq!(pool.len(), 2);
+        assert_eq!(pool.occupied(), 10);
+
+        pool.clear();
+
+        assert_eq!(pool.len(), 0);
+        assert_eq!(pool.occupied(), 0);
+
+        let e = "goodbye";
+        let f = "world";
+
+        let e_intern = pool.intern(e).unwrap();
+        let f_intern = pool.intern(f).unwrap();
+
+        assert_ne!(a_intern.deref(), e_intern.deref());
+        assert_ne!(b_intern.deref(), f_intern.deref());
+
     }
 }
