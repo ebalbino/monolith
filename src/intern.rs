@@ -1,5 +1,5 @@
-use core::ops::Deref;
 use core::cmp::PartialEq;
+use core::ops::Deref;
 
 use crate::arena::Arena;
 
@@ -226,6 +226,5 @@ mod tests {
 
         assert_ne!(a_intern.deref(), e_intern.deref());
         assert_ne!(b_intern.deref(), f_intern.deref());
-
     }
 }
