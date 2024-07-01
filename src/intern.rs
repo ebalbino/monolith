@@ -1,6 +1,5 @@
 use core::cmp::PartialEq;
 use core::ops::Deref;
-
 use crate::arena::Arena;
 
 pub struct Pool<T> {
