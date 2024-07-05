@@ -105,7 +105,7 @@ impl<'a> Arena {
         }
     }
 
-    pub fn clear(&mut self) {
+    pub fn clear(&self) {
         self.offset.set(0);
     }
 
