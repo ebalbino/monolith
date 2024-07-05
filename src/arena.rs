@@ -6,6 +6,7 @@ pub struct Arena {
     offset: Cell<usize>,
 }
 
+#[derive(Debug, PartialEq, Clone)]
 pub struct ArenaHandle<'a, T> {
     ptr: *mut  T,
     len: usize,
@@ -47,6 +48,54 @@ impl<'a> Arena {
             Some(ArenaHandle {
                 ptr,
                 len,
+                marker: core::marker::PhantomData,
+            })
+        } else {
+            None
+        }
+    }
+
+    pub fn push<T>(&'a self, value: T) -> Option<ArenaHandle<'a, T>> {
+        let size = std::mem::size_of::<T>();
+        let align = std::mem::align_of::<T>();
+        let offset = (self.offset.get() + align - 1) & !(align - 1);
+        let new_offset = offset + size;
+
+        if new_offset <= self.data.len() {
+            let ptr = &self.data[offset] as *const u8 as *mut T;
+            self.offset.set(new_offset);
+
+            unsafe {
+                ptr.write(value);
+            }
+
+            Some(ArenaHandle {
+                ptr,
+                len: 1,
+                marker: core::marker::PhantomData,
+            })
+        } else {
+            None
+        }
+    }
+
+    pub fn push_slice<T>(&'a self, values: &[T]) -> Option<ArenaHandle<'a, T>> {
+        let size = std::mem::size_of::<T>();
+        let align = std::mem::align_of::<T>();
+        let offset = (self.offset.get() + align - 1) & !(align - 1);
+        let new_offset = offset + (size * values.len());
+
+        if new_offset <= self.data.len() {
+            let ptr = &self.data[offset] as *const u8 as *mut T;
+            self.offset.set(new_offset);
+
+            unsafe {
+                ptr.copy_from_nonoverlapping(values.as_ptr(), values.len());
+            }
+
+            Some(ArenaHandle {
+                ptr,
+                len: values.len(),
                 marker: core::marker::PhantomData,
             })
         } else {
