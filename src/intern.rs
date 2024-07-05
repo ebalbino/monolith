@@ -1,6 +1,7 @@
 use core::cmp::PartialEq;
 use core::ops::Deref;
 use core::cell::RefCell;
+use alloc::vec::Vec;
 use crate::arena::Arena;
 
 pub struct StrPool<'a> {

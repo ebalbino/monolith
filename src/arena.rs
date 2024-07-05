@@ -1,5 +1,7 @@
 use core::ops::{Deref, DerefMut};
 use core::cell::Cell;
+use alloc::boxed::Box;
+use alloc::vec;
 
 pub struct Arena {
     data: Box<[u8]>,
@@ -17,13 +19,13 @@ impl<'a, T> Deref for ArenaHandle<'a, T> {
     type Target = [T];
 
     fn deref(&self) -> &Self::Target {
-        unsafe { std::slice::from_raw_parts(self.ptr, self.len) }
+        unsafe { core::slice::from_raw_parts(self.ptr, self.len) }
     }
 }
 
 impl<'a, T> DerefMut for ArenaHandle<'a, T> {
     fn deref_mut(&mut self) -> &mut Self::Target {
-        unsafe { std::slice::from_raw_parts_mut(self.ptr, self.len) }
+        unsafe { core::slice::from_raw_parts_mut(self.ptr, self.len) }
     }
 }
 
@@ -36,8 +38,8 @@ impl<'a> Arena {
     }
 
     pub fn allocate<T>(&'a self, len: usize) -> Option<ArenaHandle<'a, T>> {
-        let size = std::mem::size_of::<T>();
-        let align = std::mem::align_of::<T>();
+        let size = core::mem::size_of::<T>();
+        let align = core::mem::align_of::<T>();
         let offset = (self.offset.get() + align - 1) & !(align - 1);
         let new_offset = offset + (size * len);
 
@@ -56,8 +58,8 @@ impl<'a> Arena {
     }
 
     pub fn push<T>(&'a self, value: T) -> Option<ArenaHandle<'a, T>> {
-        let size = std::mem::size_of::<T>();
-        let align = std::mem::align_of::<T>();
+        let size = core::mem::size_of::<T>();
+        let align = core::mem::align_of::<T>();
         let offset = (self.offset.get() + align - 1) & !(align - 1);
         let new_offset = offset + size;
 
@@ -80,8 +82,8 @@ impl<'a> Arena {
     }
 
     pub fn push_slice<T>(&'a self, values: &[T]) -> Option<ArenaHandle<'a, T>> {
-        let size = std::mem::size_of::<T>();
-        let align = std::mem::align_of::<T>();
+        let size = core::mem::size_of::<T>();
+        let align = core::mem::align_of::<T>();
         let offset = (self.offset.get() + align - 1) & !(align - 1);
         let new_offset = offset + (size * values.len());
 
@@ -154,7 +156,7 @@ mod tests {
         assert_eq!(p2[0].x, 3.0);
         assert_eq!(p2[0].y, 4.0);
 
-        assert_eq!(arena.occupied(), std::mem::size_of::<Point>() * 2);
+        assert_eq!(arena.occupied(), core::mem::size_of::<Point>() * 2);
     }
 
     #[test]
@@ -181,12 +183,12 @@ mod tests {
             assert_eq!(entity.dummy, 0);
         }
 
-        assert_eq!(arena.occupied(), std::mem::size_of::<Entity>() * 10);
+        assert_eq!(arena.occupied(), core::mem::size_of::<Entity>() * 10);
     }
 
     #[test]
     fn test_full_arena() {
-        let mut arena = Arena::new(std::mem::size_of::<Point>() * 2);
+        let mut arena = Arena::new(core::mem::size_of::<Point>() * 2);
 
         let _p1: ArenaHandle<Point> = arena.allocate::<Point>(1).unwrap();
         let _p2: ArenaHandle<Point> = arena.allocate::<Point>(1).unwrap();
@@ -216,7 +218,7 @@ mod tests {
         assert_eq!(p2[0].x, 3.0);
         assert_eq!(p2[0].y, 4.0);
 
-        assert_eq!(arena.occupied(), std::mem::size_of::<Point>() * 2);
+        assert_eq!(arena.occupied(), core::mem::size_of::<Point>() * 2);
 
         arena.clear();
         assert_eq!(arena.occupied(), 0);
@@ -233,7 +235,7 @@ mod tests {
         assert_eq!(p4[0].x, 7.0);
         assert_eq!(p4[0].y, 8.0);
 
-        assert_eq!(arena.occupied(), std::mem::size_of::<Point>() * 2);
+        assert_eq!(arena.occupied(), core::mem::size_of::<Point>() * 2);
     }
 
     #[test]

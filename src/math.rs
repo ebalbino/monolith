@@ -1,4 +1,4 @@
-use std::default::Default;
+use core::default::Default;
 use glam::{IVec2, IVec3, IVec4, BVec4};
 
 pub type Vec2 = glam::Vec2;

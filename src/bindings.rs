@@ -2,11 +2,11 @@
 
 #[repr(C)]
 #[derive(Default)]
-pub struct __IncompleteArrayField<T>(::std::marker::PhantomData<T>, [T; 0]);
+pub struct __IncompleteArrayField<T>(::core::marker::PhantomData<T>, [T; 0]);
 impl<T> __IncompleteArrayField<T> {
     #[inline]
     pub const fn new() -> Self {
-        __IncompleteArrayField(::std::marker::PhantomData, [])
+        __IncompleteArrayField(::core::marker::PhantomData, [])
     }
     #[inline]
     pub fn as_ptr(&self) -> *const T {
@@ -18,15 +18,15 @@ impl<T> __IncompleteArrayField<T> {
     }
     #[inline]
     pub unsafe fn as_slice(&self, len: usize) -> &[T] {
-        ::std::slice::from_raw_parts(self.as_ptr(), len)
+        ::core::slice::from_raw_parts(self.as_ptr(), len)
     }
     #[inline]
     pub unsafe fn as_mut_slice(&mut self, len: usize) -> &mut [T] {
-        ::std::slice::from_raw_parts_mut(self.as_mut_ptr(), len)
+        ::core::slice::from_raw_parts_mut(self.as_mut_ptr(), len)
     }
 }
-impl<T> ::std::fmt::Debug for __IncompleteArrayField<T> {
-    fn fmt(&self, fmt: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+impl<T> ::core::fmt::Debug for __IncompleteArrayField<T> {
+    fn fmt(&self, fmt: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
         fmt.write_str("__IncompleteArrayField")
     }
 }
@@ -446,18 +446,18 @@ pub const _BITS_SETJMP_H: u32 = 1;
 pub const __jmp_buf_tag_defined: u32 = 1;
 pub const PTHREAD_ONCE_INIT: u32 = 0;
 pub const PTHREAD_BARRIER_SERIAL_THREAD: i32 = -1;
-pub type __u_char = ::std::os::raw::c_uchar;
-pub type __u_short = ::std::os::raw::c_ushort;
-pub type __u_int = ::std::os::raw::c_uint;
-pub type __u_long = ::std::os::raw::c_ulong;
-pub type __int8_t = ::std::os::raw::c_schar;
-pub type __uint8_t = ::std::os::raw::c_uchar;
-pub type __int16_t = ::std::os::raw::c_short;
-pub type __uint16_t = ::std::os::raw::c_ushort;
-pub type __int32_t = ::std::os::raw::c_int;
-pub type __uint32_t = ::std::os::raw::c_uint;
-pub type __int64_t = ::std::os::raw::c_long;
-pub type __uint64_t = ::std::os::raw::c_ulong;
+pub type __u_char = ::core::ffi::c_uchar;
+pub type __u_short = ::core::ffi::c_ushort;
+pub type __u_int = ::core::ffi::c_uint;
+pub type __u_long = ::core::ffi::c_ulong;
+pub type __int8_t = ::core::ffi::c_schar;
+pub type __uint8_t = ::core::ffi::c_uchar;
+pub type __int16_t = ::core::ffi::c_short;
+pub type __uint16_t = ::core::ffi::c_ushort;
+pub type __int32_t = ::core::ffi::c_int;
+pub type __uint32_t = ::core::ffi::c_uint;
+pub type __int64_t = ::core::ffi::c_long;
+pub type __uint64_t = ::core::ffi::c_ulong;
 pub type __int_least8_t = __int8_t;
 pub type __uint_least8_t = __uint8_t;
 pub type __int_least16_t = __int16_t;
@@ -466,41 +466,41 @@ pub type __int_least32_t = __int32_t;
 pub type __uint_least32_t = __uint32_t;
 pub type __int_least64_t = __int64_t;
 pub type __uint_least64_t = __uint64_t;
-pub type __quad_t = ::std::os::raw::c_long;
-pub type __u_quad_t = ::std::os::raw::c_ulong;
-pub type __intmax_t = ::std::os::raw::c_long;
-pub type __uintmax_t = ::std::os::raw::c_ulong;
-pub type __dev_t = ::std::os::raw::c_ulong;
-pub type __uid_t = ::std::os::raw::c_uint;
-pub type __gid_t = ::std::os::raw::c_uint;
-pub type __ino_t = ::std::os::raw::c_ulong;
-pub type __ino64_t = ::std::os::raw::c_ulong;
-pub type __mode_t = ::std::os::raw::c_uint;
-pub type __nlink_t = ::std::os::raw::c_ulong;
-pub type __off_t = ::std::os::raw::c_long;
-pub type __off64_t = ::std::os::raw::c_long;
-pub type __pid_t = ::std::os::raw::c_int;
+pub type __quad_t = ::core::ffi::c_long;
+pub type __u_quad_t = ::core::ffi::c_ulong;
+pub type __intmax_t = ::core::ffi::c_long;
+pub type __uintmax_t = ::core::ffi::c_ulong;
+pub type __dev_t = ::core::ffi::c_ulong;
+pub type __uid_t = ::core::ffi::c_uint;
+pub type __gid_t = ::core::ffi::c_uint;
+pub type __ino_t = ::core::ffi::c_ulong;
+pub type __ino64_t = ::core::ffi::c_ulong;
+pub type __mode_t = ::core::ffi::c_uint;
+pub type __nlink_t = ::core::ffi::c_ulong;
+pub type __off_t = ::core::ffi::c_long;
+pub type __off64_t = ::core::ffi::c_long;
+pub type __pid_t = ::core::ffi::c_int;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __fsid_t {
-    pub __val: [::std::os::raw::c_int; 2usize],
+    pub __val: [::core::ffi::c_int; 2usize],
 }
 #[test]
 fn bindgen_test_layout___fsid_t() {
-    const UNINIT: ::std::mem::MaybeUninit<__fsid_t> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__fsid_t> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__fsid_t>(),
+        ::core::mem::size_of::<__fsid_t>(),
         8usize,
         concat!("Size of: ", stringify!(__fsid_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<__fsid_t>(),
+        ::core::mem::align_of::<__fsid_t>(),
         4usize,
         concat!("Alignment of ", stringify!(__fsid_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__val) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__val) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -510,59 +510,59 @@ fn bindgen_test_layout___fsid_t() {
         )
     );
 }
-pub type __clock_t = ::std::os::raw::c_long;
-pub type __rlim_t = ::std::os::raw::c_ulong;
-pub type __rlim64_t = ::std::os::raw::c_ulong;
-pub type __id_t = ::std::os::raw::c_uint;
-pub type __time_t = ::std::os::raw::c_long;
-pub type __useconds_t = ::std::os::raw::c_uint;
-pub type __suseconds_t = ::std::os::raw::c_long;
-pub type __suseconds64_t = ::std::os::raw::c_long;
-pub type __daddr_t = ::std::os::raw::c_int;
-pub type __key_t = ::std::os::raw::c_int;
-pub type __clockid_t = ::std::os::raw::c_int;
-pub type __timer_t = *mut ::std::os::raw::c_void;
-pub type __blksize_t = ::std::os::raw::c_long;
-pub type __blkcnt_t = ::std::os::raw::c_long;
-pub type __blkcnt64_t = ::std::os::raw::c_long;
-pub type __fsblkcnt_t = ::std::os::raw::c_ulong;
-pub type __fsblkcnt64_t = ::std::os::raw::c_ulong;
-pub type __fsfilcnt_t = ::std::os::raw::c_ulong;
-pub type __fsfilcnt64_t = ::std::os::raw::c_ulong;
-pub type __fsword_t = ::std::os::raw::c_long;
-pub type __ssize_t = ::std::os::raw::c_long;
-pub type __syscall_slong_t = ::std::os::raw::c_long;
-pub type __syscall_ulong_t = ::std::os::raw::c_ulong;
+pub type __clock_t = ::core::ffi::c_long;
+pub type __rlim_t = ::core::ffi::c_ulong;
+pub type __rlim64_t = ::core::ffi::c_ulong;
+pub type __id_t = ::core::ffi::c_uint;
+pub type __time_t = ::core::ffi::c_long;
+pub type __useconds_t = ::core::ffi::c_uint;
+pub type __suseconds_t = ::core::ffi::c_long;
+pub type __suseconds64_t = ::core::ffi::c_long;
+pub type __daddr_t = ::core::ffi::c_int;
+pub type __key_t = ::core::ffi::c_int;
+pub type __clockid_t = ::core::ffi::c_int;
+pub type __timer_t = *mut ::core::ffi::c_void;
+pub type __blksize_t = ::core::ffi::c_long;
+pub type __blkcnt_t = ::core::ffi::c_long;
+pub type __blkcnt64_t = ::core::ffi::c_long;
+pub type __fsblkcnt_t = ::core::ffi::c_ulong;
+pub type __fsblkcnt64_t = ::core::ffi::c_ulong;
+pub type __fsfilcnt_t = ::core::ffi::c_ulong;
+pub type __fsfilcnt64_t = ::core::ffi::c_ulong;
+pub type __fsword_t = ::core::ffi::c_long;
+pub type __ssize_t = ::core::ffi::c_long;
+pub type __syscall_slong_t = ::core::ffi::c_long;
+pub type __syscall_ulong_t = ::core::ffi::c_ulong;
 pub type __loff_t = __off64_t;
-pub type __caddr_t = *mut ::std::os::raw::c_char;
-pub type __intptr_t = ::std::os::raw::c_long;
-pub type __socklen_t = ::std::os::raw::c_uint;
-pub type __sig_atomic_t = ::std::os::raw::c_int;
+pub type __caddr_t = *mut ::core::ffi::c_char;
+pub type __intptr_t = ::core::ffi::c_long;
+pub type __socklen_t = ::core::ffi::c_uint;
+pub type __sig_atomic_t = ::core::ffi::c_int;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct flock {
-    pub l_type: ::std::os::raw::c_short,
-    pub l_whence: ::std::os::raw::c_short,
+    pub l_type: ::core::ffi::c_short,
+    pub l_whence: ::core::ffi::c_short,
     pub l_start: __off_t,
     pub l_len: __off_t,
     pub l_pid: __pid_t,
 }
 #[test]
 fn bindgen_test_layout_flock() {
-    const UNINIT: ::std::mem::MaybeUninit<flock> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<flock> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<flock>(),
+        ::core::mem::size_of::<flock>(),
         32usize,
         concat!("Size of: ", stringify!(flock))
     );
     assert_eq!(
-        ::std::mem::align_of::<flock>(),
+        ::core::mem::align_of::<flock>(),
         8usize,
         concat!("Alignment of ", stringify!(flock))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).l_type) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).l_type) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -572,7 +572,7 @@ fn bindgen_test_layout_flock() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).l_whence) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).l_whence) as usize - ptr as usize },
         2usize,
         concat!(
             "Offset of field: ",
@@ -582,7 +582,7 @@ fn bindgen_test_layout_flock() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).l_start) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).l_start) as usize - ptr as usize },
         8usize,
         concat!(
             "Offset of field: ",
@@ -592,7 +592,7 @@ fn bindgen_test_layout_flock() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).l_len) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).l_len) as usize - ptr as usize },
         16usize,
         concat!(
             "Offset of field: ",
@@ -602,7 +602,7 @@ fn bindgen_test_layout_flock() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).l_pid) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).l_pid) as usize - ptr as usize },
         24usize,
         concat!(
             "Offset of field: ",
@@ -624,20 +624,20 @@ pub struct timespec {
 }
 #[test]
 fn bindgen_test_layout_timespec() {
-    const UNINIT: ::std::mem::MaybeUninit<timespec> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<timespec> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<timespec>(),
+        ::core::mem::size_of::<timespec>(),
         16usize,
         concat!("Size of: ", stringify!(timespec))
     );
     assert_eq!(
-        ::std::mem::align_of::<timespec>(),
+        ::core::mem::align_of::<timespec>(),
         8usize,
         concat!("Alignment of ", stringify!(timespec))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).tv_sec) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).tv_sec) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -647,7 +647,7 @@ fn bindgen_test_layout_timespec() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).tv_nsec) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).tv_nsec) as usize - ptr as usize },
         8usize,
         concat!(
             "Offset of field: ",
@@ -666,7 +666,7 @@ pub struct stat {
     pub st_mode: __mode_t,
     pub st_uid: __uid_t,
     pub st_gid: __gid_t,
-    pub __pad0: ::std::os::raw::c_int,
+    pub __pad0: ::core::ffi::c_int,
     pub st_rdev: __dev_t,
     pub st_size: __off_t,
     pub st_blksize: __blksize_t,
@@ -678,20 +678,20 @@ pub struct stat {
 }
 #[test]
 fn bindgen_test_layout_stat() {
-    const UNINIT: ::std::mem::MaybeUninit<stat> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<stat> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<stat>(),
+        ::core::mem::size_of::<stat>(),
         144usize,
         concat!("Size of: ", stringify!(stat))
     );
     assert_eq!(
-        ::std::mem::align_of::<stat>(),
+        ::core::mem::align_of::<stat>(),
         8usize,
         concat!("Alignment of ", stringify!(stat))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_dev) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_dev) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -701,7 +701,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_ino) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_ino) as usize - ptr as usize },
         8usize,
         concat!(
             "Offset of field: ",
@@ -711,7 +711,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_nlink) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_nlink) as usize - ptr as usize },
         16usize,
         concat!(
             "Offset of field: ",
@@ -721,7 +721,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_mode) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_mode) as usize - ptr as usize },
         24usize,
         concat!(
             "Offset of field: ",
@@ -731,7 +731,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_uid) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_uid) as usize - ptr as usize },
         28usize,
         concat!(
             "Offset of field: ",
@@ -741,7 +741,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_gid) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_gid) as usize - ptr as usize },
         32usize,
         concat!(
             "Offset of field: ",
@@ -751,7 +751,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__pad0) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__pad0) as usize - ptr as usize },
         36usize,
         concat!(
             "Offset of field: ",
@@ -761,7 +761,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_rdev) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_rdev) as usize - ptr as usize },
         40usize,
         concat!(
             "Offset of field: ",
@@ -771,7 +771,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_size) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_size) as usize - ptr as usize },
         48usize,
         concat!(
             "Offset of field: ",
@@ -781,7 +781,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_blksize) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_blksize) as usize - ptr as usize },
         56usize,
         concat!(
             "Offset of field: ",
@@ -791,7 +791,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_blocks) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_blocks) as usize - ptr as usize },
         64usize,
         concat!(
             "Offset of field: ",
@@ -801,7 +801,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_atim) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_atim) as usize - ptr as usize },
         72usize,
         concat!(
             "Offset of field: ",
@@ -811,7 +811,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_mtim) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_mtim) as usize - ptr as usize },
         88usize,
         concat!(
             "Offset of field: ",
@@ -821,7 +821,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).st_ctim) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).st_ctim) as usize - ptr as usize },
         104usize,
         concat!(
             "Offset of field: ",
@@ -831,7 +831,7 @@ fn bindgen_test_layout_stat() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__glibc_reserved) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__glibc_reserved) as usize - ptr as usize },
         120usize,
         concat!(
             "Offset of field: ",
@@ -842,44 +842,40 @@ fn bindgen_test_layout_stat() {
     );
 }
 extern "C" {
-    pub fn fcntl(
-        __fd: ::std::os::raw::c_int,
-        __cmd: ::std::os::raw::c_int,
-        ...
-    ) -> ::std::os::raw::c_int;
+    pub fn fcntl(__fd: ::core::ffi::c_int, __cmd: ::core::ffi::c_int, ...) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn open(
-        __file: *const ::std::os::raw::c_char,
-        __oflag: ::std::os::raw::c_int,
+        __file: *const ::core::ffi::c_char,
+        __oflag: ::core::ffi::c_int,
         ...
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn openat(
-        __fd: ::std::os::raw::c_int,
-        __file: *const ::std::os::raw::c_char,
-        __oflag: ::std::os::raw::c_int,
+        __fd: ::core::ffi::c_int,
+        __file: *const ::core::ffi::c_char,
+        __oflag: ::core::ffi::c_int,
         ...
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn creat(__file: *const ::std::os::raw::c_char, __mode: mode_t) -> ::std::os::raw::c_int;
+    pub fn creat(__file: *const ::core::ffi::c_char, __mode: mode_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn posix_fadvise(
-        __fd: ::std::os::raw::c_int,
+        __fd: ::core::ffi::c_int,
         __offset: off_t,
         __len: off_t,
-        __advise: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __advise: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn posix_fallocate(
-        __fd: ::std::os::raw::c_int,
+        __fd: ::core::ffi::c_int,
         __offset: off_t,
         __len: off_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 pub type dev_t = __dev_t;
 pub type gid_t = __gid_t;
@@ -889,142 +885,140 @@ pub type uid_t = __uid_t;
 pub type blkcnt_t = __blkcnt_t;
 pub type blksize_t = __blksize_t;
 extern "C" {
-    pub fn stat(__file: *const ::std::os::raw::c_char, __buf: *mut stat) -> ::std::os::raw::c_int;
+    pub fn stat(__file: *const ::core::ffi::c_char, __buf: *mut stat) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn fstat(__fd: ::std::os::raw::c_int, __buf: *mut stat) -> ::std::os::raw::c_int;
+    pub fn fstat(__fd: ::core::ffi::c_int, __buf: *mut stat) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn fstatat(
-        __fd: ::std::os::raw::c_int,
-        __file: *const ::std::os::raw::c_char,
+        __fd: ::core::ffi::c_int,
+        __file: *const ::core::ffi::c_char,
         __buf: *mut stat,
-        __flag: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __flag: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn lstat(__file: *const ::std::os::raw::c_char, __buf: *mut stat) -> ::std::os::raw::c_int;
+    pub fn lstat(__file: *const ::core::ffi::c_char, __buf: *mut stat) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn chmod(__file: *const ::std::os::raw::c_char, __mode: __mode_t) -> ::std::os::raw::c_int;
+    pub fn chmod(__file: *const ::core::ffi::c_char, __mode: __mode_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn fchmod(__fd: ::std::os::raw::c_int, __mode: __mode_t) -> ::std::os::raw::c_int;
+    pub fn fchmod(__fd: ::core::ffi::c_int, __mode: __mode_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn fchmodat(
-        __fd: ::std::os::raw::c_int,
-        __file: *const ::std::os::raw::c_char,
+        __fd: ::core::ffi::c_int,
+        __file: *const ::core::ffi::c_char,
         __mode: __mode_t,
-        __flag: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __flag: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn umask(__mask: __mode_t) -> __mode_t;
 }
 extern "C" {
-    pub fn mkdir(__path: *const ::std::os::raw::c_char, __mode: __mode_t) -> ::std::os::raw::c_int;
+    pub fn mkdir(__path: *const ::core::ffi::c_char, __mode: __mode_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn mkdirat(
-        __fd: ::std::os::raw::c_int,
-        __path: *const ::std::os::raw::c_char,
+        __fd: ::core::ffi::c_int,
+        __path: *const ::core::ffi::c_char,
         __mode: __mode_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn mknod(
-        __path: *const ::std::os::raw::c_char,
+        __path: *const ::core::ffi::c_char,
         __mode: __mode_t,
         __dev: __dev_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn mknodat(
-        __fd: ::std::os::raw::c_int,
-        __path: *const ::std::os::raw::c_char,
+        __fd: ::core::ffi::c_int,
+        __path: *const ::core::ffi::c_char,
         __mode: __mode_t,
         __dev: __dev_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn mkfifo(__path: *const ::std::os::raw::c_char, __mode: __mode_t)
-        -> ::std::os::raw::c_int;
+    pub fn mkfifo(__path: *const ::core::ffi::c_char, __mode: __mode_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn mkfifoat(
-        __fd: ::std::os::raw::c_int,
-        __path: *const ::std::os::raw::c_char,
+        __fd: ::core::ffi::c_int,
+        __path: *const ::core::ffi::c_char,
         __mode: __mode_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn utimensat(
-        __fd: ::std::os::raw::c_int,
-        __path: *const ::std::os::raw::c_char,
+        __fd: ::core::ffi::c_int,
+        __path: *const ::core::ffi::c_char,
         __times: *const timespec,
-        __flags: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __flags: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn futimens(__fd: ::std::os::raw::c_int, __times: *const timespec)
-        -> ::std::os::raw::c_int;
+    pub fn futimens(__fd: ::core::ffi::c_int, __times: *const timespec) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn mmap(
-        __addr: *mut ::std::os::raw::c_void,
+        __addr: *mut ::core::ffi::c_void,
         __len: usize,
-        __prot: ::std::os::raw::c_int,
-        __flags: ::std::os::raw::c_int,
-        __fd: ::std::os::raw::c_int,
+        __prot: ::core::ffi::c_int,
+        __flags: ::core::ffi::c_int,
+        __fd: ::core::ffi::c_int,
         __offset: __off_t,
-    ) -> *mut ::std::os::raw::c_void;
+    ) -> *mut ::core::ffi::c_void;
 }
 extern "C" {
-    pub fn munmap(__addr: *mut ::std::os::raw::c_void, __len: usize) -> ::std::os::raw::c_int;
+    pub fn munmap(__addr: *mut ::core::ffi::c_void, __len: usize) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn mprotect(
-        __addr: *mut ::std::os::raw::c_void,
+        __addr: *mut ::core::ffi::c_void,
         __len: usize,
-        __prot: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __prot: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn msync(
-        __addr: *mut ::std::os::raw::c_void,
+        __addr: *mut ::core::ffi::c_void,
         __len: usize,
-        __flags: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __flags: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn posix_madvise(
-        __addr: *mut ::std::os::raw::c_void,
+        __addr: *mut ::core::ffi::c_void,
         __len: usize,
-        __advice: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __advice: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn mlock(__addr: *const ::std::os::raw::c_void, __len: usize) -> ::std::os::raw::c_int;
+    pub fn mlock(__addr: *const ::core::ffi::c_void, __len: usize) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn munlock(__addr: *const ::std::os::raw::c_void, __len: usize) -> ::std::os::raw::c_int;
+    pub fn munlock(__addr: *const ::core::ffi::c_void, __len: usize) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn mlockall(__flags: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn mlockall(__flags: ::core::ffi::c_int) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn munlockall() -> ::std::os::raw::c_int;
+    pub fn munlockall() -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn shm_open(
-        __name: *const ::std::os::raw::c_char,
-        __oflag: ::std::os::raw::c_int,
+        __name: *const ::core::ffi::c_char,
+        __oflag: ::core::ffi::c_int,
         __mode: mode_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn shm_unlink(__name: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
+    pub fn shm_unlink(__name: *const ::core::ffi::c_char) -> ::core::ffi::c_int;
 }
 pub type int_least8_t = __int_least8_t;
 pub type int_least16_t = __int_least16_t;
@@ -1034,44 +1028,44 @@ pub type uint_least8_t = __uint_least8_t;
 pub type uint_least16_t = __uint_least16_t;
 pub type uint_least32_t = __uint_least32_t;
 pub type uint_least64_t = __uint_least64_t;
-pub type int_fast8_t = ::std::os::raw::c_schar;
-pub type int_fast16_t = ::std::os::raw::c_long;
-pub type int_fast32_t = ::std::os::raw::c_long;
-pub type int_fast64_t = ::std::os::raw::c_long;
-pub type uint_fast8_t = ::std::os::raw::c_uchar;
-pub type uint_fast16_t = ::std::os::raw::c_ulong;
-pub type uint_fast32_t = ::std::os::raw::c_ulong;
-pub type uint_fast64_t = ::std::os::raw::c_ulong;
+pub type int_fast8_t = ::core::ffi::c_schar;
+pub type int_fast16_t = ::core::ffi::c_long;
+pub type int_fast32_t = ::core::ffi::c_long;
+pub type int_fast64_t = ::core::ffi::c_long;
+pub type uint_fast8_t = ::core::ffi::c_uchar;
+pub type uint_fast16_t = ::core::ffi::c_ulong;
+pub type uint_fast32_t = ::core::ffi::c_ulong;
+pub type uint_fast64_t = ::core::ffi::c_ulong;
 pub type intmax_t = __intmax_t;
 pub type uintmax_t = __uintmax_t;
 pub const IN_CLOEXEC: _bindgen_ty_1 = 524288;
 pub const IN_NONBLOCK: _bindgen_ty_1 = 2048;
-pub type _bindgen_ty_1 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_1 = ::core::ffi::c_uint;
 #[repr(C)]
 #[derive(Debug)]
 pub struct inotify_event {
-    pub wd: ::std::os::raw::c_int,
+    pub wd: ::core::ffi::c_int,
     pub mask: u32,
     pub cookie: u32,
     pub len: u32,
-    pub name: __IncompleteArrayField<::std::os::raw::c_char>,
+    pub name: __IncompleteArrayField<::core::ffi::c_char>,
 }
 #[test]
 fn bindgen_test_layout_inotify_event() {
-    const UNINIT: ::std::mem::MaybeUninit<inotify_event> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<inotify_event> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<inotify_event>(),
+        ::core::mem::size_of::<inotify_event>(),
         16usize,
         concat!("Size of: ", stringify!(inotify_event))
     );
     assert_eq!(
-        ::std::mem::align_of::<inotify_event>(),
+        ::core::mem::align_of::<inotify_event>(),
         4usize,
         concat!("Alignment of ", stringify!(inotify_event))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).wd) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).wd) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1081,7 +1075,7 @@ fn bindgen_test_layout_inotify_event() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).mask) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).mask) as usize - ptr as usize },
         4usize,
         concat!(
             "Offset of field: ",
@@ -1091,7 +1085,7 @@ fn bindgen_test_layout_inotify_event() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).cookie) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).cookie) as usize - ptr as usize },
         8usize,
         concat!(
             "Offset of field: ",
@@ -1101,7 +1095,7 @@ fn bindgen_test_layout_inotify_event() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).len) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).len) as usize - ptr as usize },
         12usize,
         concat!(
             "Offset of field: ",
@@ -1111,7 +1105,7 @@ fn bindgen_test_layout_inotify_event() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).name) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).name) as usize - ptr as usize },
         16usize,
         concat!(
             "Offset of field: ",
@@ -1122,23 +1116,23 @@ fn bindgen_test_layout_inotify_event() {
     );
 }
 extern "C" {
-    pub fn inotify_init() -> ::std::os::raw::c_int;
+    pub fn inotify_init() -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn inotify_init1(__flags: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn inotify_init1(__flags: ::core::ffi::c_int) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn inotify_add_watch(
-        __fd: ::std::os::raw::c_int,
-        __name: *const ::std::os::raw::c_char,
+        __fd: ::core::ffi::c_int,
+        __name: *const ::core::ffi::c_char,
         __mask: u32,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn inotify_rm_watch(
-        __fd: ::std::os::raw::c_int,
-        __wd: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __fd: ::core::ffi::c_int,
+        __wd: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 pub type id_t = __id_t;
 pub type key_t = __key_t;
@@ -1151,33 +1145,33 @@ pub type u_int8_t = __uint8_t;
 pub type u_int16_t = __uint16_t;
 pub type u_int32_t = __uint32_t;
 pub type u_int64_t = __uint64_t;
-pub type register_t = ::std::os::raw::c_long;
+pub type register_t = ::core::ffi::c_long;
 pub type fsblkcnt_t = __fsblkcnt_t;
 pub type fsfilcnt_t = __fsfilcnt_t;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union __atomic_wide_counter {
-    pub __value64: ::std::os::raw::c_ulonglong,
+    pub __value64: ::core::ffi::c_ulonglong,
     pub __value32: __atomic_wide_counter__bindgen_ty_1,
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __atomic_wide_counter__bindgen_ty_1 {
-    pub __low: ::std::os::raw::c_uint,
-    pub __high: ::std::os::raw::c_uint,
+    pub __low: ::core::ffi::c_uint,
+    pub __high: ::core::ffi::c_uint,
 }
 #[test]
 fn bindgen_test_layout___atomic_wide_counter__bindgen_ty_1() {
-    const UNINIT: ::std::mem::MaybeUninit<__atomic_wide_counter__bindgen_ty_1> =
-        ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__atomic_wide_counter__bindgen_ty_1> =
+        ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__atomic_wide_counter__bindgen_ty_1>(),
+        ::core::mem::size_of::<__atomic_wide_counter__bindgen_ty_1>(),
         8usize,
         concat!("Size of: ", stringify!(__atomic_wide_counter__bindgen_ty_1))
     );
     assert_eq!(
-        ::std::mem::align_of::<__atomic_wide_counter__bindgen_ty_1>(),
+        ::core::mem::align_of::<__atomic_wide_counter__bindgen_ty_1>(),
         4usize,
         concat!(
             "Alignment of ",
@@ -1185,7 +1179,7 @@ fn bindgen_test_layout___atomic_wide_counter__bindgen_ty_1() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__low) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__low) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1195,7 +1189,7 @@ fn bindgen_test_layout___atomic_wide_counter__bindgen_ty_1() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__high) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__high) as usize - ptr as usize },
         4usize,
         concat!(
             "Offset of field: ",
@@ -1207,21 +1201,21 @@ fn bindgen_test_layout___atomic_wide_counter__bindgen_ty_1() {
 }
 #[test]
 fn bindgen_test_layout___atomic_wide_counter() {
-    const UNINIT: ::std::mem::MaybeUninit<__atomic_wide_counter> =
-        ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__atomic_wide_counter> =
+        ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__atomic_wide_counter>(),
+        ::core::mem::size_of::<__atomic_wide_counter>(),
         8usize,
         concat!("Size of: ", stringify!(__atomic_wide_counter))
     );
     assert_eq!(
-        ::std::mem::align_of::<__atomic_wide_counter>(),
+        ::core::mem::align_of::<__atomic_wide_counter>(),
         8usize,
         concat!("Alignment of ", stringify!(__atomic_wide_counter))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__value64) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__value64) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1231,7 +1225,7 @@ fn bindgen_test_layout___atomic_wide_counter() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__value32) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__value32) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1249,21 +1243,21 @@ pub struct __pthread_internal_list {
 }
 #[test]
 fn bindgen_test_layout___pthread_internal_list() {
-    const UNINIT: ::std::mem::MaybeUninit<__pthread_internal_list> =
-        ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__pthread_internal_list> =
+        ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__pthread_internal_list>(),
+        ::core::mem::size_of::<__pthread_internal_list>(),
         16usize,
         concat!("Size of: ", stringify!(__pthread_internal_list))
     );
     assert_eq!(
-        ::std::mem::align_of::<__pthread_internal_list>(),
+        ::core::mem::align_of::<__pthread_internal_list>(),
         8usize,
         concat!("Alignment of ", stringify!(__pthread_internal_list))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__prev) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__prev) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1273,7 +1267,7 @@ fn bindgen_test_layout___pthread_internal_list() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__next) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__next) as usize - ptr as usize },
         8usize,
         concat!(
             "Offset of field: ",
@@ -1291,21 +1285,21 @@ pub struct __pthread_internal_slist {
 }
 #[test]
 fn bindgen_test_layout___pthread_internal_slist() {
-    const UNINIT: ::std::mem::MaybeUninit<__pthread_internal_slist> =
-        ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__pthread_internal_slist> =
+        ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__pthread_internal_slist>(),
+        ::core::mem::size_of::<__pthread_internal_slist>(),
         8usize,
         concat!("Size of: ", stringify!(__pthread_internal_slist))
     );
     assert_eq!(
-        ::std::mem::align_of::<__pthread_internal_slist>(),
+        ::core::mem::align_of::<__pthread_internal_slist>(),
         8usize,
         concat!("Alignment of ", stringify!(__pthread_internal_slist))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__next) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__next) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1319,31 +1313,31 @@ pub type __pthread_slist_t = __pthread_internal_slist;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __pthread_mutex_s {
-    pub __lock: ::std::os::raw::c_int,
-    pub __count: ::std::os::raw::c_uint,
-    pub __owner: ::std::os::raw::c_int,
-    pub __nusers: ::std::os::raw::c_uint,
-    pub __kind: ::std::os::raw::c_int,
-    pub __spins: ::std::os::raw::c_short,
-    pub __elision: ::std::os::raw::c_short,
+    pub __lock: ::core::ffi::c_int,
+    pub __count: ::core::ffi::c_uint,
+    pub __owner: ::core::ffi::c_int,
+    pub __nusers: ::core::ffi::c_uint,
+    pub __kind: ::core::ffi::c_int,
+    pub __spins: ::core::ffi::c_short,
+    pub __elision: ::core::ffi::c_short,
     pub __list: __pthread_list_t,
 }
 #[test]
 fn bindgen_test_layout___pthread_mutex_s() {
-    const UNINIT: ::std::mem::MaybeUninit<__pthread_mutex_s> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__pthread_mutex_s> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__pthread_mutex_s>(),
+        ::core::mem::size_of::<__pthread_mutex_s>(),
         40usize,
         concat!("Size of: ", stringify!(__pthread_mutex_s))
     );
     assert_eq!(
-        ::std::mem::align_of::<__pthread_mutex_s>(),
+        ::core::mem::align_of::<__pthread_mutex_s>(),
         8usize,
         concat!("Alignment of ", stringify!(__pthread_mutex_s))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__lock) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__lock) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1353,7 +1347,7 @@ fn bindgen_test_layout___pthread_mutex_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__count) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__count) as usize - ptr as usize },
         4usize,
         concat!(
             "Offset of field: ",
@@ -1363,7 +1357,7 @@ fn bindgen_test_layout___pthread_mutex_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__owner) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__owner) as usize - ptr as usize },
         8usize,
         concat!(
             "Offset of field: ",
@@ -1373,7 +1367,7 @@ fn bindgen_test_layout___pthread_mutex_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__nusers) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__nusers) as usize - ptr as usize },
         12usize,
         concat!(
             "Offset of field: ",
@@ -1383,7 +1377,7 @@ fn bindgen_test_layout___pthread_mutex_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__kind) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__kind) as usize - ptr as usize },
         16usize,
         concat!(
             "Offset of field: ",
@@ -1393,7 +1387,7 @@ fn bindgen_test_layout___pthread_mutex_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__spins) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__spins) as usize - ptr as usize },
         20usize,
         concat!(
             "Offset of field: ",
@@ -1403,7 +1397,7 @@ fn bindgen_test_layout___pthread_mutex_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__elision) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__elision) as usize - ptr as usize },
         22usize,
         concat!(
             "Offset of field: ",
@@ -1413,7 +1407,7 @@ fn bindgen_test_layout___pthread_mutex_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__list) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__list) as usize - ptr as usize },
         24usize,
         concat!(
             "Offset of field: ",
@@ -1426,36 +1420,36 @@ fn bindgen_test_layout___pthread_mutex_s() {
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __pthread_rwlock_arch_t {
-    pub __readers: ::std::os::raw::c_uint,
-    pub __writers: ::std::os::raw::c_uint,
-    pub __wrphase_futex: ::std::os::raw::c_uint,
-    pub __writers_futex: ::std::os::raw::c_uint,
-    pub __pad3: ::std::os::raw::c_uint,
-    pub __pad4: ::std::os::raw::c_uint,
-    pub __cur_writer: ::std::os::raw::c_int,
-    pub __shared: ::std::os::raw::c_int,
-    pub __rwelision: ::std::os::raw::c_schar,
-    pub __pad1: [::std::os::raw::c_uchar; 7usize],
-    pub __pad2: ::std::os::raw::c_ulong,
-    pub __flags: ::std::os::raw::c_uint,
+    pub __readers: ::core::ffi::c_uint,
+    pub __writers: ::core::ffi::c_uint,
+    pub __wrphase_futex: ::core::ffi::c_uint,
+    pub __writers_futex: ::core::ffi::c_uint,
+    pub __pad3: ::core::ffi::c_uint,
+    pub __pad4: ::core::ffi::c_uint,
+    pub __cur_writer: ::core::ffi::c_int,
+    pub __shared: ::core::ffi::c_int,
+    pub __rwelision: ::core::ffi::c_schar,
+    pub __pad1: [::core::ffi::c_uchar; 7usize],
+    pub __pad2: ::core::ffi::c_ulong,
+    pub __flags: ::core::ffi::c_uint,
 }
 #[test]
 fn bindgen_test_layout___pthread_rwlock_arch_t() {
-    const UNINIT: ::std::mem::MaybeUninit<__pthread_rwlock_arch_t> =
-        ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__pthread_rwlock_arch_t> =
+        ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__pthread_rwlock_arch_t>(),
+        ::core::mem::size_of::<__pthread_rwlock_arch_t>(),
         56usize,
         concat!("Size of: ", stringify!(__pthread_rwlock_arch_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<__pthread_rwlock_arch_t>(),
+        ::core::mem::align_of::<__pthread_rwlock_arch_t>(),
         8usize,
         concat!("Alignment of ", stringify!(__pthread_rwlock_arch_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__readers) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__readers) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1465,7 +1459,7 @@ fn bindgen_test_layout___pthread_rwlock_arch_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__writers) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__writers) as usize - ptr as usize },
         4usize,
         concat!(
             "Offset of field: ",
@@ -1475,7 +1469,7 @@ fn bindgen_test_layout___pthread_rwlock_arch_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__wrphase_futex) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__wrphase_futex) as usize - ptr as usize },
         8usize,
         concat!(
             "Offset of field: ",
@@ -1485,7 +1479,7 @@ fn bindgen_test_layout___pthread_rwlock_arch_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__writers_futex) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__writers_futex) as usize - ptr as usize },
         12usize,
         concat!(
             "Offset of field: ",
@@ -1495,7 +1489,7 @@ fn bindgen_test_layout___pthread_rwlock_arch_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__pad3) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__pad3) as usize - ptr as usize },
         16usize,
         concat!(
             "Offset of field: ",
@@ -1505,7 +1499,7 @@ fn bindgen_test_layout___pthread_rwlock_arch_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__pad4) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__pad4) as usize - ptr as usize },
         20usize,
         concat!(
             "Offset of field: ",
@@ -1515,7 +1509,7 @@ fn bindgen_test_layout___pthread_rwlock_arch_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__cur_writer) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__cur_writer) as usize - ptr as usize },
         24usize,
         concat!(
             "Offset of field: ",
@@ -1525,7 +1519,7 @@ fn bindgen_test_layout___pthread_rwlock_arch_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__shared) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__shared) as usize - ptr as usize },
         28usize,
         concat!(
             "Offset of field: ",
@@ -1535,7 +1529,7 @@ fn bindgen_test_layout___pthread_rwlock_arch_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__rwelision) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__rwelision) as usize - ptr as usize },
         32usize,
         concat!(
             "Offset of field: ",
@@ -1545,7 +1539,7 @@ fn bindgen_test_layout___pthread_rwlock_arch_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__pad1) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__pad1) as usize - ptr as usize },
         33usize,
         concat!(
             "Offset of field: ",
@@ -1555,7 +1549,7 @@ fn bindgen_test_layout___pthread_rwlock_arch_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__pad2) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__pad2) as usize - ptr as usize },
         40usize,
         concat!(
             "Offset of field: ",
@@ -1565,7 +1559,7 @@ fn bindgen_test_layout___pthread_rwlock_arch_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__flags) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__flags) as usize - ptr as usize },
         48usize,
         concat!(
             "Offset of field: ",
@@ -1580,28 +1574,28 @@ fn bindgen_test_layout___pthread_rwlock_arch_t() {
 pub struct __pthread_cond_s {
     pub __wseq: __atomic_wide_counter,
     pub __g1_start: __atomic_wide_counter,
-    pub __g_refs: [::std::os::raw::c_uint; 2usize],
-    pub __g_size: [::std::os::raw::c_uint; 2usize],
-    pub __g1_orig_size: ::std::os::raw::c_uint,
-    pub __wrefs: ::std::os::raw::c_uint,
-    pub __g_signals: [::std::os::raw::c_uint; 2usize],
+    pub __g_refs: [::core::ffi::c_uint; 2usize],
+    pub __g_size: [::core::ffi::c_uint; 2usize],
+    pub __g1_orig_size: ::core::ffi::c_uint,
+    pub __wrefs: ::core::ffi::c_uint,
+    pub __g_signals: [::core::ffi::c_uint; 2usize],
 }
 #[test]
 fn bindgen_test_layout___pthread_cond_s() {
-    const UNINIT: ::std::mem::MaybeUninit<__pthread_cond_s> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__pthread_cond_s> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__pthread_cond_s>(),
+        ::core::mem::size_of::<__pthread_cond_s>(),
         48usize,
         concat!("Size of: ", stringify!(__pthread_cond_s))
     );
     assert_eq!(
-        ::std::mem::align_of::<__pthread_cond_s>(),
+        ::core::mem::align_of::<__pthread_cond_s>(),
         8usize,
         concat!("Alignment of ", stringify!(__pthread_cond_s))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__wseq) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__wseq) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1611,7 +1605,7 @@ fn bindgen_test_layout___pthread_cond_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__g1_start) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__g1_start) as usize - ptr as usize },
         8usize,
         concat!(
             "Offset of field: ",
@@ -1621,7 +1615,7 @@ fn bindgen_test_layout___pthread_cond_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__g_refs) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__g_refs) as usize - ptr as usize },
         16usize,
         concat!(
             "Offset of field: ",
@@ -1631,7 +1625,7 @@ fn bindgen_test_layout___pthread_cond_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__g_size) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__g_size) as usize - ptr as usize },
         24usize,
         concat!(
             "Offset of field: ",
@@ -1641,7 +1635,7 @@ fn bindgen_test_layout___pthread_cond_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__g1_orig_size) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__g1_orig_size) as usize - ptr as usize },
         32usize,
         concat!(
             "Offset of field: ",
@@ -1651,7 +1645,7 @@ fn bindgen_test_layout___pthread_cond_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__wrefs) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__wrefs) as usize - ptr as usize },
         36usize,
         concat!(
             "Offset of field: ",
@@ -1661,7 +1655,7 @@ fn bindgen_test_layout___pthread_cond_s() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__g_signals) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__g_signals) as usize - ptr as usize },
         40usize,
         concat!(
             "Offset of field: ",
@@ -1671,29 +1665,29 @@ fn bindgen_test_layout___pthread_cond_s() {
         )
     );
 }
-pub type __tss_t = ::std::os::raw::c_uint;
-pub type __thrd_t = ::std::os::raw::c_ulong;
+pub type __tss_t = ::core::ffi::c_uint;
+pub type __thrd_t = ::core::ffi::c_ulong;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __once_flag {
-    pub __data: ::std::os::raw::c_int,
+    pub __data: ::core::ffi::c_int,
 }
 #[test]
 fn bindgen_test_layout___once_flag() {
-    const UNINIT: ::std::mem::MaybeUninit<__once_flag> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__once_flag> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__once_flag>(),
+        ::core::mem::size_of::<__once_flag>(),
         4usize,
         concat!("Size of: ", stringify!(__once_flag))
     );
     assert_eq!(
-        ::std::mem::align_of::<__once_flag>(),
+        ::core::mem::align_of::<__once_flag>(),
         4usize,
         concat!("Alignment of ", stringify!(__once_flag))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__data) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__data) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1703,29 +1697,30 @@ fn bindgen_test_layout___once_flag() {
         )
     );
 }
-pub type pthread_t = ::std::os::raw::c_ulong;
+pub type pthread_t = ::core::ffi::c_ulong;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union pthread_mutexattr_t {
-    pub __size: [::std::os::raw::c_char; 4usize],
-    pub __align: ::std::os::raw::c_int,
+    pub __size: [::core::ffi::c_char; 4usize],
+    pub __align: ::core::ffi::c_int,
 }
 #[test]
 fn bindgen_test_layout_pthread_mutexattr_t() {
-    const UNINIT: ::std::mem::MaybeUninit<pthread_mutexattr_t> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<pthread_mutexattr_t> =
+        ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<pthread_mutexattr_t>(),
+        ::core::mem::size_of::<pthread_mutexattr_t>(),
         4usize,
         concat!("Size of: ", stringify!(pthread_mutexattr_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<pthread_mutexattr_t>(),
+        ::core::mem::align_of::<pthread_mutexattr_t>(),
         4usize,
         concat!("Alignment of ", stringify!(pthread_mutexattr_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1735,7 +1730,7 @@ fn bindgen_test_layout_pthread_mutexattr_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1748,25 +1743,25 @@ fn bindgen_test_layout_pthread_mutexattr_t() {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union pthread_condattr_t {
-    pub __size: [::std::os::raw::c_char; 4usize],
-    pub __align: ::std::os::raw::c_int,
+    pub __size: [::core::ffi::c_char; 4usize],
+    pub __align: ::core::ffi::c_int,
 }
 #[test]
 fn bindgen_test_layout_pthread_condattr_t() {
-    const UNINIT: ::std::mem::MaybeUninit<pthread_condattr_t> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<pthread_condattr_t> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<pthread_condattr_t>(),
+        ::core::mem::size_of::<pthread_condattr_t>(),
         4usize,
         concat!("Size of: ", stringify!(pthread_condattr_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<pthread_condattr_t>(),
+        ::core::mem::align_of::<pthread_condattr_t>(),
         4usize,
         concat!("Alignment of ", stringify!(pthread_condattr_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1776,7 +1771,7 @@ fn bindgen_test_layout_pthread_condattr_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1786,30 +1781,30 @@ fn bindgen_test_layout_pthread_condattr_t() {
         )
     );
 }
-pub type pthread_key_t = ::std::os::raw::c_uint;
-pub type pthread_once_t = ::std::os::raw::c_int;
+pub type pthread_key_t = ::core::ffi::c_uint;
+pub type pthread_once_t = ::core::ffi::c_int;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union pthread_attr_t {
-    pub __size: [::std::os::raw::c_char; 56usize],
-    pub __align: ::std::os::raw::c_long,
+    pub __size: [::core::ffi::c_char; 56usize],
+    pub __align: ::core::ffi::c_long,
 }
 #[test]
 fn bindgen_test_layout_pthread_attr_t() {
-    const UNINIT: ::std::mem::MaybeUninit<pthread_attr_t> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<pthread_attr_t> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<pthread_attr_t>(),
+        ::core::mem::size_of::<pthread_attr_t>(),
         56usize,
         concat!("Size of: ", stringify!(pthread_attr_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<pthread_attr_t>(),
+        ::core::mem::align_of::<pthread_attr_t>(),
         8usize,
         concat!("Alignment of ", stringify!(pthread_attr_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1819,7 +1814,7 @@ fn bindgen_test_layout_pthread_attr_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1833,25 +1828,25 @@ fn bindgen_test_layout_pthread_attr_t() {
 #[derive(Copy, Clone)]
 pub union pthread_mutex_t {
     pub __data: __pthread_mutex_s,
-    pub __size: [::std::os::raw::c_char; 40usize],
-    pub __align: ::std::os::raw::c_long,
+    pub __size: [::core::ffi::c_char; 40usize],
+    pub __align: ::core::ffi::c_long,
 }
 #[test]
 fn bindgen_test_layout_pthread_mutex_t() {
-    const UNINIT: ::std::mem::MaybeUninit<pthread_mutex_t> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<pthread_mutex_t> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<pthread_mutex_t>(),
+        ::core::mem::size_of::<pthread_mutex_t>(),
         40usize,
         concat!("Size of: ", stringify!(pthread_mutex_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<pthread_mutex_t>(),
+        ::core::mem::align_of::<pthread_mutex_t>(),
         8usize,
         concat!("Alignment of ", stringify!(pthread_mutex_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__data) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__data) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1861,7 +1856,7 @@ fn bindgen_test_layout_pthread_mutex_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1871,7 +1866,7 @@ fn bindgen_test_layout_pthread_mutex_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1885,25 +1880,25 @@ fn bindgen_test_layout_pthread_mutex_t() {
 #[derive(Copy, Clone)]
 pub union pthread_cond_t {
     pub __data: __pthread_cond_s,
-    pub __size: [::std::os::raw::c_char; 48usize],
-    pub __align: ::std::os::raw::c_longlong,
+    pub __size: [::core::ffi::c_char; 48usize],
+    pub __align: ::core::ffi::c_longlong,
 }
 #[test]
 fn bindgen_test_layout_pthread_cond_t() {
-    const UNINIT: ::std::mem::MaybeUninit<pthread_cond_t> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<pthread_cond_t> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<pthread_cond_t>(),
+        ::core::mem::size_of::<pthread_cond_t>(),
         48usize,
         concat!("Size of: ", stringify!(pthread_cond_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<pthread_cond_t>(),
+        ::core::mem::align_of::<pthread_cond_t>(),
         8usize,
         concat!("Alignment of ", stringify!(pthread_cond_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__data) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__data) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1913,7 +1908,7 @@ fn bindgen_test_layout_pthread_cond_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1923,7 +1918,7 @@ fn bindgen_test_layout_pthread_cond_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1937,25 +1932,25 @@ fn bindgen_test_layout_pthread_cond_t() {
 #[derive(Copy, Clone)]
 pub union pthread_rwlock_t {
     pub __data: __pthread_rwlock_arch_t,
-    pub __size: [::std::os::raw::c_char; 56usize],
-    pub __align: ::std::os::raw::c_long,
+    pub __size: [::core::ffi::c_char; 56usize],
+    pub __align: ::core::ffi::c_long,
 }
 #[test]
 fn bindgen_test_layout_pthread_rwlock_t() {
-    const UNINIT: ::std::mem::MaybeUninit<pthread_rwlock_t> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<pthread_rwlock_t> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<pthread_rwlock_t>(),
+        ::core::mem::size_of::<pthread_rwlock_t>(),
         56usize,
         concat!("Size of: ", stringify!(pthread_rwlock_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<pthread_rwlock_t>(),
+        ::core::mem::align_of::<pthread_rwlock_t>(),
         8usize,
         concat!("Alignment of ", stringify!(pthread_rwlock_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__data) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__data) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1965,7 +1960,7 @@ fn bindgen_test_layout_pthread_rwlock_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1975,7 +1970,7 @@ fn bindgen_test_layout_pthread_rwlock_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -1988,25 +1983,26 @@ fn bindgen_test_layout_pthread_rwlock_t() {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union pthread_rwlockattr_t {
-    pub __size: [::std::os::raw::c_char; 8usize],
-    pub __align: ::std::os::raw::c_long,
+    pub __size: [::core::ffi::c_char; 8usize],
+    pub __align: ::core::ffi::c_long,
 }
 #[test]
 fn bindgen_test_layout_pthread_rwlockattr_t() {
-    const UNINIT: ::std::mem::MaybeUninit<pthread_rwlockattr_t> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<pthread_rwlockattr_t> =
+        ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<pthread_rwlockattr_t>(),
+        ::core::mem::size_of::<pthread_rwlockattr_t>(),
         8usize,
         concat!("Size of: ", stringify!(pthread_rwlockattr_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<pthread_rwlockattr_t>(),
+        ::core::mem::align_of::<pthread_rwlockattr_t>(),
         8usize,
         concat!("Alignment of ", stringify!(pthread_rwlockattr_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2016,7 +2012,7 @@ fn bindgen_test_layout_pthread_rwlockattr_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2026,29 +2022,29 @@ fn bindgen_test_layout_pthread_rwlockattr_t() {
         )
     );
 }
-pub type pthread_spinlock_t = ::std::os::raw::c_int;
+pub type pthread_spinlock_t = ::core::ffi::c_int;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union pthread_barrier_t {
-    pub __size: [::std::os::raw::c_char; 32usize],
-    pub __align: ::std::os::raw::c_long,
+    pub __size: [::core::ffi::c_char; 32usize],
+    pub __align: ::core::ffi::c_long,
 }
 #[test]
 fn bindgen_test_layout_pthread_barrier_t() {
-    const UNINIT: ::std::mem::MaybeUninit<pthread_barrier_t> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<pthread_barrier_t> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<pthread_barrier_t>(),
+        ::core::mem::size_of::<pthread_barrier_t>(),
         32usize,
         concat!("Size of: ", stringify!(pthread_barrier_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<pthread_barrier_t>(),
+        ::core::mem::align_of::<pthread_barrier_t>(),
         8usize,
         concat!("Alignment of ", stringify!(pthread_barrier_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2058,7 +2054,7 @@ fn bindgen_test_layout_pthread_barrier_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2071,26 +2067,26 @@ fn bindgen_test_layout_pthread_barrier_t() {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union pthread_barrierattr_t {
-    pub __size: [::std::os::raw::c_char; 4usize],
-    pub __align: ::std::os::raw::c_int,
+    pub __size: [::core::ffi::c_char; 4usize],
+    pub __align: ::core::ffi::c_int,
 }
 #[test]
 fn bindgen_test_layout_pthread_barrierattr_t() {
-    const UNINIT: ::std::mem::MaybeUninit<pthread_barrierattr_t> =
-        ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<pthread_barrierattr_t> =
+        ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<pthread_barrierattr_t>(),
+        ::core::mem::size_of::<pthread_barrierattr_t>(),
         4usize,
         concat!("Size of: ", stringify!(pthread_barrierattr_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<pthread_barrierattr_t>(),
+        ::core::mem::align_of::<pthread_barrierattr_t>(),
         4usize,
         concat!("Alignment of ", stringify!(pthread_barrierattr_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__size) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2100,7 +2096,7 @@ fn bindgen_test_layout_pthread_barrierattr_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__align) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2113,24 +2109,24 @@ fn bindgen_test_layout_pthread_barrierattr_t() {
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __sigset_t {
-    pub __val: [::std::os::raw::c_ulong; 16usize],
+    pub __val: [::core::ffi::c_ulong; 16usize],
 }
 #[test]
 fn bindgen_test_layout___sigset_t() {
-    const UNINIT: ::std::mem::MaybeUninit<__sigset_t> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__sigset_t> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__sigset_t>(),
+        ::core::mem::size_of::<__sigset_t>(),
         128usize,
         concat!("Size of: ", stringify!(__sigset_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<__sigset_t>(),
+        ::core::mem::align_of::<__sigset_t>(),
         8usize,
         concat!("Alignment of ", stringify!(__sigset_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__val) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__val) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2142,7 +2138,7 @@ fn bindgen_test_layout___sigset_t() {
 }
 pub type sigset_t = __sigset_t;
 pub const EPOLL_CLOEXEC: _bindgen_ty_2 = 524288;
-pub type _bindgen_ty_2 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_2 = ::core::ffi::c_uint;
 pub const EPOLL_EVENTS_EPOLLIN: EPOLL_EVENTS = 1;
 pub const EPOLL_EVENTS_EPOLLPRI: EPOLL_EVENTS = 2;
 pub const EPOLL_EVENTS_EPOLLOUT: EPOLL_EVENTS = 4;
@@ -2158,31 +2154,31 @@ pub const EPOLL_EVENTS_EPOLLEXCLUSIVE: EPOLL_EVENTS = 268435456;
 pub const EPOLL_EVENTS_EPOLLWAKEUP: EPOLL_EVENTS = 536870912;
 pub const EPOLL_EVENTS_EPOLLONESHOT: EPOLL_EVENTS = 1073741824;
 pub const EPOLL_EVENTS_EPOLLET: EPOLL_EVENTS = 2147483648;
-pub type EPOLL_EVENTS = ::std::os::raw::c_uint;
+pub type EPOLL_EVENTS = ::core::ffi::c_uint;
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub union epoll_data {
-    pub ptr: *mut ::std::os::raw::c_void,
-    pub fd: ::std::os::raw::c_int,
+    pub ptr: *mut ::core::ffi::c_void,
+    pub fd: ::core::ffi::c_int,
     pub u32_: u32,
     pub u64_: u64,
 }
 #[test]
 fn bindgen_test_layout_epoll_data() {
-    const UNINIT: ::std::mem::MaybeUninit<epoll_data> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<epoll_data> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<epoll_data>(),
+        ::core::mem::size_of::<epoll_data>(),
         8usize,
         concat!("Size of: ", stringify!(epoll_data))
     );
     assert_eq!(
-        ::std::mem::align_of::<epoll_data>(),
+        ::core::mem::align_of::<epoll_data>(),
         8usize,
         concat!("Alignment of ", stringify!(epoll_data))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).ptr) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).ptr) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2192,7 +2188,7 @@ fn bindgen_test_layout_epoll_data() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).fd) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).fd) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2202,7 +2198,7 @@ fn bindgen_test_layout_epoll_data() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).u32_) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).u32_) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2212,7 +2208,7 @@ fn bindgen_test_layout_epoll_data() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).u64_) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).u64_) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2231,20 +2227,20 @@ pub struct epoll_event {
 }
 #[test]
 fn bindgen_test_layout_epoll_event() {
-    const UNINIT: ::std::mem::MaybeUninit<epoll_event> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<epoll_event> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<epoll_event>(),
+        ::core::mem::size_of::<epoll_event>(),
         12usize,
         concat!("Size of: ", stringify!(epoll_event))
     );
     assert_eq!(
-        ::std::mem::align_of::<epoll_event>(),
+        ::core::mem::align_of::<epoll_event>(),
         1usize,
         concat!("Alignment of ", stringify!(epoll_event))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).events) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).events) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2254,7 +2250,7 @@ fn bindgen_test_layout_epoll_event() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).data) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).data) as usize - ptr as usize },
         4usize,
         concat!(
             "Offset of field: ",
@@ -2265,44 +2261,44 @@ fn bindgen_test_layout_epoll_event() {
     );
 }
 extern "C" {
-    pub fn epoll_create(__size: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn epoll_create(__size: ::core::ffi::c_int) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn epoll_create1(__flags: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn epoll_create1(__flags: ::core::ffi::c_int) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn epoll_ctl(
-        __epfd: ::std::os::raw::c_int,
-        __op: ::std::os::raw::c_int,
-        __fd: ::std::os::raw::c_int,
+        __epfd: ::core::ffi::c_int,
+        __op: ::core::ffi::c_int,
+        __fd: ::core::ffi::c_int,
         __event: *mut epoll_event,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn epoll_wait(
-        __epfd: ::std::os::raw::c_int,
+        __epfd: ::core::ffi::c_int,
         __events: *mut epoll_event,
-        __maxevents: ::std::os::raw::c_int,
-        __timeout: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __maxevents: ::core::ffi::c_int,
+        __timeout: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn epoll_pwait(
-        __epfd: ::std::os::raw::c_int,
+        __epfd: ::core::ffi::c_int,
         __events: *mut epoll_event,
-        __maxevents: ::std::os::raw::c_int,
-        __timeout: ::std::os::raw::c_int,
+        __maxevents: ::core::ffi::c_int,
+        __timeout: ::core::ffi::c_int,
         __ss: *const __sigset_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn epoll_pwait2(
-        __epfd: ::std::os::raw::c_int,
+        __epfd: ::core::ffi::c_int,
         __events: *mut epoll_event,
-        __maxevents: ::std::os::raw::c_int,
+        __maxevents: ::core::ffi::c_int,
         __timeout: *const timespec,
         __ss: *const __sigset_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 pub type __gnuc_va_list = __builtin_va_list;
 extern "C" {
@@ -2310,16 +2306,16 @@ extern "C" {
 }
 extern "C" {
     pub fn openlog(
-        __ident: *const ::std::os::raw::c_char,
-        __option: ::std::os::raw::c_int,
-        __facility: ::std::os::raw::c_int,
+        __ident: *const ::core::ffi::c_char,
+        __option: ::core::ffi::c_int,
+        __facility: ::core::ffi::c_int,
     );
 }
 extern "C" {
-    pub fn setlogmask(__mask: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn setlogmask(__mask: ::core::ffi::c_int) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn syslog(__pri: ::std::os::raw::c_int, __fmt: *const ::std::os::raw::c_char, ...);
+    pub fn syslog(__pri: ::core::ffi::c_int, __fmt: *const ::core::ffi::c_char, ...);
 }
 pub type _Float32 = f32;
 pub type _Float64 = f64;
@@ -2327,21 +2323,21 @@ pub type _Float32x = f64;
 pub type _Float64x = u128;
 extern "C" {
     pub fn dlopen(
-        __file: *const ::std::os::raw::c_char,
-        __mode: ::std::os::raw::c_int,
-    ) -> *mut ::std::os::raw::c_void;
+        __file: *const ::core::ffi::c_char,
+        __mode: ::core::ffi::c_int,
+    ) -> *mut ::core::ffi::c_void;
 }
 extern "C" {
-    pub fn dlclose(__handle: *mut ::std::os::raw::c_void) -> ::std::os::raw::c_int;
+    pub fn dlclose(__handle: *mut ::core::ffi::c_void) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn dlsym(
-        __handle: *mut ::std::os::raw::c_void,
-        __name: *const ::std::os::raw::c_char,
-    ) -> *mut ::std::os::raw::c_void;
+        __handle: *mut ::core::ffi::c_void,
+        __name: *const ::core::ffi::c_char,
+    ) -> *mut ::core::ffi::c_void;
 }
 extern "C" {
-    pub fn dlerror() -> *mut ::std::os::raw::c_char;
+    pub fn dlerror() -> *mut ::core::ffi::c_char;
 }
 pub const FTW_F: _bindgen_ty_3 = 0;
 pub const FTW_D: _bindgen_ty_3 = 1;
@@ -2350,39 +2346,39 @@ pub const FTW_NS: _bindgen_ty_3 = 3;
 pub const FTW_SL: _bindgen_ty_3 = 4;
 pub const FTW_DP: _bindgen_ty_3 = 5;
 pub const FTW_SLN: _bindgen_ty_3 = 6;
-pub type _bindgen_ty_3 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_3 = ::core::ffi::c_uint;
 pub const FTW_PHYS: _bindgen_ty_4 = 1;
 pub const FTW_MOUNT: _bindgen_ty_4 = 2;
 pub const FTW_CHDIR: _bindgen_ty_4 = 4;
 pub const FTW_DEPTH: _bindgen_ty_4 = 8;
-pub type _bindgen_ty_4 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_4 = ::core::ffi::c_uint;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct FTW {
-    pub base: ::std::os::raw::c_int,
-    pub level: ::std::os::raw::c_int,
+    pub base: ::core::ffi::c_int,
+    pub level: ::core::ffi::c_int,
 }
 #[test]
 fn bindgen_test_layout_FTW() {
-    const UNINIT: ::std::mem::MaybeUninit<FTW> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<FTW> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<FTW>(),
+        ::core::mem::size_of::<FTW>(),
         8usize,
         concat!("Size of: ", stringify!(FTW))
     );
     assert_eq!(
-        ::std::mem::align_of::<FTW>(),
+        ::core::mem::align_of::<FTW>(),
         4usize,
         concat!("Alignment of ", stringify!(FTW))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).base) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).base) as usize - ptr as usize },
         0usize,
         concat!("Offset of field: ", stringify!(FTW), "::", stringify!(base))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).level) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).level) as usize - ptr as usize },
         4usize,
         concat!(
             "Offset of field: ",
@@ -2392,57 +2388,57 @@ fn bindgen_test_layout_FTW() {
         )
     );
 }
-pub type __ftw_func_t = ::std::option::Option<
+pub type __ftw_func_t = ::core::option::Option<
     unsafe extern "C" fn(
-        __filename: *const ::std::os::raw::c_char,
+        __filename: *const ::core::ffi::c_char,
         __status: *const stat,
-        __flag: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int,
+        __flag: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int,
 >;
-pub type __nftw_func_t = ::std::option::Option<
+pub type __nftw_func_t = ::core::option::Option<
     unsafe extern "C" fn(
-        __filename: *const ::std::os::raw::c_char,
+        __filename: *const ::core::ffi::c_char,
         __status: *const stat,
-        __flag: ::std::os::raw::c_int,
+        __flag: ::core::ffi::c_int,
         __info: *mut FTW,
-    ) -> ::std::os::raw::c_int,
+    ) -> ::core::ffi::c_int,
 >;
 extern "C" {
     pub fn ftw(
-        __dir: *const ::std::os::raw::c_char,
+        __dir: *const ::core::ffi::c_char,
         __func: __ftw_func_t,
-        __descriptors: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __descriptors: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn nftw(
-        __dir: *const ::std::os::raw::c_char,
+        __dir: *const ::core::ffi::c_char,
         __func: __nftw_func_t,
-        __descriptors: ::std::os::raw::c_int,
-        __flag: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __descriptors: ::core::ffi::c_int,
+        __flag: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct sched_param {
-    pub sched_priority: ::std::os::raw::c_int,
+    pub sched_priority: ::core::ffi::c_int,
 }
 #[test]
 fn bindgen_test_layout_sched_param() {
-    const UNINIT: ::std::mem::MaybeUninit<sched_param> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<sched_param> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<sched_param>(),
+        ::core::mem::size_of::<sched_param>(),
         4usize,
         concat!("Size of: ", stringify!(sched_param))
     );
     assert_eq!(
-        ::std::mem::align_of::<sched_param>(),
+        ::core::mem::align_of::<sched_param>(),
         4usize,
         concat!("Alignment of ", stringify!(sched_param))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).sched_priority) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).sched_priority) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2452,7 +2448,7 @@ fn bindgen_test_layout_sched_param() {
         )
     );
 }
-pub type __cpu_mask = ::std::os::raw::c_ulong;
+pub type __cpu_mask = ::core::ffi::c_ulong;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct cpu_set_t {
@@ -2460,20 +2456,20 @@ pub struct cpu_set_t {
 }
 #[test]
 fn bindgen_test_layout_cpu_set_t() {
-    const UNINIT: ::std::mem::MaybeUninit<cpu_set_t> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<cpu_set_t> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<cpu_set_t>(),
+        ::core::mem::size_of::<cpu_set_t>(),
         128usize,
         concat!("Size of: ", stringify!(cpu_set_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<cpu_set_t>(),
+        ::core::mem::align_of::<cpu_set_t>(),
         8usize,
         concat!("Alignment of ", stringify!(cpu_set_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__bits) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__bits) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2484,7 +2480,7 @@ fn bindgen_test_layout_cpu_set_t() {
     );
 }
 extern "C" {
-    pub fn __sched_cpucount(__setsize: usize, __setp: *const cpu_set_t) -> ::std::os::raw::c_int;
+    pub fn __sched_cpucount(__setsize: usize, __setp: *const cpu_set_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn __sched_cpualloc(__count: usize) -> *mut cpu_set_t;
@@ -2493,64 +2489,64 @@ extern "C" {
     pub fn __sched_cpufree(__set: *mut cpu_set_t);
 }
 extern "C" {
-    pub fn sched_setparam(__pid: __pid_t, __param: *const sched_param) -> ::std::os::raw::c_int;
+    pub fn sched_setparam(__pid: __pid_t, __param: *const sched_param) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn sched_getparam(__pid: __pid_t, __param: *mut sched_param) -> ::std::os::raw::c_int;
+    pub fn sched_getparam(__pid: __pid_t, __param: *mut sched_param) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn sched_setscheduler(
         __pid: __pid_t,
-        __policy: ::std::os::raw::c_int,
+        __policy: ::core::ffi::c_int,
         __param: *const sched_param,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn sched_getscheduler(__pid: __pid_t) -> ::std::os::raw::c_int;
+    pub fn sched_getscheduler(__pid: __pid_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn sched_yield() -> ::std::os::raw::c_int;
+    pub fn sched_yield() -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn sched_get_priority_max(__algorithm: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn sched_get_priority_max(__algorithm: ::core::ffi::c_int) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn sched_get_priority_min(__algorithm: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn sched_get_priority_min(__algorithm: ::core::ffi::c_int) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn sched_rr_get_interval(__pid: __pid_t, __t: *mut timespec) -> ::std::os::raw::c_int;
+    pub fn sched_rr_get_interval(__pid: __pid_t, __t: *mut timespec) -> ::core::ffi::c_int;
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct tm {
-    pub tm_sec: ::std::os::raw::c_int,
-    pub tm_min: ::std::os::raw::c_int,
-    pub tm_hour: ::std::os::raw::c_int,
-    pub tm_mday: ::std::os::raw::c_int,
-    pub tm_mon: ::std::os::raw::c_int,
-    pub tm_year: ::std::os::raw::c_int,
-    pub tm_wday: ::std::os::raw::c_int,
-    pub tm_yday: ::std::os::raw::c_int,
-    pub tm_isdst: ::std::os::raw::c_int,
-    pub __tm_gmtoff: ::std::os::raw::c_long,
-    pub __tm_zone: *const ::std::os::raw::c_char,
+    pub tm_sec: ::core::ffi::c_int,
+    pub tm_min: ::core::ffi::c_int,
+    pub tm_hour: ::core::ffi::c_int,
+    pub tm_mday: ::core::ffi::c_int,
+    pub tm_mon: ::core::ffi::c_int,
+    pub tm_year: ::core::ffi::c_int,
+    pub tm_wday: ::core::ffi::c_int,
+    pub tm_yday: ::core::ffi::c_int,
+    pub tm_isdst: ::core::ffi::c_int,
+    pub __tm_gmtoff: ::core::ffi::c_long,
+    pub __tm_zone: *const ::core::ffi::c_char,
 }
 #[test]
 fn bindgen_test_layout_tm() {
-    const UNINIT: ::std::mem::MaybeUninit<tm> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<tm> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<tm>(),
+        ::core::mem::size_of::<tm>(),
         56usize,
         concat!("Size of: ", stringify!(tm))
     );
     assert_eq!(
-        ::std::mem::align_of::<tm>(),
+        ::core::mem::align_of::<tm>(),
         8usize,
         concat!("Alignment of ", stringify!(tm))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).tm_sec) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).tm_sec) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2560,7 +2556,7 @@ fn bindgen_test_layout_tm() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).tm_min) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).tm_min) as usize - ptr as usize },
         4usize,
         concat!(
             "Offset of field: ",
@@ -2570,7 +2566,7 @@ fn bindgen_test_layout_tm() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).tm_hour) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).tm_hour) as usize - ptr as usize },
         8usize,
         concat!(
             "Offset of field: ",
@@ -2580,7 +2576,7 @@ fn bindgen_test_layout_tm() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).tm_mday) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).tm_mday) as usize - ptr as usize },
         12usize,
         concat!(
             "Offset of field: ",
@@ -2590,7 +2586,7 @@ fn bindgen_test_layout_tm() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).tm_mon) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).tm_mon) as usize - ptr as usize },
         16usize,
         concat!(
             "Offset of field: ",
@@ -2600,7 +2596,7 @@ fn bindgen_test_layout_tm() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).tm_year) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).tm_year) as usize - ptr as usize },
         20usize,
         concat!(
             "Offset of field: ",
@@ -2610,7 +2606,7 @@ fn bindgen_test_layout_tm() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).tm_wday) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).tm_wday) as usize - ptr as usize },
         24usize,
         concat!(
             "Offset of field: ",
@@ -2620,7 +2616,7 @@ fn bindgen_test_layout_tm() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).tm_yday) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).tm_yday) as usize - ptr as usize },
         28usize,
         concat!(
             "Offset of field: ",
@@ -2630,7 +2626,7 @@ fn bindgen_test_layout_tm() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).tm_isdst) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).tm_isdst) as usize - ptr as usize },
         32usize,
         concat!(
             "Offset of field: ",
@@ -2640,7 +2636,7 @@ fn bindgen_test_layout_tm() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__tm_gmtoff) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__tm_gmtoff) as usize - ptr as usize },
         40usize,
         concat!(
             "Offset of field: ",
@@ -2650,7 +2646,7 @@ fn bindgen_test_layout_tm() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__tm_zone) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__tm_zone) as usize - ptr as usize },
         48usize,
         concat!(
             "Offset of field: ",
@@ -2668,20 +2664,20 @@ pub struct itimerspec {
 }
 #[test]
 fn bindgen_test_layout_itimerspec() {
-    const UNINIT: ::std::mem::MaybeUninit<itimerspec> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<itimerspec> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<itimerspec>(),
+        ::core::mem::size_of::<itimerspec>(),
         32usize,
         concat!("Size of: ", stringify!(itimerspec))
     );
     assert_eq!(
-        ::std::mem::align_of::<itimerspec>(),
+        ::core::mem::align_of::<itimerspec>(),
         8usize,
         concat!("Alignment of ", stringify!(itimerspec))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).it_interval) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).it_interval) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2691,7 +2687,7 @@ fn bindgen_test_layout_itimerspec() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).it_value) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).it_value) as usize - ptr as usize },
         16usize,
         concat!(
             "Offset of field: ",
@@ -2710,27 +2706,27 @@ pub struct sigevent {
 #[derive(Debug, Copy, Clone)]
 pub struct __locale_struct {
     pub __locales: [*mut __locale_data; 13usize],
-    pub __ctype_b: *const ::std::os::raw::c_ushort,
-    pub __ctype_tolower: *const ::std::os::raw::c_int,
-    pub __ctype_toupper: *const ::std::os::raw::c_int,
-    pub __names: [*const ::std::os::raw::c_char; 13usize],
+    pub __ctype_b: *const ::core::ffi::c_ushort,
+    pub __ctype_tolower: *const ::core::ffi::c_int,
+    pub __ctype_toupper: *const ::core::ffi::c_int,
+    pub __names: [*const ::core::ffi::c_char; 13usize],
 }
 #[test]
 fn bindgen_test_layout___locale_struct() {
-    const UNINIT: ::std::mem::MaybeUninit<__locale_struct> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__locale_struct> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__locale_struct>(),
+        ::core::mem::size_of::<__locale_struct>(),
         232usize,
         concat!("Size of: ", stringify!(__locale_struct))
     );
     assert_eq!(
-        ::std::mem::align_of::<__locale_struct>(),
+        ::core::mem::align_of::<__locale_struct>(),
         8usize,
         concat!("Alignment of ", stringify!(__locale_struct))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__locales) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__locales) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2740,7 +2736,7 @@ fn bindgen_test_layout___locale_struct() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__ctype_b) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__ctype_b) as usize - ptr as usize },
         104usize,
         concat!(
             "Offset of field: ",
@@ -2750,7 +2746,7 @@ fn bindgen_test_layout___locale_struct() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__ctype_tolower) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__ctype_tolower) as usize - ptr as usize },
         112usize,
         concat!(
             "Offset of field: ",
@@ -2760,7 +2756,7 @@ fn bindgen_test_layout___locale_struct() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__ctype_toupper) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__ctype_toupper) as usize - ptr as usize },
         120usize,
         concat!(
             "Offset of field: ",
@@ -2770,7 +2766,7 @@ fn bindgen_test_layout___locale_struct() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__names) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__names) as usize - ptr as usize },
         128usize,
         concat!(
             "Offset of field: ",
@@ -2796,24 +2792,24 @@ extern "C" {
 }
 extern "C" {
     pub fn strftime(
-        __s: *mut ::std::os::raw::c_char,
+        __s: *mut ::core::ffi::c_char,
         __maxsize: usize,
-        __format: *const ::std::os::raw::c_char,
+        __format: *const ::core::ffi::c_char,
         __tp: *const tm,
     ) -> usize;
 }
 extern "C" {
     pub fn strptime(
-        __s: *const ::std::os::raw::c_char,
-        __fmt: *const ::std::os::raw::c_char,
+        __s: *const ::core::ffi::c_char,
+        __fmt: *const ::core::ffi::c_char,
         __tp: *mut tm,
-    ) -> *mut ::std::os::raw::c_char;
+    ) -> *mut ::core::ffi::c_char;
 }
 extern "C" {
     pub fn strftime_l(
-        __s: *mut ::std::os::raw::c_char,
+        __s: *mut ::core::ffi::c_char,
         __maxsize: usize,
-        __format: *const ::std::os::raw::c_char,
+        __format: *const ::core::ffi::c_char,
         __tp: *const tm,
         __loc: locale_t,
     ) -> usize;
@@ -2831,130 +2827,124 @@ extern "C" {
     pub fn localtime_r(__timer: *const time_t, __tp: *mut tm) -> *mut tm;
 }
 extern "C" {
-    pub fn asctime(__tp: *const tm) -> *mut ::std::os::raw::c_char;
+    pub fn asctime(__tp: *const tm) -> *mut ::core::ffi::c_char;
 }
 extern "C" {
-    pub fn ctime(__timer: *const time_t) -> *mut ::std::os::raw::c_char;
+    pub fn ctime(__timer: *const time_t) -> *mut ::core::ffi::c_char;
 }
 extern "C" {
-    pub fn asctime_r(
-        __tp: *const tm,
-        __buf: *mut ::std::os::raw::c_char,
-    ) -> *mut ::std::os::raw::c_char;
+    pub fn asctime_r(__tp: *const tm, __buf: *mut ::core::ffi::c_char) -> *mut ::core::ffi::c_char;
 }
 extern "C" {
     pub fn ctime_r(
         __timer: *const time_t,
-        __buf: *mut ::std::os::raw::c_char,
-    ) -> *mut ::std::os::raw::c_char;
+        __buf: *mut ::core::ffi::c_char,
+    ) -> *mut ::core::ffi::c_char;
 }
 extern "C" {
-    pub static mut __tzname: [*mut ::std::os::raw::c_char; 2usize];
+    pub static mut __tzname: [*mut ::core::ffi::c_char; 2usize];
 }
 extern "C" {
-    pub static mut __daylight: ::std::os::raw::c_int;
+    pub static mut __daylight: ::core::ffi::c_int;
 }
 extern "C" {
-    pub static mut __timezone: ::std::os::raw::c_long;
+    pub static mut __timezone: ::core::ffi::c_long;
 }
 extern "C" {
-    pub static mut tzname: [*mut ::std::os::raw::c_char; 2usize];
+    pub static mut tzname: [*mut ::core::ffi::c_char; 2usize];
 }
 extern "C" {
     pub fn tzset();
 }
 extern "C" {
-    pub static mut daylight: ::std::os::raw::c_int;
+    pub static mut daylight: ::core::ffi::c_int;
 }
 extern "C" {
-    pub static mut timezone: ::std::os::raw::c_long;
+    pub static mut timezone: ::core::ffi::c_long;
 }
 extern "C" {
     pub fn nanosleep(
         __requested_time: *const timespec,
         __remaining: *mut timespec,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn clock_getres(__clock_id: clockid_t, __res: *mut timespec) -> ::std::os::raw::c_int;
+    pub fn clock_getres(__clock_id: clockid_t, __res: *mut timespec) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn clock_gettime(__clock_id: clockid_t, __tp: *mut timespec) -> ::std::os::raw::c_int;
+    pub fn clock_gettime(__clock_id: clockid_t, __tp: *mut timespec) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn clock_settime(__clock_id: clockid_t, __tp: *const timespec) -> ::std::os::raw::c_int;
+    pub fn clock_settime(__clock_id: clockid_t, __tp: *const timespec) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn clock_nanosleep(
         __clock_id: clockid_t,
-        __flags: ::std::os::raw::c_int,
+        __flags: ::core::ffi::c_int,
         __req: *const timespec,
         __rem: *mut timespec,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn clock_getcpuclockid(__pid: pid_t, __clock_id: *mut clockid_t) -> ::std::os::raw::c_int;
+    pub fn clock_getcpuclockid(__pid: pid_t, __clock_id: *mut clockid_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn timer_create(
         __clock_id: clockid_t,
         __evp: *mut sigevent,
         __timerid: *mut timer_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn timer_delete(__timerid: timer_t) -> ::std::os::raw::c_int;
+    pub fn timer_delete(__timerid: timer_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn timer_settime(
         __timerid: timer_t,
-        __flags: ::std::os::raw::c_int,
+        __flags: ::core::ffi::c_int,
         __value: *const itimerspec,
         __ovalue: *mut itimerspec,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn timer_gettime(__timerid: timer_t, __value: *mut itimerspec) -> ::std::os::raw::c_int;
+    pub fn timer_gettime(__timerid: timer_t, __value: *mut itimerspec) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn timer_getoverrun(__timerid: timer_t) -> ::std::os::raw::c_int;
+    pub fn timer_getoverrun(__timerid: timer_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn timespec_get(
-        __ts: *mut timespec,
-        __base: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+    pub fn timespec_get(__ts: *mut timespec, __base: ::core::ffi::c_int) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub static mut getdate_err: ::std::os::raw::c_int;
+    pub static mut getdate_err: ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn getdate(__string: *const ::std::os::raw::c_char) -> *mut tm;
+    pub fn getdate(__string: *const ::core::ffi::c_char) -> *mut tm;
 }
-pub type __jmp_buf = [::std::os::raw::c_long; 8usize];
+pub type __jmp_buf = [::core::ffi::c_long; 8usize];
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __jmp_buf_tag {
     pub __jmpbuf: __jmp_buf,
-    pub __mask_was_saved: ::std::os::raw::c_int,
+    pub __mask_was_saved: ::core::ffi::c_int,
     pub __saved_mask: __sigset_t,
 }
 #[test]
 fn bindgen_test_layout___jmp_buf_tag() {
-    const UNINIT: ::std::mem::MaybeUninit<__jmp_buf_tag> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__jmp_buf_tag> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__jmp_buf_tag>(),
+        ::core::mem::size_of::<__jmp_buf_tag>(),
         200usize,
         concat!("Size of: ", stringify!(__jmp_buf_tag))
     );
     assert_eq!(
-        ::std::mem::align_of::<__jmp_buf_tag>(),
+        ::core::mem::align_of::<__jmp_buf_tag>(),
         8usize,
         concat!("Alignment of ", stringify!(__jmp_buf_tag))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__jmpbuf) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__jmpbuf) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -2964,7 +2954,7 @@ fn bindgen_test_layout___jmp_buf_tag() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__mask_was_saved) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__mask_was_saved) as usize - ptr as usize },
         64usize,
         concat!(
             "Offset of field: ",
@@ -2974,7 +2964,7 @@ fn bindgen_test_layout___jmp_buf_tag() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__saved_mask) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__saved_mask) as usize - ptr as usize },
         72usize,
         concat!(
             "Offset of field: ",
@@ -2986,7 +2976,7 @@ fn bindgen_test_layout___jmp_buf_tag() {
 }
 pub const PTHREAD_CREATE_JOINABLE: _bindgen_ty_5 = 0;
 pub const PTHREAD_CREATE_DETACHED: _bindgen_ty_5 = 1;
-pub type _bindgen_ty_5 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_5 = ::core::ffi::c_uint;
 pub const PTHREAD_MUTEX_TIMED_NP: _bindgen_ty_6 = 0;
 pub const PTHREAD_MUTEX_RECURSIVE_NP: _bindgen_ty_6 = 1;
 pub const PTHREAD_MUTEX_ERRORCHECK_NP: _bindgen_ty_6 = 2;
@@ -2995,55 +2985,55 @@ pub const PTHREAD_MUTEX_NORMAL: _bindgen_ty_6 = 0;
 pub const PTHREAD_MUTEX_RECURSIVE: _bindgen_ty_6 = 1;
 pub const PTHREAD_MUTEX_ERRORCHECK: _bindgen_ty_6 = 2;
 pub const PTHREAD_MUTEX_DEFAULT: _bindgen_ty_6 = 0;
-pub type _bindgen_ty_6 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_6 = ::core::ffi::c_uint;
 pub const PTHREAD_MUTEX_STALLED: _bindgen_ty_7 = 0;
 pub const PTHREAD_MUTEX_STALLED_NP: _bindgen_ty_7 = 0;
 pub const PTHREAD_MUTEX_ROBUST: _bindgen_ty_7 = 1;
 pub const PTHREAD_MUTEX_ROBUST_NP: _bindgen_ty_7 = 1;
-pub type _bindgen_ty_7 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_7 = ::core::ffi::c_uint;
 pub const PTHREAD_PRIO_NONE: _bindgen_ty_8 = 0;
 pub const PTHREAD_PRIO_INHERIT: _bindgen_ty_8 = 1;
 pub const PTHREAD_PRIO_PROTECT: _bindgen_ty_8 = 2;
-pub type _bindgen_ty_8 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_8 = ::core::ffi::c_uint;
 pub const PTHREAD_RWLOCK_PREFER_READER_NP: _bindgen_ty_9 = 0;
 pub const PTHREAD_RWLOCK_PREFER_WRITER_NP: _bindgen_ty_9 = 1;
 pub const PTHREAD_RWLOCK_PREFER_WRITER_NONRECURSIVE_NP: _bindgen_ty_9 = 2;
 pub const PTHREAD_RWLOCK_DEFAULT_NP: _bindgen_ty_9 = 0;
-pub type _bindgen_ty_9 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_9 = ::core::ffi::c_uint;
 pub const PTHREAD_INHERIT_SCHED: _bindgen_ty_10 = 0;
 pub const PTHREAD_EXPLICIT_SCHED: _bindgen_ty_10 = 1;
-pub type _bindgen_ty_10 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_10 = ::core::ffi::c_uint;
 pub const PTHREAD_SCOPE_SYSTEM: _bindgen_ty_11 = 0;
 pub const PTHREAD_SCOPE_PROCESS: _bindgen_ty_11 = 1;
-pub type _bindgen_ty_11 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_11 = ::core::ffi::c_uint;
 pub const PTHREAD_PROCESS_PRIVATE: _bindgen_ty_12 = 0;
 pub const PTHREAD_PROCESS_SHARED: _bindgen_ty_12 = 1;
-pub type _bindgen_ty_12 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_12 = ::core::ffi::c_uint;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct _pthread_cleanup_buffer {
-    pub __routine: ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
-    pub __arg: *mut ::std::os::raw::c_void,
-    pub __canceltype: ::std::os::raw::c_int,
+    pub __routine: ::core::option::Option<unsafe extern "C" fn(arg1: *mut ::core::ffi::c_void)>,
+    pub __arg: *mut ::core::ffi::c_void,
+    pub __canceltype: ::core::ffi::c_int,
     pub __prev: *mut _pthread_cleanup_buffer,
 }
 #[test]
 fn bindgen_test_layout__pthread_cleanup_buffer() {
-    const UNINIT: ::std::mem::MaybeUninit<_pthread_cleanup_buffer> =
-        ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<_pthread_cleanup_buffer> =
+        ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<_pthread_cleanup_buffer>(),
+        ::core::mem::size_of::<_pthread_cleanup_buffer>(),
         32usize,
         concat!("Size of: ", stringify!(_pthread_cleanup_buffer))
     );
     assert_eq!(
-        ::std::mem::align_of::<_pthread_cleanup_buffer>(),
+        ::core::mem::align_of::<_pthread_cleanup_buffer>(),
         8usize,
         concat!("Alignment of ", stringify!(_pthread_cleanup_buffer))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__routine) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__routine) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -3053,7 +3043,7 @@ fn bindgen_test_layout__pthread_cleanup_buffer() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__arg) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__arg) as usize - ptr as usize },
         8usize,
         concat!(
             "Offset of field: ",
@@ -3063,7 +3053,7 @@ fn bindgen_test_layout__pthread_cleanup_buffer() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__canceltype) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__canceltype) as usize - ptr as usize },
         16usize,
         concat!(
             "Offset of field: ",
@@ -3073,7 +3063,7 @@ fn bindgen_test_layout__pthread_cleanup_buffer() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__prev) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__prev) as usize - ptr as usize },
         24usize,
         concat!(
             "Offset of field: ",
@@ -3085,200 +3075,200 @@ fn bindgen_test_layout__pthread_cleanup_buffer() {
 }
 pub const PTHREAD_CANCEL_ENABLE: _bindgen_ty_13 = 0;
 pub const PTHREAD_CANCEL_DISABLE: _bindgen_ty_13 = 1;
-pub type _bindgen_ty_13 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_13 = ::core::ffi::c_uint;
 pub const PTHREAD_CANCEL_DEFERRED: _bindgen_ty_14 = 0;
 pub const PTHREAD_CANCEL_ASYNCHRONOUS: _bindgen_ty_14 = 1;
-pub type _bindgen_ty_14 = ::std::os::raw::c_uint;
+pub type _bindgen_ty_14 = ::core::ffi::c_uint;
 extern "C" {
     pub fn pthread_create(
         __newthread: *mut pthread_t,
         __attr: *const pthread_attr_t,
-        __start_routine: ::std::option::Option<
-            unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void) -> *mut ::std::os::raw::c_void,
+        __start_routine: ::core::option::Option<
+            unsafe extern "C" fn(arg1: *mut ::core::ffi::c_void) -> *mut ::core::ffi::c_void,
         >,
-        __arg: *mut ::std::os::raw::c_void,
-    ) -> ::std::os::raw::c_int;
+        __arg: *mut ::core::ffi::c_void,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_exit(__retval: *mut ::std::os::raw::c_void) -> !;
+    pub fn pthread_exit(__retval: *mut ::core::ffi::c_void) -> !;
 }
 extern "C" {
     pub fn pthread_join(
         __th: pthread_t,
-        __thread_return: *mut *mut ::std::os::raw::c_void,
-    ) -> ::std::os::raw::c_int;
+        __thread_return: *mut *mut ::core::ffi::c_void,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_detach(__th: pthread_t) -> ::std::os::raw::c_int;
+    pub fn pthread_detach(__th: pthread_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_self() -> pthread_t;
 }
 extern "C" {
-    pub fn pthread_equal(__thread1: pthread_t, __thread2: pthread_t) -> ::std::os::raw::c_int;
+    pub fn pthread_equal(__thread1: pthread_t, __thread2: pthread_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_attr_init(__attr: *mut pthread_attr_t) -> ::std::os::raw::c_int;
+    pub fn pthread_attr_init(__attr: *mut pthread_attr_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_attr_destroy(__attr: *mut pthread_attr_t) -> ::std::os::raw::c_int;
+    pub fn pthread_attr_destroy(__attr: *mut pthread_attr_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_getdetachstate(
         __attr: *const pthread_attr_t,
-        __detachstate: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __detachstate: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_setdetachstate(
         __attr: *mut pthread_attr_t,
-        __detachstate: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __detachstate: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_getguardsize(
         __attr: *const pthread_attr_t,
         __guardsize: *mut usize,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_setguardsize(
         __attr: *mut pthread_attr_t,
         __guardsize: usize,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_getschedparam(
         __attr: *const pthread_attr_t,
         __param: *mut sched_param,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_setschedparam(
         __attr: *mut pthread_attr_t,
         __param: *const sched_param,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_getschedpolicy(
         __attr: *const pthread_attr_t,
-        __policy: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __policy: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_setschedpolicy(
         __attr: *mut pthread_attr_t,
-        __policy: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __policy: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_getinheritsched(
         __attr: *const pthread_attr_t,
-        __inherit: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __inherit: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_setinheritsched(
         __attr: *mut pthread_attr_t,
-        __inherit: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __inherit: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_getscope(
         __attr: *const pthread_attr_t,
-        __scope: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __scope: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_setscope(
         __attr: *mut pthread_attr_t,
-        __scope: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __scope: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_getstackaddr(
         __attr: *const pthread_attr_t,
-        __stackaddr: *mut *mut ::std::os::raw::c_void,
-    ) -> ::std::os::raw::c_int;
+        __stackaddr: *mut *mut ::core::ffi::c_void,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_setstackaddr(
         __attr: *mut pthread_attr_t,
-        __stackaddr: *mut ::std::os::raw::c_void,
-    ) -> ::std::os::raw::c_int;
+        __stackaddr: *mut ::core::ffi::c_void,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_getstacksize(
         __attr: *const pthread_attr_t,
         __stacksize: *mut usize,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_setstacksize(
         __attr: *mut pthread_attr_t,
         __stacksize: usize,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_getstack(
         __attr: *const pthread_attr_t,
-        __stackaddr: *mut *mut ::std::os::raw::c_void,
+        __stackaddr: *mut *mut ::core::ffi::c_void,
         __stacksize: *mut usize,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_attr_setstack(
         __attr: *mut pthread_attr_t,
-        __stackaddr: *mut ::std::os::raw::c_void,
+        __stackaddr: *mut ::core::ffi::c_void,
         __stacksize: usize,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_setschedparam(
         __target_thread: pthread_t,
-        __policy: ::std::os::raw::c_int,
+        __policy: ::core::ffi::c_int,
         __param: *const sched_param,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_getschedparam(
         __target_thread: pthread_t,
-        __policy: *mut ::std::os::raw::c_int,
+        __policy: *mut ::core::ffi::c_int,
         __param: *mut sched_param,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_setschedprio(
         __target_thread: pthread_t,
-        __prio: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __prio: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_getconcurrency() -> ::std::os::raw::c_int;
+    pub fn pthread_getconcurrency() -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_setconcurrency(__level: ::std::os::raw::c_int) -> ::std::os::raw::c_int;
+    pub fn pthread_setconcurrency(__level: ::core::ffi::c_int) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_once(
         __once_control: *mut pthread_once_t,
-        __init_routine: ::std::option::Option<unsafe extern "C" fn()>,
-    ) -> ::std::os::raw::c_int;
+        __init_routine: ::core::option::Option<unsafe extern "C" fn()>,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_setcancelstate(
-        __state: ::std::os::raw::c_int,
-        __oldstate: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __state: ::core::ffi::c_int,
+        __oldstate: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_setcanceltype(
-        __type: ::std::os::raw::c_int,
-        __oldtype: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __type: ::core::ffi::c_int,
+        __oldtype: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_cancel(__th: pthread_t) -> ::std::os::raw::c_int;
+    pub fn pthread_cancel(__th: pthread_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_testcancel();
@@ -3287,24 +3277,25 @@ extern "C" {
 #[derive(Debug, Copy, Clone)]
 pub struct __cancel_jmp_buf_tag {
     pub __cancel_jmp_buf: __jmp_buf,
-    pub __mask_was_saved: ::std::os::raw::c_int,
+    pub __mask_was_saved: ::core::ffi::c_int,
 }
 #[test]
 fn bindgen_test_layout___cancel_jmp_buf_tag() {
-    const UNINIT: ::std::mem::MaybeUninit<__cancel_jmp_buf_tag> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__cancel_jmp_buf_tag> =
+        ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__cancel_jmp_buf_tag>(),
+        ::core::mem::size_of::<__cancel_jmp_buf_tag>(),
         72usize,
         concat!("Size of: ", stringify!(__cancel_jmp_buf_tag))
     );
     assert_eq!(
-        ::std::mem::align_of::<__cancel_jmp_buf_tag>(),
+        ::core::mem::align_of::<__cancel_jmp_buf_tag>(),
         8usize,
         concat!("Alignment of ", stringify!(__cancel_jmp_buf_tag))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__cancel_jmp_buf) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__cancel_jmp_buf) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -3314,7 +3305,7 @@ fn bindgen_test_layout___cancel_jmp_buf_tag() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__mask_was_saved) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__mask_was_saved) as usize - ptr as usize },
         64usize,
         concat!(
             "Offset of field: ",
@@ -3328,25 +3319,25 @@ fn bindgen_test_layout___cancel_jmp_buf_tag() {
 #[derive(Debug, Copy, Clone)]
 pub struct __pthread_unwind_buf_t {
     pub __cancel_jmp_buf: [__cancel_jmp_buf_tag; 1usize],
-    pub __pad: [*mut ::std::os::raw::c_void; 4usize],
+    pub __pad: [*mut ::core::ffi::c_void; 4usize],
 }
 #[test]
 fn bindgen_test_layout___pthread_unwind_buf_t() {
-    const UNINIT: ::std::mem::MaybeUninit<__pthread_unwind_buf_t> =
-        ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__pthread_unwind_buf_t> =
+        ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__pthread_unwind_buf_t>(),
+        ::core::mem::size_of::<__pthread_unwind_buf_t>(),
         104usize,
         concat!("Size of: ", stringify!(__pthread_unwind_buf_t))
     );
     assert_eq!(
-        ::std::mem::align_of::<__pthread_unwind_buf_t>(),
+        ::core::mem::align_of::<__pthread_unwind_buf_t>(),
         8usize,
         concat!("Alignment of ", stringify!(__pthread_unwind_buf_t))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__cancel_jmp_buf) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__cancel_jmp_buf) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -3356,7 +3347,7 @@ fn bindgen_test_layout___pthread_unwind_buf_t() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__pad) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__pad) as usize - ptr as usize },
         72usize,
         concat!(
             "Offset of field: ",
@@ -3370,28 +3361,28 @@ fn bindgen_test_layout___pthread_unwind_buf_t() {
 #[derive(Debug, Copy, Clone)]
 pub struct __pthread_cleanup_frame {
     pub __cancel_routine:
-        ::std::option::Option<unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void)>,
-    pub __cancel_arg: *mut ::std::os::raw::c_void,
-    pub __do_it: ::std::os::raw::c_int,
-    pub __cancel_type: ::std::os::raw::c_int,
+        ::core::option::Option<unsafe extern "C" fn(arg1: *mut ::core::ffi::c_void)>,
+    pub __cancel_arg: *mut ::core::ffi::c_void,
+    pub __do_it: ::core::ffi::c_int,
+    pub __cancel_type: ::core::ffi::c_int,
 }
 #[test]
 fn bindgen_test_layout___pthread_cleanup_frame() {
-    const UNINIT: ::std::mem::MaybeUninit<__pthread_cleanup_frame> =
-        ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__pthread_cleanup_frame> =
+        ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__pthread_cleanup_frame>(),
+        ::core::mem::size_of::<__pthread_cleanup_frame>(),
         24usize,
         concat!("Size of: ", stringify!(__pthread_cleanup_frame))
     );
     assert_eq!(
-        ::std::mem::align_of::<__pthread_cleanup_frame>(),
+        ::core::mem::align_of::<__pthread_cleanup_frame>(),
         8usize,
         concat!("Alignment of ", stringify!(__pthread_cleanup_frame))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__cancel_routine) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__cancel_routine) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -3401,7 +3392,7 @@ fn bindgen_test_layout___pthread_cleanup_frame() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__cancel_arg) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__cancel_arg) as usize - ptr as usize },
         8usize,
         concat!(
             "Offset of field: ",
@@ -3411,7 +3402,7 @@ fn bindgen_test_layout___pthread_cleanup_frame() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__do_it) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__do_it) as usize - ptr as usize },
         16usize,
         concat!(
             "Offset of field: ",
@@ -3421,7 +3412,7 @@ fn bindgen_test_layout___pthread_cleanup_frame() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).__cancel_type) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).__cancel_type) as usize - ptr as usize },
         20usize,
         concat!(
             "Offset of field: ",
@@ -3443,347 +3434,346 @@ extern "C" {
 extern "C" {
     pub fn __sigsetjmp(
         __env: *mut __jmp_buf_tag,
-        __savemask: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __savemask: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutex_init(
         __mutex: *mut pthread_mutex_t,
         __mutexattr: *const pthread_mutexattr_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_mutex_destroy(__mutex: *mut pthread_mutex_t) -> ::std::os::raw::c_int;
+    pub fn pthread_mutex_destroy(__mutex: *mut pthread_mutex_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_mutex_trylock(__mutex: *mut pthread_mutex_t) -> ::std::os::raw::c_int;
+    pub fn pthread_mutex_trylock(__mutex: *mut pthread_mutex_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_mutex_lock(__mutex: *mut pthread_mutex_t) -> ::std::os::raw::c_int;
+    pub fn pthread_mutex_lock(__mutex: *mut pthread_mutex_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutex_timedlock(
         __mutex: *mut pthread_mutex_t,
         __abstime: *const timespec,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_mutex_unlock(__mutex: *mut pthread_mutex_t) -> ::std::os::raw::c_int;
+    pub fn pthread_mutex_unlock(__mutex: *mut pthread_mutex_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutex_getprioceiling(
         __mutex: *const pthread_mutex_t,
-        __prioceiling: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __prioceiling: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutex_setprioceiling(
         __mutex: *mut pthread_mutex_t,
-        __prioceiling: ::std::os::raw::c_int,
-        __old_ceiling: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __prioceiling: ::core::ffi::c_int,
+        __old_ceiling: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_mutex_consistent(__mutex: *mut pthread_mutex_t) -> ::std::os::raw::c_int;
+    pub fn pthread_mutex_consistent(__mutex: *mut pthread_mutex_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_mutexattr_init(__attr: *mut pthread_mutexattr_t) -> ::std::os::raw::c_int;
+    pub fn pthread_mutexattr_init(__attr: *mut pthread_mutexattr_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_mutexattr_destroy(__attr: *mut pthread_mutexattr_t) -> ::std::os::raw::c_int;
+    pub fn pthread_mutexattr_destroy(__attr: *mut pthread_mutexattr_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutexattr_getpshared(
         __attr: *const pthread_mutexattr_t,
-        __pshared: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __pshared: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutexattr_setpshared(
         __attr: *mut pthread_mutexattr_t,
-        __pshared: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __pshared: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutexattr_gettype(
         __attr: *const pthread_mutexattr_t,
-        __kind: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __kind: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutexattr_settype(
         __attr: *mut pthread_mutexattr_t,
-        __kind: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __kind: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutexattr_getprotocol(
         __attr: *const pthread_mutexattr_t,
-        __protocol: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __protocol: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutexattr_setprotocol(
         __attr: *mut pthread_mutexattr_t,
-        __protocol: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __protocol: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutexattr_getprioceiling(
         __attr: *const pthread_mutexattr_t,
-        __prioceiling: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __prioceiling: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutexattr_setprioceiling(
         __attr: *mut pthread_mutexattr_t,
-        __prioceiling: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __prioceiling: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutexattr_getrobust(
         __attr: *const pthread_mutexattr_t,
-        __robustness: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __robustness: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_mutexattr_setrobust(
         __attr: *mut pthread_mutexattr_t,
-        __robustness: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __robustness: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_rwlock_init(
         __rwlock: *mut pthread_rwlock_t,
         __attr: *const pthread_rwlockattr_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_rwlock_destroy(__rwlock: *mut pthread_rwlock_t) -> ::std::os::raw::c_int;
+    pub fn pthread_rwlock_destroy(__rwlock: *mut pthread_rwlock_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_rwlock_rdlock(__rwlock: *mut pthread_rwlock_t) -> ::std::os::raw::c_int;
+    pub fn pthread_rwlock_rdlock(__rwlock: *mut pthread_rwlock_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_rwlock_tryrdlock(__rwlock: *mut pthread_rwlock_t) -> ::std::os::raw::c_int;
+    pub fn pthread_rwlock_tryrdlock(__rwlock: *mut pthread_rwlock_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_rwlock_timedrdlock(
         __rwlock: *mut pthread_rwlock_t,
         __abstime: *const timespec,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_rwlock_wrlock(__rwlock: *mut pthread_rwlock_t) -> ::std::os::raw::c_int;
+    pub fn pthread_rwlock_wrlock(__rwlock: *mut pthread_rwlock_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_rwlock_trywrlock(__rwlock: *mut pthread_rwlock_t) -> ::std::os::raw::c_int;
+    pub fn pthread_rwlock_trywrlock(__rwlock: *mut pthread_rwlock_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_rwlock_timedwrlock(
         __rwlock: *mut pthread_rwlock_t,
         __abstime: *const timespec,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_rwlock_unlock(__rwlock: *mut pthread_rwlock_t) -> ::std::os::raw::c_int;
+    pub fn pthread_rwlock_unlock(__rwlock: *mut pthread_rwlock_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_rwlockattr_init(__attr: *mut pthread_rwlockattr_t) -> ::std::os::raw::c_int;
+    pub fn pthread_rwlockattr_init(__attr: *mut pthread_rwlockattr_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_rwlockattr_destroy(__attr: *mut pthread_rwlockattr_t) -> ::std::os::raw::c_int;
+    pub fn pthread_rwlockattr_destroy(__attr: *mut pthread_rwlockattr_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_rwlockattr_getpshared(
         __attr: *const pthread_rwlockattr_t,
-        __pshared: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __pshared: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_rwlockattr_setpshared(
         __attr: *mut pthread_rwlockattr_t,
-        __pshared: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __pshared: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_rwlockattr_getkind_np(
         __attr: *const pthread_rwlockattr_t,
-        __pref: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __pref: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_rwlockattr_setkind_np(
         __attr: *mut pthread_rwlockattr_t,
-        __pref: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __pref: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_cond_init(
         __cond: *mut pthread_cond_t,
         __cond_attr: *const pthread_condattr_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_cond_destroy(__cond: *mut pthread_cond_t) -> ::std::os::raw::c_int;
+    pub fn pthread_cond_destroy(__cond: *mut pthread_cond_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_cond_signal(__cond: *mut pthread_cond_t) -> ::std::os::raw::c_int;
+    pub fn pthread_cond_signal(__cond: *mut pthread_cond_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_cond_broadcast(__cond: *mut pthread_cond_t) -> ::std::os::raw::c_int;
+    pub fn pthread_cond_broadcast(__cond: *mut pthread_cond_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_cond_wait(
         __cond: *mut pthread_cond_t,
         __mutex: *mut pthread_mutex_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_cond_timedwait(
         __cond: *mut pthread_cond_t,
         __mutex: *mut pthread_mutex_t,
         __abstime: *const timespec,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_condattr_init(__attr: *mut pthread_condattr_t) -> ::std::os::raw::c_int;
+    pub fn pthread_condattr_init(__attr: *mut pthread_condattr_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_condattr_destroy(__attr: *mut pthread_condattr_t) -> ::std::os::raw::c_int;
+    pub fn pthread_condattr_destroy(__attr: *mut pthread_condattr_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_condattr_getpshared(
         __attr: *const pthread_condattr_t,
-        __pshared: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __pshared: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_condattr_setpshared(
         __attr: *mut pthread_condattr_t,
-        __pshared: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __pshared: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_condattr_getclock(
         __attr: *const pthread_condattr_t,
         __clock_id: *mut __clockid_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_condattr_setclock(
         __attr: *mut pthread_condattr_t,
         __clock_id: __clockid_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_spin_init(
         __lock: *mut pthread_spinlock_t,
-        __pshared: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __pshared: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_spin_destroy(__lock: *mut pthread_spinlock_t) -> ::std::os::raw::c_int;
+    pub fn pthread_spin_destroy(__lock: *mut pthread_spinlock_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_spin_lock(__lock: *mut pthread_spinlock_t) -> ::std::os::raw::c_int;
+    pub fn pthread_spin_lock(__lock: *mut pthread_spinlock_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_spin_trylock(__lock: *mut pthread_spinlock_t) -> ::std::os::raw::c_int;
+    pub fn pthread_spin_trylock(__lock: *mut pthread_spinlock_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_spin_unlock(__lock: *mut pthread_spinlock_t) -> ::std::os::raw::c_int;
+    pub fn pthread_spin_unlock(__lock: *mut pthread_spinlock_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_barrier_init(
         __barrier: *mut pthread_barrier_t,
         __attr: *const pthread_barrierattr_t,
-        __count: ::std::os::raw::c_uint,
-    ) -> ::std::os::raw::c_int;
+        __count: ::core::ffi::c_uint,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_barrier_destroy(__barrier: *mut pthread_barrier_t) -> ::std::os::raw::c_int;
+    pub fn pthread_barrier_destroy(__barrier: *mut pthread_barrier_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_barrier_wait(__barrier: *mut pthread_barrier_t) -> ::std::os::raw::c_int;
+    pub fn pthread_barrier_wait(__barrier: *mut pthread_barrier_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_barrierattr_init(__attr: *mut pthread_barrierattr_t) -> ::std::os::raw::c_int;
+    pub fn pthread_barrierattr_init(__attr: *mut pthread_barrierattr_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_barrierattr_destroy(__attr: *mut pthread_barrierattr_t)
-        -> ::std::os::raw::c_int;
+    pub fn pthread_barrierattr_destroy(__attr: *mut pthread_barrierattr_t) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_barrierattr_getpshared(
         __attr: *const pthread_barrierattr_t,
-        __pshared: *mut ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __pshared: *mut ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_barrierattr_setpshared(
         __attr: *mut pthread_barrierattr_t,
-        __pshared: ::std::os::raw::c_int,
-    ) -> ::std::os::raw::c_int;
+        __pshared: ::core::ffi::c_int,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_key_create(
         __key: *mut pthread_key_t,
-        __destr_function: ::std::option::Option<
-            unsafe extern "C" fn(arg1: *mut ::std::os::raw::c_void),
+        __destr_function: ::core::option::Option<
+            unsafe extern "C" fn(arg1: *mut ::core::ffi::c_void),
         >,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_key_delete(__key: pthread_key_t) -> ::std::os::raw::c_int;
+    pub fn pthread_key_delete(__key: pthread_key_t) -> ::core::ffi::c_int;
 }
 extern "C" {
-    pub fn pthread_getspecific(__key: pthread_key_t) -> *mut ::std::os::raw::c_void;
+    pub fn pthread_getspecific(__key: pthread_key_t) -> *mut ::core::ffi::c_void;
 }
 extern "C" {
     pub fn pthread_setspecific(
         __key: pthread_key_t,
-        __pointer: *const ::std::os::raw::c_void,
-    ) -> ::std::os::raw::c_int;
+        __pointer: *const ::core::ffi::c_void,
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_getcpuclockid(
         __thread_id: pthread_t,
         __clock_id: *mut __clockid_t,
-    ) -> ::std::os::raw::c_int;
+    ) -> ::core::ffi::c_int;
 }
 extern "C" {
     pub fn pthread_atfork(
-        __prepare: ::std::option::Option<unsafe extern "C" fn()>,
-        __parent: ::std::option::Option<unsafe extern "C" fn()>,
-        __child: ::std::option::Option<unsafe extern "C" fn()>,
-    ) -> ::std::os::raw::c_int;
+        __prepare: ::core::option::Option<unsafe extern "C" fn()>,
+        __parent: ::core::option::Option<unsafe extern "C" fn()>,
+        __child: ::core::option::Option<unsafe extern "C" fn()>,
+    ) -> ::core::ffi::c_int;
 }
 pub type __builtin_va_list = [__va_list_tag; 1usize];
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __va_list_tag {
-    pub gp_offset: ::std::os::raw::c_uint,
-    pub fp_offset: ::std::os::raw::c_uint,
-    pub overflow_arg_area: *mut ::std::os::raw::c_void,
-    pub reg_save_area: *mut ::std::os::raw::c_void,
+    pub gp_offset: ::core::ffi::c_uint,
+    pub fp_offset: ::core::ffi::c_uint,
+    pub overflow_arg_area: *mut ::core::ffi::c_void,
+    pub reg_save_area: *mut ::core::ffi::c_void,
 }
 #[test]
 fn bindgen_test_layout___va_list_tag() {
-    const UNINIT: ::std::mem::MaybeUninit<__va_list_tag> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::core::mem::MaybeUninit<__va_list_tag> = ::core::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     assert_eq!(
-        ::std::mem::size_of::<__va_list_tag>(),
+        ::core::mem::size_of::<__va_list_tag>(),
         24usize,
         concat!("Size of: ", stringify!(__va_list_tag))
     );
     assert_eq!(
-        ::std::mem::align_of::<__va_list_tag>(),
+        ::core::mem::align_of::<__va_list_tag>(),
         8usize,
         concat!("Alignment of ", stringify!(__va_list_tag))
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).gp_offset) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).gp_offset) as usize - ptr as usize },
         0usize,
         concat!(
             "Offset of field: ",
@@ -3793,7 +3783,7 @@ fn bindgen_test_layout___va_list_tag() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).fp_offset) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).fp_offset) as usize - ptr as usize },
         4usize,
         concat!(
             "Offset of field: ",
@@ -3803,7 +3793,7 @@ fn bindgen_test_layout___va_list_tag() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).overflow_arg_area) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).overflow_arg_area) as usize - ptr as usize },
         8usize,
         concat!(
             "Offset of field: ",
@@ -3813,7 +3803,7 @@ fn bindgen_test_layout___va_list_tag() {
         )
     );
     assert_eq!(
-        unsafe { ::std::ptr::addr_of!((*ptr).reg_save_area) as usize - ptr as usize },
+        unsafe { ::core::ptr::addr_of!((*ptr).reg_save_area) as usize - ptr as usize },
         16usize,
         concat!(
             "Offset of field: ",
