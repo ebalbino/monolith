@@ -11,23 +11,23 @@ pub type Vec4b = BVec4;
 pub type Point = Vec2;
 
 pub struct BoundingBox2D {
-    pub min: Vec2,
-    pub max: Vec2,
+    min: Vec2,
+    max: Vec2,
 }
 
 pub struct BoundingBox3D {
-    pub min: Vec3,
-    pub max: Vec3,
+    min: Vec3,
+    max: Vec3,
 }
 
 pub struct Ray2D {
-    pub origin: Vec2,
-    pub direction: Vec2,
+    origin: Vec2,
+    direction: Vec2,
 }
 
 pub struct Ray3D {
-    pub origin: Vec3,
-    pub direction: Vec3,
+    origin: Vec3,
+    direction: Vec3,
 }
 
 pub fn vec2(x: f32, y: f32) -> Vec2 {
@@ -45,8 +45,8 @@ pub fn vec4(x: f32, y: f32, z: f32, w: f32) -> Vec4 {
 impl Default for BoundingBox2D {
     fn default() -> Self {
         BoundingBox2D {
-            min: vec2(0.0, 0.0),
-            max: vec2(0.0, 0.0),
+            min: Vec2::ZERO,
+            max: Vec2::ZERO,
         }
     }
 }
@@ -54,8 +54,8 @@ impl Default for BoundingBox2D {
 impl Default for BoundingBox3D {
     fn default() -> Self {
         BoundingBox3D {
-            min: vec3(0.0, 0.0, 0.0),
-            max: vec3(0.0, 0.0, 0.0),
+            min: Vec3::ZERO,
+            max: Vec3::ZERO,
         }
     }
 }
@@ -179,6 +179,77 @@ impl BoundingBox3D {
         if other.max.z > self.max.z {
             self.max.z = other.max.z;
         }
+    }
+}
+
+impl Ray2D {
+    pub fn new(origin: Vec2, direction: Vec2) -> Self {
+        Ray2D { origin, direction }
+    }
+
+    pub fn point_at(&self, t: f32) -> Vec2 {
+        self.origin + self.direction * t
+    }
+}
+
+impl Ray3D {
+    pub fn new(origin: Vec3, direction: Vec3) -> Self {
+        Ray3D { origin, direction }
+    }
+
+    pub fn point_at(&self, t: f32) -> Vec3 {
+        self.origin + self.direction * t
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_bounding_box2d() {
+        let mut bbox = BoundingBox2D::new(vec2(0.0, 0.0), vec2(1.0, 1.0));
+        assert_eq!(bbox.center(), vec2(0.5, 0.5));
+        assert_eq!(bbox.size(), vec2(1.0, 1.0));
+        assert_eq!(bbox.contains(vec2(0.5, 0.5)), true);
+        assert_eq!(bbox.contains(vec2(1.5, 1.5)), false);
+
+        bbox.expand(vec2(2.0, 2.0));
+        assert_eq!(bbox.size(), vec2(2.0, 2.0));
+        assert_eq!(bbox.contains(vec2(2.0, 2.0)), true);
+
+        bbox.expand(vec2(-1.0, -1.0));
+        assert_eq!(bbox.size(), vec2(3.0, 3.0));
+        assert_eq!(bbox.contains(vec2(-1.0, -1.0)), true);
+
+        let other = BoundingBox2D::new(vec2(-1.0, -1.0), vec2(1.0, 1.0));
+        bbox.expand_to_fit(&other);
+        assert_eq!(bbox.size(), vec2(3.0, 3.0));
+        assert_eq!(bbox.contains(vec2(-1.0, -1.0)), true);
+        assert_eq!(bbox.contains(vec2(1.0, 1.0)), true);
+    }
+
+    #[test]
+    fn test_bounding_box3d() {
+        let mut bbox = BoundingBox3D::new(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
+        assert_eq!(bbox.center(), vec3(0.5, 0.5, 0.5));
+        assert_eq!(bbox.size(), vec3(1.0, 1.0, 1.0));
+        assert_eq!(bbox.contains(vec3(0.5, 0.5, 0.5)), true);
+        assert_eq!(bbox.contains(vec3(1.5, 1.5, 1.5)), false);
+
+        bbox.expand(vec3(2.0, 2.0, 2.0));
+        assert_eq!(bbox.size(), vec3(2.0, 2.0, 2.0));
+        assert_eq!(bbox.contains(vec3(2.0, 2.0, 2.0)), true);
+
+        bbox.expand(vec3(-1.0, -1.0, -1.0));
+        assert_eq!(bbox.size(), vec3(3.0, 3.0, 3.0));
+        assert_eq!(bbox.contains(vec3(-1.0, -1.0, -1.0)), true);
+
+        let other = BoundingBox3D::new(vec3(-1.0, -1.0, -1.0), vec3(1.0, 1.0, 1.0));
+        bbox.expand_to_fit(&other);
+        assert_eq!(bbox.size(), vec3(3.0, 3.0, 3.0));
+        assert_eq!(bbox.contains(vec3(-1.0, -1.0, -1.0)), true);
+        assert_eq!(bbox.contains(vec3(1.0, 1.0, 1.0)), true);
     }
 }
 
