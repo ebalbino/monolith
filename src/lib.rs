@@ -10,6 +10,6 @@ pub mod arena;
 pub mod intern;
 pub mod math;
 
-pub use arena::{Arena, ArenaHandle};
+pub use arena::{Arena, ArenaView};
 pub use intern::{StrPool};
 pub use math::*;

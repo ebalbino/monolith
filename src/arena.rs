@@ -8,14 +8,14 @@ pub struct Arena {
     offset: Cell<usize>,
 }
 
-#[derive(Debug, PartialEq, Clone)]
-pub struct ArenaHandle<'a, T> {
+#[derive(Debug, PartialEq)]
+pub struct ArenaView<T> {
+    arena: *const Arena,
     ptr: *mut  T,
     len: usize,
-    marker: core::marker::PhantomData<&'a T>,
 }
 
-impl<'a, T> Deref for ArenaHandle<'a, T> {
+impl<T> Deref for ArenaView<T> {
     type Target = [T];
 
     fn deref(&self) -> &Self::Target {
@@ -23,13 +23,27 @@ impl<'a, T> Deref for ArenaHandle<'a, T> {
     }
 }
 
-impl<'a, T> DerefMut for ArenaHandle<'a, T> {
+impl<T> DerefMut for ArenaView<T> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         unsafe { core::slice::from_raw_parts_mut(self.ptr, self.len) }
     }
 }
 
-impl<'a> Arena {
+impl<T> Clone for ArenaView<T> {
+    fn clone(&self) -> Self {
+        let new_ptr = unsafe {
+            (*self.arena).push_slice(&self[..]).unwrap().as_ptr() as *mut T
+        };
+
+        ArenaView {
+            arena: self.arena,
+            ptr: new_ptr,
+            len: self.len,
+        }
+    }
+}
+
+impl Arena {
     pub fn new(size: usize) -> Arena {
         Arena {
             data: vec![0; size].into_boxed_slice(),
@@ -37,7 +51,7 @@ impl<'a> Arena {
         }
     }
 
-    pub fn allocate<T>(&'a self, len: usize) -> Option<ArenaHandle<'a, T>> {
+    pub fn allocate<T>(&self, len: usize) -> Option<ArenaView<T>> {
         let size = core::mem::size_of::<T>();
         let align = core::mem::align_of::<T>();
         let offset = (self.offset.get() + align - 1) & !(align - 1);
@@ -47,17 +61,17 @@ impl<'a> Arena {
             let ptr = &self.data[offset] as *const u8 as *mut T;
             self.offset.set(new_offset);
 
-            Some(ArenaHandle {
+            Some(ArenaView {
+                arena: self,
                 ptr,
                 len,
-                marker: core::marker::PhantomData,
             })
         } else {
             None
         }
     }
 
-    pub fn push<T>(&'a self, value: T) -> Option<ArenaHandle<'a, T>> {
+    pub fn push<T>(&self, value: T) -> Option<ArenaView<T>> {
         let size = core::mem::size_of::<T>();
         let align = core::mem::align_of::<T>();
         let offset = (self.offset.get() + align - 1) & !(align - 1);
@@ -71,17 +85,17 @@ impl<'a> Arena {
                 ptr.write(value);
             }
 
-            Some(ArenaHandle {
+            Some(ArenaView {
+                arena: self,
                 ptr,
                 len: 1,
-                marker: core::marker::PhantomData,
             })
         } else {
             None
         }
     }
 
-    pub fn push_slice<T>(&'a self, values: &[T]) -> Option<ArenaHandle<'a, T>> {
+    pub fn push_slice<T>(&self, values: &[T]) -> Option<ArenaView<T>> {
         let size = core::mem::size_of::<T>();
         let align = core::mem::align_of::<T>();
         let offset = (self.offset.get() + align - 1) & !(align - 1);
@@ -95,10 +109,10 @@ impl<'a> Arena {
                 ptr.copy_from_nonoverlapping(values.as_ptr(), values.len());
             }
 
-            Some(ArenaHandle {
+            Some(ArenaView {
+                arena: self,
                 ptr,
                 len: values.len(),
-                marker: core::marker::PhantomData,
             })
         } else {
             None
@@ -144,8 +158,8 @@ mod tests {
     fn test_arena() {
         let arena = Arena::new(1024);
 
-        let mut p1: ArenaHandle<Point> = arena.allocate::<Point>(1).unwrap();
-        let mut p2: ArenaHandle<Point> = arena.allocate::<Point>(1).unwrap();
+        let mut p1: ArenaView<Point> = arena.allocate::<Point>(1).unwrap();
+        let mut p2: ArenaView<Point> = arena.allocate::<Point>(1).unwrap();
 
         p1[0] = Point { x: 1.0, y: 2.0 };
         p2[0] = Point { x: 3.0, y: 4.0 };
@@ -163,7 +177,7 @@ mod tests {
     fn test_arena_x() {
         let arena = Arena::new(1024);
 
-        let mut entities: ArenaHandle<Entity> = arena.allocate::<Entity>(10).unwrap();
+        let mut entities: ArenaView<Entity> = arena.allocate::<Entity>(10).unwrap();
 
         for entity in entities.iter_mut() {
             entity.position = Point { x: 1.0, y: 2.0 };
@@ -188,26 +202,26 @@ mod tests {
 
     #[test]
     fn test_full_arena() {
-        let mut arena = Arena::new(core::mem::size_of::<Point>() * 2);
+        let arena = Arena::new(core::mem::size_of::<Point>() * 2);
 
-        let _p1: ArenaHandle<Point> = arena.allocate::<Point>(1).unwrap();
-        let _p2: ArenaHandle<Point> = arena.allocate::<Point>(1).unwrap();
+        let _p1: ArenaView<Point> = arena.allocate::<Point>(1).unwrap();
+        let _p2: ArenaView<Point> = arena.allocate::<Point>(1).unwrap();
 
         assert!(arena.is_full());
         arena.clear();
         assert_eq!(arena.occupied(), 0);
 
-        let _p4: ArenaHandle<Point> = arena.allocate::<Point>(1).unwrap();
-        let _p5: ArenaHandle<Point> = arena.allocate::<Point>(1).unwrap();
+        let _p4: ArenaView<Point> = arena.allocate::<Point>(1).unwrap();
+        let _p5: ArenaView<Point> = arena.allocate::<Point>(1).unwrap();
         assert!(arena.is_full());
     }
 
     #[test]
     fn test_arena_clear() {
-        let mut arena = Arena::new(1024);
+        let arena = Arena::new(1024);
 
-        let mut p1: ArenaHandle<Point> = arena.allocate::<Point>(1).unwrap();
-        let mut p2: ArenaHandle<Point> = arena.allocate::<Point>(1).unwrap();
+        let mut p1 = arena.allocate::<Point>(1).unwrap();
+        let mut p2 = arena.allocate::<Point>(1).unwrap();
 
         p1[0] = Point { x: 1.0, y: 2.0 };
         p2[0] = Point { x: 3.0, y: 4.0 };
@@ -223,8 +237,8 @@ mod tests {
         arena.clear();
         assert_eq!(arena.occupied(), 0);
 
-        let mut p3: ArenaHandle<Point> = arena.allocate::<Point>(1).unwrap();
-        let mut p4: ArenaHandle<Point> = arena.allocate::<Point>(1).unwrap();
+        let mut p3 = arena.allocate::<Point>(1).unwrap();
+        let mut p4 = arena.allocate::<Point>(1).unwrap();
 
         p3[0] = Point { x: 5.0, y: 6.0 };
         p4[0] = Point { x: 7.0, y: 8.0 };

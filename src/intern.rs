@@ -4,37 +4,43 @@ use core::cell::RefCell;
 use alloc::vec::Vec;
 use crate::arena::Arena;
 
-pub struct StrPool<'a> {
+pub struct StrPool {
     arena: RefCell<Arena>,
-    lookup: RefCell<Vec<StrIntern<'a>>>,
+    lookup: RefCell<Vec<StrIntern>>,
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
-struct StrIntern<'a> {
-    data: &'a str,
+struct StrIntern {
+    data: *const u8,
+    len: usize,
 }
 
-impl<'a> Deref for StrIntern<'a> {
+impl Deref for StrIntern {
     type Target = str;
 
     fn deref(&self) -> &Self::Target {
-        self.data
+        unsafe {
+            core::str::from_utf8_unchecked(core::slice::from_raw_parts(self.data as *const u8, self.len))
+        }
     }
 }
 
-impl<'a> StrPool<'a> {
-    pub fn new(size: usize) -> StrPool<'a> {
+impl StrPool {
+    pub fn new(size: usize) -> StrPool {
         StrPool {
             arena: RefCell::new(Arena::new(size)),
             lookup: RefCell::new(Vec::new()),
         }
     }
 
-    pub fn intern(&'a self, value: &'a str) -> Option<&'a str> {
+    pub fn intern(&self, value: &str) -> Option<&str> {
         for intern in self.lookup.borrow().iter() {
-            if intern.data.len() == value.len() {
-                if intern.data.as_bytes() == value.as_bytes() {
-                    return Some(intern.data);
+            if intern.len == value.len() {
+                if intern.as_bytes() == value.as_bytes() {
+                    let data = unsafe {
+                        core::str::from_utf8_unchecked(core::slice::from_raw_parts(intern.as_ptr() as *const u8, intern.len))
+                    };
+                    return Some(data);
                 }
             }
         }
@@ -45,7 +51,7 @@ impl<'a> StrPool<'a> {
             core::str::from_utf8_unchecked(core::slice::from_raw_parts(slice.as_ptr() as *const u8, slice.len()))
         };
 
-        self.lookup.borrow_mut().push(StrIntern { data });
+        self.lookup.borrow_mut().push(StrIntern { data: slice.as_ptr(), len: slice.len()});
         Some(data)
     }
 
