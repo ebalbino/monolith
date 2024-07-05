@@ -1,25 +1,14 @@
-extern crate nalgebra as na;
-
 use std::default::Default;
-use na::{Vector2, Vector3, Vector4};
+use glam::{IVec2, IVec3, IVec4, BVec4};
 
-pub type Vec2 = Vector2<f64>;
-pub type Vec3 = Vector3<f64>;
-pub type Vec4 = Vector4<f64>;
-pub type Vec2i = Vector2<i32>;
-pub type Vec3i = Vector3<i32>;
-pub type Vec4i = Vector4<i32>;
-pub type Vec4b = Vector4<u8>;
-
+pub type Vec2 = glam::Vec2;
+pub type Vec3 = glam::Vec3;
+pub type Vec4 = glam::Vec4;
+pub type Vec2i = IVec2;
+pub type Vec3i = IVec3;
+pub type Vec4i = IVec4;
+pub type Vec4b = BVec4;
 pub type Point = Vec2;
-
-const ZERO_VEC2: Vec2 = Vec2::new(0.0, 0.0);
-const ZERO_VEC3: Vec3 = Vec3::new(0.0, 0.0, 0.0);
-const ZERO_VEC4: Vec4 = Vec4::new(0.0, 0.0, 0.0, 0.0);
-
-const ONE_VEC2: Vec2 = Vec2::new(1.0, 1.0);
-const ONE_VEC3: Vec3 = Vec3::new(1.0, 1.0, 1.0);
-const ONE_VEC4: Vec4 = Vec4::new(1.0, 1.0, 1.0, 1.0);
 
 pub struct BoundingBox2D {
     pub min: Vec2,
@@ -41,23 +30,23 @@ pub struct Ray3D {
     pub direction: Vec3,
 }
 
-pub fn vec2(x: f64, y: f64) -> Vec2 {
-    Vector2::new(x, y)
+pub fn vec2(x: f32, y: f32) -> Vec2 {
+    Vec2::new(x, y)
 }
 
-pub fn vec3(x: f64, y: f64, z: f64) -> Vec3 {
-    Vector3::new(x, y, z)
+pub fn vec3(x: f32, y: f32, z: f32) -> Vec3 {
+    Vec3::new(x, y, z)
 }
 
-pub fn vec4(x: f64, y: f64, z: f64, w: f64) -> Vec4 {
-    Vector4::new(x, y, z, w)
+pub fn vec4(x: f32, y: f32, z: f32, w: f32) -> Vec4 {
+    Vec4::new(x, y, z, w)
 }
 
 impl Default for BoundingBox2D {
     fn default() -> Self {
         BoundingBox2D {
-            min: ZERO_VEC2,
-            max: ZERO_VEC2,
+            min: vec2(0.0, 0.0),
+            max: vec2(0.0, 0.0),
         }
     }
 }
@@ -65,8 +54,8 @@ impl Default for BoundingBox2D {
 impl Default for BoundingBox3D {
     fn default() -> Self {
         BoundingBox3D {
-            min: ZERO_VEC3,
-            max: ZERO_VEC3,
+            min: vec3(0.0, 0.0, 0.0),
+            max: vec3(0.0, 0.0, 0.0),
         }
     }
 }
