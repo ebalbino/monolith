@@ -1,5 +1,5 @@
 use core::default::Default;
-use glam::{IVec2, IVec3, IVec4, BVec4};
+use glam::{BVec4, IVec2, IVec3, IVec4, UVec2, UVec3, UVec4};
 
 pub type Vec2 = glam::Vec2;
 pub type Vec3 = glam::Vec3;
@@ -7,6 +7,9 @@ pub type Vec4 = glam::Vec4;
 pub type Vec2i = IVec2;
 pub type Vec3i = IVec3;
 pub type Vec4i = IVec4;
+pub type Vec2u = UVec2;
+pub type Vec3u = UVec3;
+pub type Vec4u = UVec4;
 pub type Vec4b = BVec4;
 pub type Point = Vec2;
 

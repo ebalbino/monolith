@@ -9,7 +9,9 @@ pub mod bindings;
 pub mod arena;
 pub mod intern;
 pub mod math;
+pub mod draw;
 
 pub use arena::{Arena, ArenaView};
 pub use intern::{StrPool};
 pub use math::*;
+pub use draw::*;
