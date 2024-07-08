@@ -85,6 +85,10 @@ impl Mesh {
         self.vertices.is_valid()
     }
 
+    pub fn vertices(&self) -> &VertexData {
+        &self.vertices
+    }
+
     pub fn positions(&self) -> &[Vec3] {
         self.vertices.positions()
     }
@@ -505,7 +509,7 @@ pub fn make_sphere(arena: &Arena, steps: u32, scale: f32, uvscale: f32) -> Optio
     return Some(mesh);
 }
 
-pub fn make_uvsphere(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) -> Option<Mesh> {
+pub fn make_uv_sphere(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) -> Option<Mesh> {
     let mut mesh = make_rect(arena, steps, Vec2::new(1.0, 1.0), Vec2::new(1.0, 1.0))?;
 
     for i in 0..mesh.vertices.positions.len() {
@@ -525,7 +529,196 @@ pub fn make_uvsphere(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) -> 
     return Some(mesh);
 }
 
-pub fn quads_to_triangles(arena: &Arena, quads: ArenaView<Vec4u>) -> Option<ArenaView<Vec3u>> {
+pub fn make_uv_sphere_y(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) -> Option<Mesh> {
+    let mut mesh = make_uv_sphere(arena, steps, scale, uvscale)?;
+
+    for position in mesh.vertices.positions.iter_mut() {
+        *position = Vec3::new(position.x, position.z, position.y);
+    }
+
+    for normal in mesh.vertices.normals.iter_mut() {
+        *normal = Vec3::new(normal.x, normal.z, normal.y);
+    }
+
+    for texcoords in mesh.vertices.texcoords.iter_mut() {
+        *texcoords = Vec2::new(texcoords.x, 1.0 - texcoords.y);
+    }
+
+    let elements = match mesh.elements {
+        Element::Quad(ref mut quads) => quads,
+        _ => return None,
+    };
+
+    for quad in elements.iter_mut() {
+        *quad = Vec4u::new(quad.x, quad.w, quad.z, quad.y);
+    }
+
+    return Some(mesh);
+}
+
+pub fn make_capped_uvsphere(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2, cap: f32) -> Option<Mesh> {
+    let mut mesh = make_uv_sphere(arena, steps, scale, uvscale)?;
+
+    if cap != 0.0 {
+        let cap = cap.min(scale / 2.0);
+        let zflip = scale - cap;
+        for (position, normal) in mesh.vertices.positions.iter_mut().zip(mesh.vertices.normals.iter_mut()) {
+            if position.z > zflip {
+                position.z = 2.0 * zflip - position.z;
+                normal.x = -normal.x;
+                normal.y = -normal.y;
+            } else if position.z < -zflip {
+                position.z = 2.0 * -zflip - position.z;
+                normal.x = -normal.x;
+                normal.y = -normal.y;
+            }
+        }
+    }
+
+    return Some(mesh);
+}
+
+pub fn make_capped_uvsphere_y(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2, cap: f32) -> Option<Mesh> {
+    let mut mesh = make_uv_sphere_y(arena, steps, scale, uvscale)?;
+
+    if cap != 0.0 {
+        let cap = cap.min(scale / 2.0);
+        let zflip = scale - cap;
+        for (position, normal) in mesh.vertices.positions.iter_mut().zip(mesh.vertices.normals.iter_mut()) {
+            if position.z > zflip {
+                position.z = 2.0 * zflip - position.z;
+                normal.x = -normal.x;
+                normal.y = -normal.y;
+            } else if position.z < -zflip {
+                position.z = 2.0 * -zflip - position.z;
+                normal.x = -normal.x;
+                normal.y = -normal.y;
+            }
+        }
+    }
+
+    return Some(mesh);
+}
+
+pub fn make_disk(arena: &Arena, steps: u32, scale: f32, uvscale: f32) -> Option<Mesh> {
+    let mut mesh = make_rect(arena, Vec2u::new(steps, steps), Vec2::new(1.0, 1.0), Vec2::new(uvscale, uvscale))?;
+
+    for position in mesh.vertices.positions.iter_mut() {
+        *position = Vec3::new(position.x, position.z, position.y);
+    }
+
+    for normal in mesh.vertices.normals.iter_mut() {
+        *normal = Vec3::new(normal.x, normal.z, normal.y);
+    }
+
+    for texcoords in mesh.vertices.texcoords.iter_mut() {
+        *texcoords = Vec2::new(texcoords.x, 1.0 - texcoords.y);
+    }
+
+    let elements = match mesh.elements {
+        Element::Quad(ref mut quads) => quads,
+        _ => return None,
+    };
+
+    for quad in elements.iter_mut() {
+        *quad = Vec4u::new(quad.x, quad.w, quad.z, quad.y);
+    }
+
+    return Some(mesh);
+}
+
+pub fn make_bulged_disk(arena: &Arena, steps: u32, scale: f32, uvscale: f32, height: f32) -> Option<Mesh> {
+    let mut disk = make_disk(arena, steps, scale, uvscale)?;
+
+    if height != 0.0 {
+        let height = height.min(scale);
+        let radius = (1.0 + height * height) / (2.0 * height);
+        let center = Vec3::new(0.0, 0.0, -radius + height);
+        for (position, normal) in disk.vertices.positions.iter_mut().zip(disk.vertices.normals.iter_mut()) {
+            let pn = (*position - center).normalize();
+            *position = center + pn * radius;
+            *normal = pn;
+        }
+    }
+
+    return Some(disk);
+}
+
+pub fn make_uv_disk(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) -> Option<Mesh> {
+    let mut disk = make_rect(arena, steps, Vec2::new(1.0, 1.0), Vec2::new(1.0, 1.0))?;
+
+    for i in 0..disk.vertices.positions.len() {
+        let uv = disk.vertices.texcoords[i];
+        let phi = 2.0 * core::f32::consts::PI * uv.x;
+
+        disk.vertices.positions[i] = Vec3::new(phi.cos() * uv.y, phi.sin() * uv.y, 0.0) * scale;
+        disk.vertices.normals[i] = Vec3::new(0.0, 0.0, 1.0);
+        disk.vertices.texcoords[i] = uv * uvscale;
+    }
+
+    return Some(disk);
+}
+
+pub fn make_lines(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2, rad: Vec2) -> Option<Mesh> {
+    let mut positions = arena.allocate::<Vec3>(((steps.x + 1) * steps.y) as usize).unwrap();
+    let mut normals = arena.allocate::<Vec3>(((steps.x + 1) * steps.y) as usize).unwrap();
+    let mut texcoords = arena.allocate::<Vec2>(((steps.x + 1) * steps.y) as usize).unwrap();
+    let mut radius = arena.allocate::<f32>(((steps.x + 1) * steps.y) as usize).unwrap();
+    let mut lines = arena.allocate::<Vec2u>((steps.x * steps.y) as usize).unwrap();
+
+    if steps.y > 1 {
+        for y in 0..steps.y {
+            for x in 0..steps.x + 1 {
+                let uv = vec2(x as f32 / steps.x as f32, y as f32 / (steps.y - 1) as f32);
+                let index = (y * (steps.x + 1) + x) as usize;
+
+                positions[index] = Vec3::new(
+                    (uv.x - 0.5) * scale.x,
+                    (uv.y - 0.5) * scale.y,
+                    0.0
+                );
+                normals[index] = Vec3::new(0.0, 1.0, 0.0);
+                texcoords[index] = Vec2::new(uv.x, 1.0 - uv.y) * uvscale;
+                radius[index] = lerp(rad.x, rad.y, uv.y);
+            }
+        }
+    } else {
+        for x in 0..steps.x + 1 {
+            let uv = vec2(x as f32 / steps.x as f32, 0.0);
+            let index = x as usize;
+
+            positions[index] = Vec3::new(
+                (uv.x - 0.5) * scale.x,
+                0.0,
+                0.0
+            );
+            normals[index] = Vec3::new(1.0, 0.0, 0.0);
+            texcoords[index] = uv * uvscale;
+            radius[index] = lerp(rad.x, rad.y, uv.x);
+        }
+    }
+
+    for y in 0..steps.y {
+        for x in 0..steps.x {
+            let index = (y * steps.x + x) as usize;
+            lines[index] = Vec2u::new(
+                y * (steps.x + 1) + x,
+                y * (steps.x + 1) + (x + 1),
+            );
+        }
+    }
+
+    Some(Mesh {
+        vertices: VertexData {
+            positions,
+            normals,
+            texcoords,
+        },
+        elements: Element::Line(lines),
+    })
+}
+
+pub fn quads_to_triangles(arena: &Arena, quads: &ArenaView<Vec4u>) -> Option<ArenaView<Vec3u>> {
     let mut triangles = arena.allocate::<Vec3u>(quads.len() * 2)?;
     let mut triangle_count = 0;
 
