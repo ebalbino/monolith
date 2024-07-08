@@ -1,4 +1,4 @@
-pub mod mesh;
+use crate::arena::{Arena, ArenaView};
 
 struct Texture {
     width: u32,
