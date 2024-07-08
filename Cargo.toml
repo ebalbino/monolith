@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 glam = "0.28.0"
 nalgebra = "0.33.0"
+tao = "0.28.1"
 
 [build-dependencies]
 bindgen = "0.69.4"
