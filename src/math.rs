@@ -1,5 +1,6 @@
 use core::default::Default;
 use glam::{BVec4, IVec2, IVec3, IVec4, UVec2, UVec3, UVec4};
+use core::ops::{Mul, Add, Sub};
 
 pub type Vec2 = glam::Vec2;
 pub type Vec3 = glam::Vec3;
@@ -205,6 +206,32 @@ impl Ray3D {
     }
 }
 
+pub fn lerp<T>(a: T, b: T, t: f32) -> T
+where T: Mul<f32, Output = T> + Add<Output = T> {
+    a * (1.0 - t) + b * t
+}
+
+pub fn lerp_2d<T>(a: T, b: T, c: T, d: T, u: f32, v: f32) -> T
+where T: Mul<f32, Output = T> + Add<Output = T> {
+    lerp(lerp(a, b, u), lerp(c, d, u), v)
+}
+
+pub fn lerp_3d<T>(a: T, b: T, c: T, d: T, e: T, f: T, g: T, h: T, u: f32, v: f32, w: f32) -> T
+where T: Mul<f32, Output = T> + Add<Output = T> {
+    lerp(lerp_2d(a, b, c, d, u, v), lerp_2d(e, f, g, h, u, v), w)
+}
+
+pub fn linear_lerp<T>(a: T, b: T, t: f32) -> T
+where T: Mul<f32, Output = T> + Add<Output = T> + Sub<Output = T> + Copy {
+    a + (b - a) * t
+}
+
+pub fn cosine_lerp<T>(a: T, b: T, t: f32) -> T
+where T: Mul<f32, Output = T> + Add<Output = T> + Sub<Output = T> + Copy {
+    let t = 0.5 - (t.fract() as f32 * core::f32::consts::PI).cos() * 0.5;
+    a + (b - a) * t
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -253,6 +280,48 @@ mod tests {
         assert_eq!(bbox.size(), vec3(3.0, 3.0, 3.0));
         assert_eq!(bbox.contains(vec3(-1.0, -1.0, -1.0)), true);
         assert_eq!(bbox.contains(vec3(1.0, 1.0, 1.0)), true);
+    }
+
+    #[test]
+    fn test_lerp() {
+        assert_eq!(lerp(0.0, 1.0, 0.5), 0.5);
+        assert_eq!(lerp(vec2(0.0, 0.0), vec2(1.0, 1.0), 0.5), vec2(0.5, 0.5));
+        assert_eq!(lerp(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0), 0.5), vec3(0.5, 0.5, 0.5));
+        assert_eq!(lerp(vec4(0.0, 0.0, 0.0, 0.0), vec4(1.0, 1.0, 1.0, 1.0), 0.5), vec4(0.5, 0.5, 0.5, 0.5));
+    }
+
+    #[test]
+    fn test_lerp_2d() {
+        assert_eq!(lerp_2d(0.0, 1.0, 2.0, 3.0, 0.5, 0.5), 1.5);
+        assert_eq!(lerp_2d(vec2(0.0, 0.0), vec2(1.0, 1.0), vec2(2.0, 2.0), vec2(3.0, 3.0), 0.5, 0.5), vec2(1.5, 1.5));
+    }
+
+    #[test]
+    fn test_lerp_3d() {
+        assert_eq!(lerp_3d(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 0.5, 0.5, 0.5), 3.5);
+        assert_eq!(lerp_3d(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0), vec3(2.0, 2.0, 2.0), vec3(3.0, 3.0, 3.0), vec3(4.0, 4.0, 4.0), vec3(5.0, 5.0, 5.0), vec3(6.0, 6.0, 6.0), vec3(7.0, 7.0, 7.0), 0.5, 0.5, 0.5), vec3(3.5, 3.5, 3.5));
+    }
+
+    #[test]
+    fn test_linear_lerp() {
+        assert_eq!(linear_lerp(0.0, 1.0, 0.5), 0.5);
+        assert_eq!(linear_lerp(vec2(0.0, 0.0), vec2(1.0, 1.0), 0.5), vec2(0.5, 0.5));
+        assert_eq!(linear_lerp(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0), 0.5), vec3(0.5, 0.5, 0.5));
+        assert_eq!(linear_lerp(vec4(0.0, 0.0, 0.0, 0.0), vec4(1.0, 1.0, 1.0, 1.0), 0.5), vec4(0.5, 0.5, 0.5, 0.5));
+    }
+
+    #[test]
+    fn test_cosine_lerp() {
+        assert_eq!(cosine_lerp(0.0, 1.0, 0.5), 0.5);
+        assert_eq!(cosine_lerp(vec2(0.0, 0.0), vec2(1.0, 1.0), 0.5), vec2(0.5, 0.5));
+        assert_eq!(cosine_lerp(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0), 0.5), vec3(0.5, 0.5, 0.5));
+        assert_eq!(cosine_lerp(vec4(0.0, 0.0, 0.0, 0.0), vec4(1.0, 1.0, 1.0, 1.0), 0.5), vec4(0.5, 0.5, 0.5, 0.5));
+
+        assert_eq!(cosine_lerp(0.0, 1.0, 0.0), 0.0);
+        assert_eq!(cosine_lerp(0.0, 1.0, 1.0), 0.0);
+
+        assert_eq!(cosine_lerp(0.0, 1.0, 0.25), 0.14644662);
+        assert_eq!(cosine_lerp(0.0, 1.0, 0.75), 0.8535534);
     }
 }
 
