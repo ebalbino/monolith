@@ -601,7 +601,7 @@ pub fn make_capped_uvsphere_y(arena: &Arena, steps: Vec2u, scale: f32, uvscale: 
 }
 
 pub fn make_disk(arena: &Arena, steps: u32, scale: f32, uvscale: f32) -> Option<Mesh> {
-    let mut mesh = make_rect(arena, Vec2u::new(steps, steps), Vec2::new(1.0, 1.0), Vec2::new(uvscale, uvscale))?;
+    let mut mesh = make_rect(arena, Vec2u::new(steps, steps), Vec2::new(scale, scale), Vec2::new(uvscale, uvscale))?;
 
     for position in mesh.vertices.positions.iter_mut() {
         *position = Vec3::new(position.x, position.z, position.y);
