@@ -1,6 +1,8 @@
-type Point = [f32; 2];]
+use alloc::string::String;
 
-enum Key {
+type Vec2 = [f32; 2];
+
+pub enum Key {
     A,
     B,
     C,
@@ -105,13 +107,13 @@ enum Key {
     KeyCount,
 }
 
-struct DigitalButton {
+pub struct DigitalButton {
     down: bool,
     pressed: bool,
     released: bool,
 }
 
-struct AnalogButton {
+pub struct AnalogButton {
     threshold: f32,
     value: f32,
     down: bool,
@@ -119,9 +121,9 @@ struct AnalogButton {
     released: bool,
 }
 
-struct Mouse {
-    position: Point,
-    delta_position: Point,
+pub struct Mouse {
+    position: Vec2,
+    delta_position: Vec2,
     wheel: i32,
     delta_wheel: i32,
     left_button: DigitalButton,
@@ -129,12 +131,12 @@ struct Mouse {
     middle_button: DigitalButton,
 }
 
-struct Clock {
+pub struct Clock {
     ticks: u64,
     nanoseconds: u64,
     microseconds: u64,
     milliseconds: u64,
-    seconds: f32
+    seconds: f32,
 
     delta_ticks: u64,
     delta_nanoseconds: u64,
@@ -146,8 +148,8 @@ struct Clock {
     ticks_per_second: u64,
 }
 
-struct Window {
-    size: Point,
+pub struct Window {
+    size: Vec2,
     scale: f32,
     title: String,
     fullscreen: bool,
@@ -156,20 +158,15 @@ struct Window {
     cursor: bool,
 }
 
-type Keyboard = [DigitalButton; Key::KeyCount as usize];
-type TextBuffer = [char; 256];
+pub type Keyboard = [DigitalButton; Key::KeyCount as usize];
+pub type TextBuffer = [char; 256];
 
-struct KeyboardBuffer {
+pub struct KeyboardBuffer {
     len: usize,
     buffer: TextBuffer,
 }
 
-struct PlatformHandle {
-    window: *mut c_void,
-    context: *mut c_void,
-}
-
-struct Input {
+pub struct Input {
     window: Window,
     clock: Clock,
     mouse: Mouse,
