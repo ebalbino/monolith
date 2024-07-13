@@ -1,0 +1,178 @@
+type Point = [f32; 2];]
+
+enum Key {
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    H,
+    I,
+    J,
+    K,
+    L,
+    M,
+    N,
+    O,
+    P,
+    Q,
+    R,
+    S,
+    T,
+    U,
+    V,
+    W,
+    X,
+    Y,
+    Z,
+    Num0,
+    Num1,
+    Num2,
+    Num3,
+    Num4,
+    Num5,
+    Num6,
+    Num7,
+    Num8,
+    Num9,
+    Escape,
+    LControl,
+    LShift,
+    LAlt,
+    LSystem,
+    RControl,
+    RShift,
+    RAlt,
+    RSystem,
+    Menu,
+    LBracket,
+    RBracket,
+    SemiColon,
+    Comma,
+    Period,
+    Quote,
+    Slash,
+    BackSlash,
+    Tilde,
+    Equal,
+    Dash,
+    Space,
+    Return,
+    BackSpace,
+    Tab,
+    PageUp,
+    PageDown,
+    End,
+    Home,
+    Insert,
+    Delete,
+    Add,
+    Subtract,
+    Multiply,
+    Divide,
+    Left,
+    Right,
+    Up,
+    Down,
+    Numpad0,
+    Numpad1,
+    Numpad2,
+    Numpad3,
+    Numpad4,
+    Numpad5,
+    Numpad6,
+    Numpad7,
+    Numpad8,
+    Numpad9,
+    F1,
+    F2,
+    F3,
+    F4,
+    F5,
+    F6,
+    F7,
+    F8,
+    F9,
+    F10,
+    F11,
+    F12,
+    F13,
+    F14,
+    F15,
+    Pause,
+    KeyCount,
+}
+
+struct DigitalButton {
+    down: bool,
+    pressed: bool,
+    released: bool,
+}
+
+struct AnalogButton {
+    threshold: f32,
+    value: f32,
+    down: bool,
+    pressed: bool,
+    released: bool,
+}
+
+struct Mouse {
+    position: Point,
+    delta_position: Point,
+    wheel: i32,
+    delta_wheel: i32,
+    left_button: DigitalButton,
+    right_button: DigitalButton,
+    middle_button: DigitalButton,
+}
+
+struct Clock {
+    ticks: u64,
+    nanoseconds: u64,
+    microseconds: u64,
+    milliseconds: u64,
+    seconds: f32
+
+    delta_ticks: u64,
+    delta_nanoseconds: u64,
+    delta_microseconds: u64,
+    delta_milliseconds: u64,
+    delta_seconds: f32,
+
+    initial_ticks: u64,
+    ticks_per_second: u64,
+}
+
+struct Window {
+    size: Point,
+    scale: f32,
+    title: String,
+    fullscreen: bool,
+    vsync: bool,
+    resizable: bool,
+    cursor: bool,
+}
+
+type Keyboard = [DigitalButton; Key::KeyCount as usize];
+type TextBuffer = [char; 256];
+
+struct KeyboardBuffer {
+    len: usize,
+    buffer: TextBuffer,
+}
+
+struct PlatformHandle {
+    window: *mut c_void,
+    context: *mut c_void,
+}
+
+struct Input {
+    window: Window,
+    clock: Clock,
+    mouse: Mouse,
+    keyboard: Keyboard,
+    text_buffer: KeyboardBuffer,
+}
