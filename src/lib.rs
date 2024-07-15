@@ -10,7 +10,7 @@ pub mod arena;
 pub mod intern;
 pub mod math;
 pub mod draw;
-pub mod input;
+pub mod platform;
 
 pub use arena::{Arena, ArenaView};
 pub use intern::{StrPool};

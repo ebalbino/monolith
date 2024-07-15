@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 glam = "0.28.0"
+libc = "0.2.155"
 nalgebra = "0.33.0"
 tao = "0.28.1"
 
