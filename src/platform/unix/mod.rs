@@ -41,7 +41,7 @@ impl Clock {
         let ticks = get_time();
 
         Clock {
-            ticks: Cell::new(ticks),
+            ticks: Cell::new(0),
             nanoseconds: Cell::new(0),
             microseconds: Cell::new(0),
             milliseconds: Cell::new(0),
@@ -60,21 +60,21 @@ impl Clock {
 
     pub fn update(&self) {
         let current_ticks = get_time();
-        let delta_ticks = current_ticks - self.ticks.get();
+        let delta_ticks = (current_ticks - self.initial_ticks) - self.ticks.get();
         let ticks = current_ticks - self.initial_ticks;
 
         self.delta_ticks.set(delta_ticks);
         self.ticks.set(ticks);
 
         self.delta_nanoseconds.set(delta_ticks / self.ticks_per_second);
-        self.delta_microseconds.set(self.delta_nanoseconds.get() / 1_000);
-        self.delta_milliseconds.set(self.delta_nanoseconds.get() / 1_000_000);
-        self.delta_seconds.set(self.delta_nanoseconds.get() as f64 / 1_000_000_000.0);
+        self.delta_microseconds.set(self.delta_nanoseconds() / 1_000);
+        self.delta_milliseconds.set(self.delta_microseconds() / 1_000);
+        self.delta_seconds.set(self.delta_milliseconds() as f64 / 1_000.0);
 
         self.nanoseconds.set(ticks / self.ticks_per_second);
-        self.microseconds.set(self.nanoseconds.get() / 1_000);
-        self.milliseconds.set(self.nanoseconds.get() / 1_000_000);
-        self.seconds.set(self.nanoseconds.get() as f64 / 1_000_000_000.0);
+        self.microseconds.set(self.nanoseconds() / 1_000);
+        self.milliseconds.set(self.microseconds() / 1_000);
+        self.seconds.set(self.milliseconds() as f64 / 1_000.0);
     }
 
     pub fn ticks(&self) -> u64 {
