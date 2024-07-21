@@ -1,17 +1,26 @@
 use crate::arena::{Arena, ArenaString, ArenaView};
 use crate::intern::StrPool;
 use alloc::collections::BTreeMap;
-use core::cell::{OnceCell, RefCell};
+use alloc::format;
+use alloc::vec::Vec;
+use core::cell::{OnceCell, Ref, RefCell};
 use core::mem;
 use libc::{
-    fstat, open, read, stat, S_IFBLK, S_IFCHR, S_IFDIR, S_IFIFO, S_IFLNK, S_IFMT, S_IFREG, S_IFSOCK,
+    close, closedir, fstat, open, opendir, read, readdir, stat, DT_DIR, DT_REG, S_IFBLK, S_IFCHR,
+    S_IFDIR, S_IFIFO, S_IFLNK, S_IFMT, S_IFREG, S_IFSOCK,
 };
 use libc::{write, O_CREAT, O_RDWR};
 
 pub struct Filesystem<'a> {
     arena: Arena,
+    root: ArenaString,
     strings: StrPool,
     loaded: RefCell<BTreeMap<&'a str, i32>>,
+}
+
+pub enum INode {
+    Directory(Vec<INode>),
+    File(ArenaString),
 }
 
 pub struct File {
@@ -41,18 +50,63 @@ fn cstr(arena: &Arena, text: &str) -> *mut i8 {
     string.as_mut_ptr()
 }
 
+fn read_directory(arena: &Arena, path: &str) -> Vec<INode> {
+    let mut nodes = Vec::new();
+    let dirp = unsafe { opendir(cstr(&arena, path)) };
+    let mut entry = unsafe { readdir(dirp) };
+
+    while !entry.is_null() {
+        unsafe {
+            let inner = *entry;
+            let name_cstr = core::ffi::CStr::from_ptr(inner.d_name.as_ptr());
+            let name = name_cstr.to_str().unwrap();
+
+            match name {
+                "." | ".." | ".git" | "target" => {}
+                _ => {
+                    let file_path = format!("{}/{}", path, name);
+                    match inner.d_type {
+                        DT_DIR => {
+                            let inner_nodes = read_directory(&arena, &file_path);
+                            nodes.push(INode::Directory(inner_nodes));
+                        }
+                        DT_REG => {
+                            nodes.push(INode::File(arena.push_string(&file_path).unwrap()));
+                        }
+                        _ => {}
+                    }
+                }
+            }
+
+            entry = readdir(dirp);
+        }
+    }
+
+    unsafe {
+        closedir(dirp);
+    }
+
+    nodes
+}
+
 impl<'a> Filesystem<'a> {
-    pub fn new() -> Self {
+    pub fn new(root: &str) -> Self {
         let arena = Arena::new(1024 * 1024);
+        let root = arena.push_string(root).unwrap();
 
         Filesystem {
             arena,
+            root,
             strings: StrPool::new(1024 * 10),
             loaded: RefCell::new(BTreeMap::new()),
         }
     }
 
-    pub fn open(&self, path: &'a str) -> File {
+    pub fn read(&self) -> Vec<INode> {
+        read_directory(&self.arena, &*self.root)
+    }
+
+    pub fn load(&self, path: &'a str) -> File {
         let mut loaded = self.loaded.borrow_mut();
         let path = self.strings.intern(path).unwrap();
         let entry = loaded.get(&path);
@@ -73,6 +127,34 @@ impl<'a> Filesystem<'a> {
                 handle: *handle,
                 stat: OnceCell::new(),
             },
+        }
+    }
+
+    pub fn unload(&self, path: &'a str) {
+        let mut loaded = self.loaded.borrow_mut();
+        let path = self.strings.intern(path).unwrap();
+        let entry = loaded.get(&path);
+
+        match entry {
+            None => {}
+            Some(handle) => unsafe {
+                close(*handle);
+                loaded.remove(&path);
+            },
+        }
+    }
+
+    pub fn loaded(&self) -> Ref<BTreeMap<&'a str, i32>> {
+        self.loaded.borrow()
+    }
+}
+
+impl<'a> Drop for Filesystem<'a> {
+    fn drop(&mut self) {
+        for (_path, desc) in self.loaded.borrow().iter() {
+            unsafe {
+                close(*desc);
+            }
         }
     }
 }
@@ -150,6 +232,11 @@ impl File {
         }
 
         buf
+    }
+
+    pub fn read_to_string(&self, arena: &Arena) -> ArenaString {
+        let inner = self.read(arena);
+        ArenaString::from_view(inner)
     }
 
     pub fn append(&self, data: &[u8]) {
