@@ -2,6 +2,7 @@ use alloc::boxed::Box;
 use alloc::vec;
 use core::cell::Cell;
 use core::cmp::Ordering;
+use core::fmt::Write;
 use core::ops::{Deref, DerefMut};
 
 pub struct Arena {
@@ -55,6 +56,12 @@ impl Deref for ArenaString {
     }
 }
 
+impl DerefMut for ArenaString {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        unsafe { core::str::from_utf8_unchecked_mut(&mut self.inner) }
+    }
+}
+
 impl PartialEq for ArenaString {
     fn eq(&self, other: &Self) -> bool {
         self.deref() == other.deref()
@@ -70,6 +77,23 @@ impl PartialOrd for ArenaString {
 impl PartialEq<str> for ArenaString {
     fn eq(&self, other: &str) -> bool {
         self.deref() == other
+    }
+}
+
+impl Write for ArenaString {
+    fn write_str(&mut self, s: &str) -> core::fmt::Result {
+        if self.len() > s.len() {
+            unsafe { core::ptr::copy(s.as_ptr(), self.as_mut_ptr(), s.len()) }
+            return Ok(());
+        }
+
+        Err(core::fmt::Error)
+    }
+}
+
+impl ArenaString {
+    pub fn from_view(view: ArenaView<u8>) -> ArenaString {
+        ArenaString { inner: view }
     }
 }
 
@@ -99,6 +123,12 @@ impl Arena {
         } else {
             None
         }
+    }
+
+    pub fn allocate_string(&self, len: usize) -> Option<ArenaString> {
+        let inner = self.allocate(len)?;
+
+        Some(ArenaString { inner })
     }
 
     pub fn push<T>(&self, value: T) -> Option<ArenaView<T>> {
