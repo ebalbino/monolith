@@ -1,8 +1,8 @@
+use crate::arena::Arena;
+use alloc::vec::Vec;
+use core::cell::RefCell;
 use core::cmp::PartialEq;
 use core::ops::Deref;
-use core::cell::RefCell;
-use alloc::vec::Vec;
-use crate::arena::Arena;
 
 pub struct StrPool {
     arena: RefCell<Arena>,
@@ -20,7 +20,10 @@ impl Deref for StrIntern {
 
     fn deref(&self) -> &Self::Target {
         unsafe {
-            core::str::from_utf8_unchecked(core::slice::from_raw_parts(self.data as *const u8, self.len))
+            core::str::from_utf8_unchecked(core::slice::from_raw_parts(
+                self.data as *const u8,
+                self.len,
+            ))
         }
     }
 }
@@ -33,12 +36,15 @@ impl StrPool {
         }
     }
 
-    pub fn intern(&self, value: &str) -> Option<&str> {
+    pub fn intern<'a>(&self, value: &'a str) -> Option<&'a str> {
         for intern in self.lookup.borrow().iter() {
             if intern.len == value.len() {
                 if intern.as_bytes() == value.as_bytes() {
                     let data = unsafe {
-                        core::str::from_utf8_unchecked(core::slice::from_raw_parts(intern.as_ptr() as *const u8, intern.len))
+                        core::str::from_utf8_unchecked(core::slice::from_raw_parts(
+                            intern.as_ptr() as *const u8,
+                            intern.len,
+                        ))
                     };
                     return Some(data);
                 }
@@ -46,12 +52,19 @@ impl StrPool {
         }
 
         let arena = self.arena.borrow();
-        let slice = arena.push_slice(value.as_bytes())?;
+        let string = arena.push_string(value)?;
         let data = unsafe {
-            core::str::from_utf8_unchecked(core::slice::from_raw_parts(slice.as_ptr() as *const u8, slice.len()))
+            core::str::from_utf8_unchecked(core::slice::from_raw_parts(
+                string.as_ptr() as *const u8,
+                string.len(),
+            ))
         };
 
-        self.lookup.borrow_mut().push(StrIntern { data: slice.as_ptr(), len: slice.len()});
+        self.lookup.borrow_mut().push(StrIntern {
+            data: string.as_ptr(),
+            len: string.len(),
+        });
+
         Some(data)
     }
 
@@ -89,6 +102,12 @@ mod tests {
         assert_ne!(c_intern, d_intern);
         assert_ne!(a_intern, e_intern);
         assert_eq!(b_intern, f_intern);
+        assert_ne!(a_intern.as_ptr(), b_intern.as_ptr());
+        assert_eq!(a_intern.as_ptr(), c_intern.as_ptr());
+        assert_eq!(b_intern.as_ptr(), d_intern.as_ptr());
+        assert_ne!(c_intern.as_ptr(), d_intern.as_ptr());
+        assert_ne!(a_intern.as_ptr(), e_intern.as_ptr());
+        assert_eq!(b_intern.as_ptr(), f_intern.as_ptr());
         assert_eq!(pool.len(), 3);
         assert_eq!(pool.occupied(), 17);
     }

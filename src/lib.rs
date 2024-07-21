@@ -5,14 +5,13 @@
 
 extern crate alloc;
 
-pub mod bindings;
 pub mod arena;
+pub mod draw;
 pub mod intern;
 pub mod math;
-pub mod draw;
 pub mod platform;
 
 pub use arena::{Arena, ArenaView};
-pub use intern::{StrPool};
-pub use math::*;
 pub use draw::*;
+pub use intern::StrPool;
+pub use math::*;

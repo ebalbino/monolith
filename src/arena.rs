@@ -1,18 +1,24 @@
-use core::ops::{Deref, DerefMut};
-use core::cell::Cell;
 use alloc::boxed::Box;
 use alloc::vec;
+use core::cell::Cell;
+use core::cmp::Ordering;
+use core::ops::{Deref, DerefMut};
 
 pub struct Arena {
     data: Box<[u8]>,
     offset: Cell<usize>,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
 pub struct ArenaView<T> {
     arena: *const Arena,
-    ptr: *mut  T,
+    ptr: *mut T,
     len: usize,
+}
+
+#[derive(Debug, Clone, Eq, Ord)]
+pub struct ArenaString {
+    inner: ArenaView<u8>,
 }
 
 impl<T> Deref for ArenaView<T> {
@@ -31,15 +37,39 @@ impl<T> DerefMut for ArenaView<T> {
 
 impl<T> Clone for ArenaView<T> {
     fn clone(&self) -> Self {
-        let new_ptr = unsafe {
-            (*self.arena).push_slice(&self[..]).unwrap().as_ptr() as *mut T
-        };
+        let new_ptr = unsafe { (*self.arena).push_slice(&self[..]).unwrap().as_ptr() as *mut T };
 
         ArenaView {
             arena: self.arena,
             ptr: new_ptr,
             len: self.len,
         }
+    }
+}
+
+impl Deref for ArenaString {
+    type Target = str;
+
+    fn deref(&self) -> &Self::Target {
+        unsafe { core::str::from_utf8_unchecked(&self.inner) }
+    }
+}
+
+impl PartialEq for ArenaString {
+    fn eq(&self, other: &Self) -> bool {
+        self.deref() == other.deref()
+    }
+}
+
+impl PartialOrd for ArenaString {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.deref().partial_cmp(other.deref())
+    }
+}
+
+impl PartialEq<str> for ArenaString {
+    fn eq(&self, other: &str) -> bool {
+        self.deref() == other
     }
 }
 
@@ -117,6 +147,11 @@ impl Arena {
         } else {
             None
         }
+    }
+
+    pub fn push_string(&self, string: &str) -> Option<ArenaString> {
+        let inner = self.push_slice(string.as_bytes())?;
+        Some(ArenaString { inner })
     }
 
     pub fn clear(&self) {
