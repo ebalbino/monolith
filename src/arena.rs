@@ -20,6 +20,7 @@ pub struct ArenaView<T> {
 #[derive(Debug, Clone, Eq, Ord)]
 pub struct ArenaString {
     inner: ArenaView<u8>,
+    len: usize,
 }
 
 impl<T> Deref for ArenaView<T> {
@@ -83,7 +84,9 @@ impl PartialEq<str> for ArenaString {
 impl Write for ArenaString {
     fn write_str(&mut self, s: &str) -> core::fmt::Result {
         if self.len() > s.len() {
-            unsafe { core::ptr::copy(s.as_ptr(), self.as_mut_ptr(), s.len()) }
+            let slice = &mut self.inner[self.len..self.len + s.len()];
+            slice.copy_from_slice(s.as_bytes());
+            self.len += s.len();
             return Ok(());
         }
 
@@ -93,7 +96,10 @@ impl Write for ArenaString {
 
 impl ArenaString {
     pub fn from_view(view: ArenaView<u8>) -> ArenaString {
-        ArenaString { inner: view }
+        ArenaString {
+            inner: view,
+            len: 0,
+        }
     }
 }
 
@@ -128,7 +134,7 @@ impl Arena {
     pub fn allocate_string(&self, len: usize) -> Option<ArenaString> {
         let inner = self.allocate(len)?;
 
-        Some(ArenaString { inner })
+        Some(ArenaString { inner, len: 0 })
     }
 
     pub fn push<T>(&self, value: T) -> Option<ArenaView<T>> {
@@ -181,7 +187,7 @@ impl Arena {
 
     pub fn push_string(&self, string: &str) -> Option<ArenaString> {
         let inner = self.push_slice(string.as_bytes())?;
-        Some(ArenaString { inner })
+        Some(ArenaString { inner, len: 0 })
     }
 
     pub fn clear(&self) {
