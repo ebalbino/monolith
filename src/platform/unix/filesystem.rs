@@ -1,7 +1,7 @@
 use crate::arena::{Arena, ArenaString, ArenaView};
 use crate::intern::StrPool;
 use alloc::collections::BTreeMap;
-use alloc::format;
+use alloc::fmt::Write;
 use alloc::vec::Vec;
 use core::cell::{OnceCell, Ref, RefCell};
 use core::mem;
@@ -15,6 +15,7 @@ pub struct Filesystem<'a> {
     arena: Arena,
     root: ArenaString,
     strings: StrPool,
+    nodes: RefCell<Vec<INode>>,
     loaded: RefCell<BTreeMap<&'a str, i32>>,
 }
 
@@ -51,20 +52,22 @@ fn cstr(arena: &Arena, text: &str) -> *mut i8 {
 }
 
 fn read_directory(arena: &Arena, path: &str) -> Vec<INode> {
-    let mut nodes = Vec::new();
-    let dirp = unsafe { opendir(cstr(&arena, path)) };
-    let mut entry = unsafe { readdir(dirp) };
+    let mut nodes = Vec::with_capacity(16);
 
-    while !entry.is_null() {
-        unsafe {
+    unsafe {
+        let dirp = opendir(cstr(&arena, path));
+        let mut entry = readdir(dirp);
+
+        while !entry.is_null() {
             let inner = *entry;
             let name_cstr = core::ffi::CStr::from_ptr(inner.d_name.as_ptr());
             let name = name_cstr.to_str().unwrap();
 
             match name {
-                "." | ".." | ".git" | "target" => {}
+                "." | ".." | ".git" => {}
                 _ => {
-                    let file_path = format!("{}/{}", path, name);
+                    let mut file_path = arena.allocate_string(path.len() + name.len() + 1).unwrap();
+                    let _ = write!(&mut file_path, "{}/{}", path, name);
                     match inner.d_type {
                         DT_DIR => {
                             let inner_nodes = read_directory(&arena, &file_path);
@@ -80,9 +83,7 @@ fn read_directory(arena: &Arena, path: &str) -> Vec<INode> {
 
             entry = readdir(dirp);
         }
-    }
 
-    unsafe {
         closedir(dirp);
     }
 
@@ -97,13 +98,16 @@ impl<'a> Filesystem<'a> {
         Filesystem {
             arena,
             root,
+            nodes: RefCell::new(Vec::new()),
             strings: StrPool::new(1024 * 10),
             loaded: RefCell::new(BTreeMap::new()),
         }
     }
 
-    pub fn read(&self) -> Vec<INode> {
-        read_directory(&self.arena, &*self.root)
+    pub fn read(&self) -> Ref<Vec<INode>> {
+        let nodes = read_directory(&self.arena, &self.root);
+        let _ = self.nodes.replace(nodes);
+        self.nodes.borrow()
     }
 
     pub fn load(&self, path: &'a str) -> File {
