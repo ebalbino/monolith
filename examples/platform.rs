@@ -1,19 +1,16 @@
-use monolith::platform::unix::Clock;
+use monolith::arena::Arena;
+use monolith::platform::unix::filesystem::Filesystem;
 
 fn main() {
-    let clock = Clock::monotonic();
+    let arena = Arena::new(1024 * 1024 * 16);
+    let filesystem = Filesystem::new();
 
-    println!("Resolution: {}", clock.resolution());
+    let file = filesystem.open("./data/shaders/basic.vert");
+    let data = file.read(&arena);
+    let string = core::str::from_utf8(&data).unwrap();
 
-    loop {
-        clock.update();
+    println!("{} bytes", file.size());
+    println!("{}", string);
 
-        println!("ticks: {}", clock.ticks());
-        println!("nanoseconds: {}", clock.nanoseconds());
-        println!("microseconds: {}", clock.microseconds());
-        println!("milliseconds: {}", clock.milliseconds());
-        println!("seconds: {}", clock.seconds());
-
-        std::thread::sleep(std::time::Duration::from_millis(600));
-    }
+    file.append("#define TEST 0\n".as_bytes())
 }
