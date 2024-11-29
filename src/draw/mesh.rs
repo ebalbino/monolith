@@ -1,11 +1,11 @@
 use crate::math::*;
-use crate::arena::{Arena, ArenaView};
+use crate::arena::{Arena, ArenaSlice};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct VertexData {
-    positions: ArenaView<Vec3>,
-    normals: ArenaView<Vec3>,
-    texcoords: ArenaView<Vec2>,
+    positions: ArenaSlice<Vec3>,
+    normals: ArenaSlice<Vec3>,
+    texcoords: ArenaSlice<Vec2>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -18,10 +18,10 @@ pub enum ElementType {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Element {
-    Point(ArenaView<u32>),
-    Line(ArenaView<Vec2u>),
-    Triangle(ArenaView<Vec3u>),
-    Quad(ArenaView<Vec4u>),
+    Point(ArenaSlice<u32>),
+    Line(ArenaSlice<Vec2u>),
+    Triangle(ArenaSlice<Vec3u>),
+    Quad(ArenaSlice<Vec4u>),
 }
 
 pub struct Mesh {
@@ -718,7 +718,7 @@ pub fn make_lines(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2, rad: 
     })
 }
 
-pub fn quads_to_triangles(arena: &Arena, quads: &ArenaView<Vec4u>) -> Option<ArenaView<Vec3u>> {
+pub fn quads_to_triangles(arena: &Arena, quads: &ArenaSlice<Vec4u>) -> Option<ArenaSlice<Vec3u>> {
     let mut triangles = arena.allocate::<Vec3u>(quads.len() * 2)?;
     let mut triangle_count = 0;
 
@@ -735,7 +735,7 @@ pub fn quads_to_triangles(arena: &Arena, quads: &ArenaView<Vec4u>) -> Option<Are
     return Some(triangles);
 }
 
-pub fn triangles_to_quads(arena: &Arena, triangles: ArenaView<Vec3u>) -> Option<ArenaView<Vec4u>> {
+pub fn triangles_to_quads(arena: &Arena, triangles: ArenaSlice<Vec3u>) -> Option<ArenaSlice<Vec4u>> {
     let mut quads = arena.allocate::<Vec4u>(triangles.len())?;
     let mut quad_count = 0;
 

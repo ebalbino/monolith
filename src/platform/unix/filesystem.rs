@@ -1,4 +1,4 @@
-use crate::arena::{Arena, ArenaString, ArenaView};
+use crate::arena::{Arena, ArenaString, ArenaSlice};
 use crate::intern::StrPool;
 use alloc::collections::BTreeMap;
 use alloc::fmt::Write;
@@ -223,7 +223,7 @@ impl File {
         }
     }
 
-    pub fn read(&self, arena: &Arena) -> ArenaView<u8> {
+    pub fn read(&self, arena: &Arena) -> ArenaSlice<u8> {
         let size = self.size();
         let mut buf = arena.allocate::<u8>(size as usize).unwrap();
 

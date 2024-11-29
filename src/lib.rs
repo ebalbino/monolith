@@ -11,7 +11,7 @@ pub mod intern;
 pub mod math;
 pub mod platform;
 
-pub use arena::{Arena, ArenaView};
+pub use arena::{Arena, ArenaSlice};
 pub use draw::*;
 pub use intern::StrPool;
 pub use math::*;

@@ -11,7 +11,7 @@ pub struct Arena {
 }
 
 #[derive(Debug, PartialEq, PartialOrd, Eq, Ord)]
-pub struct ArenaView<T> {
+pub struct ArenaSlice<T> {
     arena: *const Arena,
     ptr: *mut T,
     len: usize,
@@ -19,11 +19,11 @@ pub struct ArenaView<T> {
 
 #[derive(Debug, Clone, Eq, Ord)]
 pub struct ArenaString {
-    inner: ArenaView<u8>,
+    inner: ArenaSlice<u8>,
     len: usize,
 }
 
-impl<T> Deref for ArenaView<T> {
+impl<T> Deref for ArenaSlice<T> {
     type Target = [T];
 
     fn deref(&self) -> &Self::Target {
@@ -31,17 +31,17 @@ impl<T> Deref for ArenaView<T> {
     }
 }
 
-impl<T> DerefMut for ArenaView<T> {
+impl<T> DerefMut for ArenaSlice<T> {
     fn deref_mut(&mut self) -> &mut Self::Target {
         unsafe { core::slice::from_raw_parts_mut(self.ptr, self.len) }
     }
 }
 
-impl<T> Clone for ArenaView<T> {
+impl<T> Clone for ArenaSlice<T> {
     fn clone(&self) -> Self {
         let new_ptr = unsafe { (*self.arena).push_slice(&self[..]).unwrap().as_ptr() as *mut T };
 
-        ArenaView {
+        ArenaSlice {
             arena: self.arena,
             ptr: new_ptr,
             len: self.len,
@@ -95,7 +95,7 @@ impl Write for ArenaString {
 }
 
 impl ArenaString {
-    pub fn from_view(view: ArenaView<u8>) -> ArenaString {
+    pub fn from_view(view: ArenaSlice<u8>) -> ArenaString {
         ArenaString {
             inner: view,
             len: 0,
@@ -111,7 +111,7 @@ impl Arena {
         }
     }
 
-    pub fn allocate<T>(&self, len: usize) -> Option<ArenaView<T>> {
+    pub fn allocate<T>(&self, len: usize) -> Option<ArenaSlice<T>> {
         let size = core::mem::size_of::<T>();
         let align = core::mem::align_of::<T>();
         let offset = (self.offset.get() + align - 1) & !(align - 1);
@@ -121,7 +121,7 @@ impl Arena {
             let ptr = &self.data[offset] as *const u8 as *mut T;
             self.offset.set(new_offset);
 
-            Some(ArenaView {
+            Some(ArenaSlice {
                 arena: self,
                 ptr,
                 len,
@@ -137,7 +137,7 @@ impl Arena {
         Some(ArenaString { inner, len: 0 })
     }
 
-    pub fn push<T>(&self, value: T) -> Option<ArenaView<T>> {
+    pub fn push<T>(&self, value: T) -> Option<ArenaSlice<T>> {
         let size = core::mem::size_of::<T>();
         let align = core::mem::align_of::<T>();
         let offset = (self.offset.get() + align - 1) & !(align - 1);
@@ -151,7 +151,7 @@ impl Arena {
                 ptr.write(value);
             }
 
-            Some(ArenaView {
+            Some(ArenaSlice {
                 arena: self,
                 ptr,
                 len: 1,
@@ -161,7 +161,7 @@ impl Arena {
         }
     }
 
-    pub fn push_slice<T>(&self, values: &[T]) -> Option<ArenaView<T>> {
+    pub fn push_slice<T>(&self, values: &[T]) -> Option<ArenaSlice<T>> {
         let size = core::mem::size_of::<T>();
         let align = core::mem::align_of::<T>();
         let offset = (self.offset.get() + align - 1) & !(align - 1);
@@ -175,7 +175,7 @@ impl Arena {
                 ptr.copy_from_nonoverlapping(values.as_ptr(), values.len());
             }
 
-            Some(ArenaView {
+            Some(ArenaSlice {
                 arena: self,
                 ptr,
                 len: values.len(),
@@ -229,8 +229,8 @@ mod tests {
     fn test_arena() {
         let arena = Arena::new(1024);
 
-        let mut p1: ArenaView<Point> = arena.allocate::<Point>(1).unwrap();
-        let mut p2: ArenaView<Point> = arena.allocate::<Point>(1).unwrap();
+        let mut p1: ArenaSlice<Point> = arena.allocate::<Point>(1).unwrap();
+        let mut p2: ArenaSlice<Point> = arena.allocate::<Point>(1).unwrap();
 
         p1[0] = Point { x: 1.0, y: 2.0 };
         p2[0] = Point { x: 3.0, y: 4.0 };
@@ -248,7 +248,7 @@ mod tests {
     fn test_arena_x() {
         let arena = Arena::new(1024);
 
-        let mut entities: ArenaView<Entity> = arena.allocate::<Entity>(10).unwrap();
+        let mut entities: ArenaSlice<Entity> = arena.allocate::<Entity>(10).unwrap();
 
         for entity in entities.iter_mut() {
             entity.position = Point { x: 1.0, y: 2.0 };
@@ -275,15 +275,15 @@ mod tests {
     fn test_full_arena() {
         let arena = Arena::new(core::mem::size_of::<Point>() * 2);
 
-        let _p1: ArenaView<Point> = arena.allocate::<Point>(1).unwrap();
-        let _p2: ArenaView<Point> = arena.allocate::<Point>(1).unwrap();
+        let _p1: ArenaSlice<Point> = arena.allocate::<Point>(1).unwrap();
+        let _p2: ArenaSlice<Point> = arena.allocate::<Point>(1).unwrap();
 
         assert!(arena.is_full());
         arena.clear();
         assert_eq!(arena.occupied(), 0);
 
-        let _p4: ArenaView<Point> = arena.allocate::<Point>(1).unwrap();
-        let _p5: ArenaView<Point> = arena.allocate::<Point>(1).unwrap();
+        let _p4: ArenaSlice<Point> = arena.allocate::<Point>(1).unwrap();
+        let _p5: ArenaSlice<Point> = arena.allocate::<Point>(1).unwrap();
         assert!(arena.is_full());
     }
 

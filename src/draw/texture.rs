@@ -1,10 +1,10 @@
-use crate::arena::{Arena, ArenaView};
+use crate::arena::{Arena, ArenaSlice};
 
 pub struct Texture {
     width: u32,
     height: u32,
     channels: u32,
-    data: ArenaView<u8>,
+    data: ArenaSlice<u8>,
 }
 
 impl Texture {
