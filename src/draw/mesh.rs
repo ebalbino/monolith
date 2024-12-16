@@ -1,5 +1,5 @@
-use crate::math::*;
 use crate::arena::{Arena, ArenaSlice};
+use crate::math::*;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct VertexData {
@@ -67,10 +67,7 @@ impl VertexData {
 
 impl Mesh {
     pub fn new(vertices: VertexData, elements: Element) -> Mesh {
-        Mesh {
-            vertices,
-            elements,
-        }
+        Mesh { vertices, elements }
     }
 
     pub fn len(&self) -> usize {
@@ -132,8 +129,9 @@ pub fn merge_meshes(arena: &Arena, meshes: &[Mesh], element_type: ElementType) -
         return None;
     }
 
-    let element_count = meshes.iter().map(|m| {
-        match element_type {
+    let element_count = meshes
+        .iter()
+        .map(|m| match element_type {
             ElementType::Point => match m.elements() {
                 Element::Point(indices) => indices.len(),
                 _ => 0,
@@ -150,8 +148,8 @@ pub fn merge_meshes(arena: &Arena, meshes: &[Mesh], element_type: ElementType) -
                 Element::Quad(indices) => indices.len(),
                 _ => 0,
             },
-        }
-    }).sum();
+        })
+        .sum();
 
     let vertex_count = meshes.iter().map(|m| m.len()).sum();
 
@@ -182,7 +180,8 @@ pub fn merge_meshes(arena: &Arena, meshes: &[Mesh], element_type: ElementType) -
                         _ => return None,
                     };
 
-                    element_indices[index_offset..(index_offset + mesh_indices.len())].copy_from_slice(&mesh_indices[..]);
+                    element_indices[index_offset..(index_offset + mesh_indices.len())]
+                        .copy_from_slice(&mesh_indices[..]);
 
                     if index_offset > 0 {
                         for index in element_indices.iter_mut() {
@@ -191,7 +190,7 @@ pub fn merge_meshes(arena: &Arena, meshes: &[Mesh], element_type: ElementType) -
                     }
 
                     index_offset += mesh_indices.len();
-                },
+                }
                 _ => return None,
             },
             ElementType::Line => match mesh.elements() {
@@ -216,7 +215,7 @@ pub fn merge_meshes(arena: &Arena, meshes: &[Mesh], element_type: ElementType) -
                     }
 
                     index_offset += mesh_indices.len();
-                },
+                }
                 _ => return None,
             },
             ElementType::Triangle => match mesh.elements() {
@@ -243,7 +242,7 @@ pub fn merge_meshes(arena: &Arena, meshes: &[Mesh], element_type: ElementType) -
                     }
 
                     index_offset += mesh_indices.len();
-                },
+                }
                 _ => return None,
             },
             ElementType::Quad => match mesh.elements() {
@@ -272,14 +271,16 @@ pub fn merge_meshes(arena: &Arena, meshes: &[Mesh], element_type: ElementType) -
                     }
 
                     index_offset += mesh_indices.len();
-                },
+                }
                 _ => return None,
             },
         }
 
-        positions[vertex_offset..(vertex_offset + mesh.len())].copy_from_slice(&mesh.positions()[..]);
+        positions[vertex_offset..(vertex_offset + mesh.len())]
+            .copy_from_slice(&mesh.positions()[..]);
         normals[vertex_offset..(vertex_offset + mesh.len())].copy_from_slice(&mesh.normals()[..]);
-        texcoords[vertex_offset..(vertex_offset + mesh.len())].copy_from_slice(&mesh.texcoords()[..]);
+        texcoords[vertex_offset..(vertex_offset + mesh.len())]
+            .copy_from_slice(&mesh.texcoords()[..]);
 
         vertex_offset += mesh.len();
     }
@@ -322,7 +323,7 @@ pub fn make_quads(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2) -> Op
                 y * (steps.x + 1) + x,
                 y * (steps.x + 1) + (x + 1),
                 (y + 1) * (steps.x + 1) + (x + 1),
-                (y + 1) * (steps.x + 1) + x
+                (y + 1) * (steps.x + 1) + x,
             );
         }
     }
@@ -341,14 +342,25 @@ pub fn make_rect(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2) -> Opt
     return make_quads(arena, steps, scale, uvscale);
 }
 
-pub fn make_bulged_rect(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2, height: f32) ->Option<Mesh> {
+pub fn make_bulged_rect(
+    arena: &Arena,
+    steps: Vec2u,
+    scale: Vec2,
+    uvscale: Vec2,
+    height: f32,
+) -> Option<Mesh> {
     let mut rect = make_rect(arena, steps, scale, uvscale)?;
 
     if height != 0.0 {
         let height = height.min(scale.min_element());
         let radius = (1.0 + height * height) / (2.0 * height);
         let center = Vec3::new(0.0, 0.0, -radius + height);
-        for (position, normal) in rect.vertices.positions.iter_mut().zip(rect.vertices.normals.iter_mut()) {
+        for (position, normal) in rect
+            .vertices
+            .positions
+            .iter_mut()
+            .zip(rect.vertices.normals.iter_mut())
+        {
             let pn = (*position - center).normalize();
             *position = center + pn * radius;
             *normal = pn;
@@ -372,7 +384,13 @@ pub fn make_recty(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2) -> Op
     return Some(rect);
 }
 
-pub fn make_bulged_recty(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2, height: f32) -> Option<Mesh> {
+pub fn make_bulged_recty(
+    arena: &Arena,
+    steps: Vec2u,
+    scale: Vec2,
+    uvscale: Vec2,
+    height: f32,
+) -> Option<Mesh> {
     let mut rect = make_bulged_rect(arena, steps, scale, uvscale, height)?;
 
     for position in rect.vertices.positions.iter_mut() {
@@ -387,39 +405,99 @@ pub fn make_bulged_recty(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2
 }
 
 pub fn make_box(arena: &Arena, steps: Vec3u, scale: Vec3, uvscale: Vec3) -> Option<Mesh> {
-    let mut z_plus = make_rect(arena, Vec2u::new(steps.x, steps.y), Vec2::new(scale.x, scale.y), Vec2::new(uvscale.x, uvscale.y))?;
-    let mut z_minus = make_rect(arena, Vec2u::new(steps.x, steps.y), Vec2::new(scale.x, scale.y), Vec2::new(uvscale.x, uvscale.y))?;
-    let mut x_plus = make_recty(arena, Vec2u::new(steps.z, steps.y), Vec2::new(scale.z, scale.y), Vec2::new(uvscale.z, uvscale.y))?;
-    let mut x_minus = make_recty(arena, Vec2u::new(steps.z, steps.y), Vec2::new(scale.z, scale.y), Vec2::new(uvscale.z, uvscale.y))?;
-    let mut y_plus = make_rect(arena, Vec2u::new(steps.x, steps.z), Vec2::new(scale.x, scale.z), Vec2::new(uvscale.x, uvscale.z))?;
-    let mut y_minus = make_rect(arena, Vec2u::new(steps.x, steps.z), Vec2::new(scale.x, scale.z), Vec2::new(uvscale.x, uvscale.z))?;
+    let mut z_plus = make_rect(
+        arena,
+        Vec2u::new(steps.x, steps.y),
+        Vec2::new(scale.x, scale.y),
+        Vec2::new(uvscale.x, uvscale.y),
+    )?;
+    let mut z_minus = make_rect(
+        arena,
+        Vec2u::new(steps.x, steps.y),
+        Vec2::new(scale.x, scale.y),
+        Vec2::new(uvscale.x, uvscale.y),
+    )?;
+    let mut x_plus = make_recty(
+        arena,
+        Vec2u::new(steps.z, steps.y),
+        Vec2::new(scale.z, scale.y),
+        Vec2::new(uvscale.z, uvscale.y),
+    )?;
+    let mut x_minus = make_recty(
+        arena,
+        Vec2u::new(steps.z, steps.y),
+        Vec2::new(scale.z, scale.y),
+        Vec2::new(uvscale.z, uvscale.y),
+    )?;
+    let mut y_plus = make_rect(
+        arena,
+        Vec2u::new(steps.x, steps.z),
+        Vec2::new(scale.x, scale.z),
+        Vec2::new(uvscale.x, uvscale.z),
+    )?;
+    let mut y_minus = make_rect(
+        arena,
+        Vec2u::new(steps.x, steps.z),
+        Vec2::new(scale.x, scale.z),
+        Vec2::new(uvscale.x, uvscale.z),
+    )?;
 
-    for (position, normal) in z_plus.vertices.positions.iter_mut().zip(z_plus.vertices.normals.iter_mut()) {
+    for (position, normal) in z_plus
+        .vertices
+        .positions
+        .iter_mut()
+        .zip(z_plus.vertices.normals.iter_mut())
+    {
         *position = Vec3::new(position.x, position.y, scale.z);
         *normal = Vec3::new(0.0, 0.0, 1.0);
     }
 
-    for (position, normal) in z_minus.vertices.positions.iter_mut().zip(z_minus.vertices.normals.iter_mut()) {
+    for (position, normal) in z_minus
+        .vertices
+        .positions
+        .iter_mut()
+        .zip(z_minus.vertices.normals.iter_mut())
+    {
         *position = Vec3::new(position.x, position.y, -scale.z);
         *normal = Vec3::new(0.0, 0.0, -1.0);
     }
 
-    for (position, normal) in x_plus.vertices.positions.iter_mut().zip(x_plus.vertices.normals.iter_mut()) {
+    for (position, normal) in x_plus
+        .vertices
+        .positions
+        .iter_mut()
+        .zip(x_plus.vertices.normals.iter_mut())
+    {
         *position = Vec3::new(scale.x, position.y, position.z);
         *normal = Vec3::new(1.0, 0.0, 0.0);
     }
 
-    for (position, normal) in x_minus.vertices.positions.iter_mut().zip(x_minus.vertices.normals.iter_mut()) {
+    for (position, normal) in x_minus
+        .vertices
+        .positions
+        .iter_mut()
+        .zip(x_minus.vertices.normals.iter_mut())
+    {
         *position = Vec3::new(-scale.x, position.y, position.z);
         *normal = Vec3::new(-1.0, 0.0, 0.0);
     }
 
-    for (position, normal) in y_plus.vertices.positions.iter_mut().zip(y_plus.vertices.normals.iter_mut()) {
+    for (position, normal) in y_plus
+        .vertices
+        .positions
+        .iter_mut()
+        .zip(y_plus.vertices.normals.iter_mut())
+    {
         *position = Vec3::new(position.x, scale.y, position.z);
         *normal = Vec3::new(0.0, 1.0, 0.0);
     }
 
-    for (position, normal) in y_minus.vertices.positions.iter_mut().zip(y_minus.vertices.normals.iter_mut()) {
+    for (position, normal) in y_minus
+        .vertices
+        .positions
+        .iter_mut()
+        .zip(y_minus.vertices.normals.iter_mut())
+    {
         *position = Vec3::new(position.x, -scale.y, position.z);
         *normal = Vec3::new(0.0, -1.0, 0.0);
     }
@@ -428,16 +506,31 @@ pub fn make_box(arena: &Arena, steps: Vec3u, scale: Vec3, uvscale: Vec3) -> Opti
     return merge_meshes(arena, &faces, ElementType::Quad);
 }
 
-pub fn make_rounded_box(arena: &Arena, steps: Vec3u, scale: Vec3, uvscale: Vec3, radius: f32) -> Option<Mesh> {
+pub fn make_rounded_box(
+    arena: &Arena,
+    steps: Vec3u,
+    scale: Vec3,
+    uvscale: Vec3,
+    radius: f32,
+) -> Option<Mesh> {
     let mut box_mesh = make_box(arena, steps, scale, uvscale)?;
 
     if radius != 0.0 {
         let radius = radius.min(scale.min_element());
         let c = scale - radius;
 
-        for (position, normal) in box_mesh.vertices.positions.iter_mut().zip(box_mesh.vertices.normals.iter_mut()) {
+        for (position, normal) in box_mesh
+            .vertices
+            .positions
+            .iter_mut()
+            .zip(box_mesh.vertices.normals.iter_mut())
+        {
             let pc = Vec3::new(position.x.abs(), position.y.abs(), position.z.abs());
-            let ps = Vec3::new(position.x.signum(), position.y.signum(), position.z.signum());
+            let ps = Vec3::new(
+                position.x.signum(),
+                position.y.signum(),
+                position.z.signum(),
+            );
 
             if pc.x >= c.x && pc.y >= c.y && pc.z >= c.z {
                 let pn = (pc - c).normalize();
@@ -471,7 +564,12 @@ pub fn make_rect_stack(arena: &Arena, steps: Vec3u, scale: Vec3, uvscale: Vec2) 
     let mut meshes = arena.allocate::<Mesh>((steps.z + 1) as usize)?;
 
     for i in 0..(steps.z + 1) {
-        let mut mesh = make_rect(arena, Vec2u::new(steps.x, steps.y), Vec2::new(scale.x, scale.y), uvscale)?;
+        let mut mesh = make_rect(
+            arena,
+            Vec2u::new(steps.x, steps.y),
+            Vec2::new(scale.x, scale.y),
+            uvscale,
+        )?;
 
         for position in mesh.vertices.positions.iter_mut() {
             position.z = (-1.0 + 2.0 * i as f32 / steps.z as f32) * scale.z;
@@ -498,9 +596,19 @@ pub fn make_floor(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2) -> Op
 }
 
 pub fn make_sphere(arena: &Arena, steps: u32, scale: f32, uvscale: f32) -> Option<Mesh> {
-    let mut mesh = make_box(arena, Vec3u::new(steps, steps, steps), Vec3::new(scale, scale, scale), Vec3::new(uvscale, uvscale, uvscale))?;
+    let mut mesh = make_box(
+        arena,
+        Vec3u::new(steps, steps, steps),
+        Vec3::new(scale, scale, scale),
+        Vec3::new(uvscale, uvscale, uvscale),
+    )?;
 
-    for (position, normal) in mesh.vertices.positions.iter_mut().zip(mesh.vertices.normals.iter_mut()) {
+    for (position, normal) in mesh
+        .vertices
+        .positions
+        .iter_mut()
+        .zip(mesh.vertices.normals.iter_mut())
+    {
         let pn = position.normalize();
         *position = scale * pn;
         *normal = pn;
@@ -514,13 +622,13 @@ pub fn make_uv_sphere(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) ->
 
     for i in 0..mesh.vertices.positions.len() {
         let uv = mesh.vertices.texcoords[i];
-        let a = Vec2::new(2.0 * core::f32::consts::PI * uv.x, core::f32::consts::PI * (1.0 - uv.y));
+        let a = Vec2::new(
+            2.0 * core::f32::consts::PI * uv.x,
+            core::f32::consts::PI * (1.0 - uv.y),
+        );
 
-        mesh.vertices.positions[i] = Vec3::new(
-            a.x.cos() * a.y.sin(),
-            a.x.sin() * a.y.sin(),
-            a.y.cos(),
-        ) * scale;
+        mesh.vertices.positions[i] =
+            Vec3::new(a.x.cos() * a.y.sin(), a.x.sin() * a.y.sin(), a.y.cos()) * scale;
 
         mesh.vertices.normals[i] = mesh.vertices.positions[i].normalize();
         mesh.vertices.texcoords[i] = uv * uvscale;
@@ -556,13 +664,24 @@ pub fn make_uv_sphere_y(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) 
     return Some(mesh);
 }
 
-pub fn make_capped_uvsphere(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2, cap: f32) -> Option<Mesh> {
+pub fn make_capped_uvsphere(
+    arena: &Arena,
+    steps: Vec2u,
+    scale: f32,
+    uvscale: Vec2,
+    cap: f32,
+) -> Option<Mesh> {
     let mut mesh = make_uv_sphere(arena, steps, scale, uvscale)?;
 
     if cap != 0.0 {
         let cap = cap.min(scale / 2.0);
         let zflip = scale - cap;
-        for (position, normal) in mesh.vertices.positions.iter_mut().zip(mesh.vertices.normals.iter_mut()) {
+        for (position, normal) in mesh
+            .vertices
+            .positions
+            .iter_mut()
+            .zip(mesh.vertices.normals.iter_mut())
+        {
             if position.z > zflip {
                 position.z = 2.0 * zflip - position.z;
                 normal.x = -normal.x;
@@ -578,13 +697,24 @@ pub fn make_capped_uvsphere(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Ve
     return Some(mesh);
 }
 
-pub fn make_capped_uvsphere_y(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2, cap: f32) -> Option<Mesh> {
+pub fn make_capped_uvsphere_y(
+    arena: &Arena,
+    steps: Vec2u,
+    scale: f32,
+    uvscale: Vec2,
+    cap: f32,
+) -> Option<Mesh> {
     let mut mesh = make_uv_sphere_y(arena, steps, scale, uvscale)?;
 
     if cap != 0.0 {
         let cap = cap.min(scale / 2.0);
         let zflip = scale - cap;
-        for (position, normal) in mesh.vertices.positions.iter_mut().zip(mesh.vertices.normals.iter_mut()) {
+        for (position, normal) in mesh
+            .vertices
+            .positions
+            .iter_mut()
+            .zip(mesh.vertices.normals.iter_mut())
+        {
             if position.z > zflip {
                 position.z = 2.0 * zflip - position.z;
                 normal.x = -normal.x;
@@ -601,7 +731,12 @@ pub fn make_capped_uvsphere_y(arena: &Arena, steps: Vec2u, scale: f32, uvscale: 
 }
 
 pub fn make_disk(arena: &Arena, steps: u32, scale: f32, uvscale: f32) -> Option<Mesh> {
-    let mut mesh = make_rect(arena, Vec2u::new(steps, steps), Vec2::new(scale, scale), Vec2::new(uvscale, uvscale))?;
+    let mut mesh = make_rect(
+        arena,
+        Vec2u::new(steps, steps),
+        Vec2::new(scale, scale),
+        Vec2::new(uvscale, uvscale),
+    )?;
 
     for position in mesh.vertices.positions.iter_mut() {
         *position = Vec3::new(position.x, position.z, position.y);
@@ -627,14 +762,25 @@ pub fn make_disk(arena: &Arena, steps: u32, scale: f32, uvscale: f32) -> Option<
     return Some(mesh);
 }
 
-pub fn make_bulged_disk(arena: &Arena, steps: u32, scale: f32, uvscale: f32, height: f32) -> Option<Mesh> {
+pub fn make_bulged_disk(
+    arena: &Arena,
+    steps: u32,
+    scale: f32,
+    uvscale: f32,
+    height: f32,
+) -> Option<Mesh> {
     let mut disk = make_disk(arena, steps, scale, uvscale)?;
 
     if height != 0.0 {
         let height = height.min(scale);
         let radius = (1.0 + height * height) / (2.0 * height);
         let center = Vec3::new(0.0, 0.0, -radius + height);
-        for (position, normal) in disk.vertices.positions.iter_mut().zip(disk.vertices.normals.iter_mut()) {
+        for (position, normal) in disk
+            .vertices
+            .positions
+            .iter_mut()
+            .zip(disk.vertices.normals.iter_mut())
+        {
             let pn = (*position - center).normalize();
             *position = center + pn * radius;
             *normal = pn;
@@ -659,12 +805,28 @@ pub fn make_uv_disk(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) -> O
     return Some(disk);
 }
 
-pub fn make_lines(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2, rad: Vec2) -> Option<Mesh> {
-    let mut positions = arena.allocate::<Vec3>(((steps.x + 1) * steps.y) as usize).unwrap();
-    let mut normals = arena.allocate::<Vec3>(((steps.x + 1) * steps.y) as usize).unwrap();
-    let mut texcoords = arena.allocate::<Vec2>(((steps.x + 1) * steps.y) as usize).unwrap();
-    let mut radius = arena.allocate::<f32>(((steps.x + 1) * steps.y) as usize).unwrap();
-    let mut lines = arena.allocate::<Vec2u>((steps.x * steps.y) as usize).unwrap();
+pub fn make_lines(
+    arena: &Arena,
+    steps: Vec2u,
+    scale: Vec2,
+    uvscale: Vec2,
+    rad: Vec2,
+) -> Option<Mesh> {
+    let mut positions = arena
+        .allocate::<Vec3>(((steps.x + 1) * steps.y) as usize)
+        .unwrap();
+    let mut normals = arena
+        .allocate::<Vec3>(((steps.x + 1) * steps.y) as usize)
+        .unwrap();
+    let mut texcoords = arena
+        .allocate::<Vec2>(((steps.x + 1) * steps.y) as usize)
+        .unwrap();
+    let mut radius = arena
+        .allocate::<f32>(((steps.x + 1) * steps.y) as usize)
+        .unwrap();
+    let mut lines = arena
+        .allocate::<Vec2u>((steps.x * steps.y) as usize)
+        .unwrap();
 
     if steps.y > 1 {
         for y in 0..steps.y {
@@ -672,11 +834,7 @@ pub fn make_lines(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2, rad: 
                 let uv = vec2(x as f32 / steps.x as f32, y as f32 / (steps.y - 1) as f32);
                 let index = (y * (steps.x + 1) + x) as usize;
 
-                positions[index] = Vec3::new(
-                    (uv.x - 0.5) * scale.x,
-                    (uv.y - 0.5) * scale.y,
-                    0.0
-                );
+                positions[index] = Vec3::new((uv.x - 0.5) * scale.x, (uv.y - 0.5) * scale.y, 0.0);
                 normals[index] = Vec3::new(0.0, 1.0, 0.0);
                 texcoords[index] = Vec2::new(uv.x, 1.0 - uv.y) * uvscale;
                 radius[index] = lerp(rad.x, rad.y, uv.y);
@@ -687,11 +845,7 @@ pub fn make_lines(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2, rad: 
             let uv = vec2(x as f32 / steps.x as f32, 0.0);
             let index = x as usize;
 
-            positions[index] = Vec3::new(
-                (uv.x - 0.5) * scale.x,
-                0.0,
-                0.0
-            );
+            positions[index] = Vec3::new((uv.x - 0.5) * scale.x, 0.0, 0.0);
             normals[index] = Vec3::new(1.0, 0.0, 0.0);
             texcoords[index] = uv * uvscale;
             radius[index] = lerp(rad.x, rad.y, uv.x);
@@ -701,10 +855,7 @@ pub fn make_lines(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2, rad: 
     for y in 0..steps.y {
         for x in 0..steps.x {
             let index = (y * steps.x + x) as usize;
-            lines[index] = Vec2u::new(
-                y * (steps.x + 1) + x,
-                y * (steps.x + 1) + (x + 1),
-            );
+            lines[index] = Vec2u::new(y * (steps.x + 1) + x, y * (steps.x + 1) + (x + 1));
         }
     }
 
@@ -735,7 +886,10 @@ pub fn quads_to_triangles(arena: &Arena, quads: &ArenaSlice<Vec4u>) -> Option<Ar
     return Some(triangles);
 }
 
-pub fn triangles_to_quads(arena: &Arena, triangles: ArenaSlice<Vec3u>) -> Option<ArenaSlice<Vec4u>> {
+pub fn triangles_to_quads(
+    arena: &Arena,
+    triangles: ArenaSlice<Vec3u>,
+) -> Option<ArenaSlice<Vec4u>> {
     let mut quads = arena.allocate::<Vec4u>(triangles.len())?;
     let mut quad_count = 0;
 
@@ -798,21 +952,33 @@ mod tests {
         assert_eq!(mesh.positions().len(), 10);
         assert_eq!(mesh.normals().len(), 10);
         assert_eq!(mesh.texcoords().len(), 10);
-        assert_eq!(match mesh.elements() {
-            Element::Point(_) => true,
-            _ => false,
-        }, true);
-        assert_eq!(match mesh.elements() {
-            Element::Point(indices) => indices.len(),
-            _ => 0,
-        }, 10);
+        assert_eq!(
+            match mesh.elements() {
+                Element::Point(_) => true,
+                _ => false,
+            },
+            true
+        );
+        assert_eq!(
+            match mesh.elements() {
+                Element::Point(indices) => indices.len(),
+                _ => 0,
+            },
+            10
+        );
     }
 
     #[test]
     fn test_make_quad() {
         let arena = Arena::new(1024);
 
-        let mesh = make_quads(&arena, Vec2u::new(1, 1), Vec2::new(1.0, 1.0), Vec2::new(1.0, 1.0)).unwrap();
+        let mesh = make_quads(
+            &arena,
+            Vec2u::new(1, 1),
+            Vec2::new(1.0, 1.0),
+            Vec2::new(1.0, 1.0),
+        )
+        .unwrap();
 
         assert_eq!(mesh.len(), 4);
         assert_eq!(mesh.is_empty(), false);
@@ -821,13 +987,19 @@ mod tests {
         assert_eq!(mesh.positions().len(), 4);
         assert_eq!(mesh.normals().len(), 4);
         assert_eq!(mesh.texcoords().len(), 4);
-        assert_eq!(match mesh.elements() {
-            Element::Quad(_) => true,
-            _ => false,
-        }, true);
-        assert_eq!(match mesh.elements() {
-            Element::Quad(indices) => indices.len(),
-            _ => 0,
-        }, 1);
+        assert_eq!(
+            match mesh.elements() {
+                Element::Quad(_) => true,
+                _ => false,
+            },
+            true
+        );
+        assert_eq!(
+            match mesh.elements() {
+                Element::Quad(indices) => indices.len(),
+                _ => 0,
+            },
+            1
+        );
     }
 }

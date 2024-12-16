@@ -9,7 +9,9 @@ pub struct Texture {
 
 impl Texture {
     pub fn new(arena: &Arena, width: u32, height: u32, channels: u32) -> Self {
-        let data = arena.allocate::<u8>(width as usize * height as usize * channels as usize).unwrap();
+        let data = arena
+            .allocate::<u8>(width as usize * height as usize * channels as usize)
+            .unwrap();
         Self {
             width,
             height,
@@ -31,14 +33,10 @@ impl Texture {
     }
 
     pub fn data(&self) -> &[u8] {
-        unsafe {
-            core::slice::from_raw_parts(self.data.as_ptr(), self.data.len())
-        }
+        unsafe { core::slice::from_raw_parts(self.data.as_ptr(), self.data.len()) }
     }
 
     pub fn data_mut(&mut self) -> &mut [u8] {
-        unsafe {
-            core::slice::from_raw_parts_mut(self.data.as_mut_ptr(), self.data.len())
-        }
+        unsafe { core::slice::from_raw_parts_mut(self.data.as_mut_ptr(), self.data.len()) }
     }
 }

@@ -1,4 +1,4 @@
-use crate::arena::{Arena, ArenaString, ArenaSlice};
+use crate::arena::{Arena, ArenaSlice, ArenaString};
 use crate::intern::StrPool;
 use alloc::collections::BTreeMap;
 use alloc::fmt::Write;
