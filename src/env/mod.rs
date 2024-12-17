@@ -1,23 +1,19 @@
-use core::cell::{Cell, OnceCell};
+use core::cell::Cell;
 use core::ops::Sub;
 use glam::Vec2;
 use tao::event::MouseButton;
+use tao::event::{DeviceEvent, ElementState, Event, KeyEvent, MouseScrollDelta, WindowEvent};
+use tao::event_loop::{ControlFlow, EventLoop};
 use tao::keyboard::KeyCode;
+use tao::window::{Window, WindowBuilder};
 
 mod clock;
-mod gamepad;
 mod keyboard;
 mod mouse;
 
-use clock::{Clock, Instant};
+use clock::Clock;
 use keyboard::Keyboard;
 use mouse::Mouse;
-
-#[derive(Clone, Copy)]
-pub struct Axis {
-    x: f32,
-    y: f32,
-}
 
 #[derive(Clone, Copy, Debug)]
 pub struct Button {
@@ -91,143 +87,22 @@ impl<T: Copy + Sub<Output = T>> Delta<T> {
 
     pub fn update(&self, value: T) {
         let current = self.value.get();
-        self.value.set(value);
         self.delta.set(value - current);
-    }
-}
-
-pub struct Switch<T: Copy> {
-    value: Cell<T>,
-    previous: Cell<T>,
-}
-
-impl<T: Copy> Switch<T> {
-    pub fn new(value: T) -> Self {
-        Self {
-            value: Cell::new(value),
-            previous: Cell::new(value),
-        }
-    }
-
-    pub fn current(&self) -> T {
-        self.value.get()
-    }
-
-    pub fn previous(&self) -> T {
-        self.previous.get()
-    }
-
-    pub fn update(&self, value: T) {
-        let current = self.value.get();
-        self.previous.set(current);
         self.value.set(value);
-    }
-}
-
-pub struct AnalogButton {
-    threshold: f32,
-    value: Cell<f32>,
-    inner: Cell<Button>,
-}
-
-impl AnalogButton {
-    pub fn new(threshold: f32) -> Self {
-        Self {
-            threshold,
-            value: Cell::new(0.0),
-            inner: Cell::new(Button::default()),
-        }
-    }
-
-    pub fn update(&mut self, value: f32) {
-        let button = self.inner.get_mut();
-        self.value.set(value);
-
-        button.update(value >= self.threshold);
-    }
-
-    pub fn value(&self) -> f32 {
-        self.value.get()
-    }
-
-    pub fn down(&self) -> bool {
-        self.inner.get().down()
-    }
-
-    pub fn repeat(&self) -> bool {
-        self.inner.get().repeat()
-    }
-
-    pub fn pressed(&self) -> bool {
-        self.inner.get().pressed()
-    }
-
-    pub fn released(&self) -> bool {
-        self.inner.get().released()
-    }
-}
-
-pub struct Stick {
-    axis: Cell<Axis>,
-    button: Cell<Button>,
-    threshold: Cell<f32>,
-}
-
-impl Stick {
-    pub fn new(threshold: f32) -> Self {
-        Self {
-            axis: Cell::new(Axis { x: 0.0, y: 0.0 }),
-            button: Cell::new(Button::default()),
-            threshold: Cell::new(threshold),
-        }
-    }
-
-    pub fn update(&self, x: f32, y: f32) {
-        let x = if x.abs() <= self.threshold.get() {
-            0.0
-        } else {
-            x
-        };
-        let y = if y.abs() <= self.threshold.get() {
-            0.0
-        } else {
-            y
-        };
-        self.axis.set(Axis { x, y });
     }
 }
 
 pub struct Environment {
     initialized: Cell<bool>,
     quit: Cell<bool>,
-    focused: Cell<bool>,
 
-    window_size: Cell<Vec2>,
-    window_title: String,
-
+    window: Window,
     mouse: Mouse,
     keyboard: Keyboard,
     clock: Clock,
 }
 
 impl Environment {
-    pub fn new() -> Self {
-        let keyboard = Keyboard::new();
-        let mouse = Mouse::default();
-        let clock = Clock::new();
-
-        Self {
-            window_size: Cell::new(Vec2::new(0.0, 0.0)),
-            window_title: "monolith".to_string(),
-            initialized: Cell::new(false),
-            quit: Cell::new(false),
-            focused: Cell::new(true),
-            keyboard,
-            clock,
-            mouse,
-        }
-    }
-
     pub fn initialized(&self) -> bool {
         self.initialized.get()
     }
@@ -236,20 +111,8 @@ impl Environment {
         self.quit.get()
     }
 
-    pub fn window_size(&self) -> Vec2 {
-        self.window_size.get()
-    }
-
-    pub fn window_title(&self) -> &str {
-        &self.window_title
-    }
-
     pub fn update_keyboard(&mut self, key: KeyCode, down: bool) {
         self.keyboard.update(key, down);
-    }
-
-    pub fn update_focused(&mut self, focused: bool) {
-        self.focused.set(focused);
     }
 
     pub fn update_mouse_button(&mut self, button: MouseButton, down: bool) {
@@ -275,5 +138,127 @@ impl Environment {
 
     pub fn clock(&self) -> &Clock {
         &self.clock
+    }
+
+    pub fn update(&mut self, event: Event<()>, control_flow: &mut ControlFlow) {
+        match event {
+            Event::WindowEvent { event, .. } => match event {
+                WindowEvent::CloseRequested => {
+                    *control_flow = ControlFlow::Exit;
+                }
+                WindowEvent::Destroyed => {
+                    *control_flow = ControlFlow::Exit;
+                }
+                WindowEvent::KeyboardInput {
+                    event:
+                        KeyEvent {
+                            state,
+                            physical_key,
+                            ..
+                        },
+                    ..
+                } => match state {
+                    ElementState::Pressed => self.update_keyboard(physical_key, true),
+                    ElementState::Released => self.update_keyboard(physical_key, false),
+                    _ => (),
+                },
+                WindowEvent::Resized(size) => {
+                    //window.request_redraw();
+                }
+                WindowEvent::MouseInput {
+                    state,
+                    button,
+                    device_id,
+                    ..
+                } => match state {
+                    ElementState::Pressed => self.update_mouse_button(button, true),
+                    ElementState::Released => self.update_mouse_button(button, false),
+                    _ => (),
+                },
+                WindowEvent::MouseWheel { delta, .. } => match delta {
+                    MouseScrollDelta::LineDelta(x, _) => {
+                        self.update_mouse_scroll(x);
+                    }
+                    MouseScrollDelta::PixelDelta(pos) => {
+                        self.update_mouse_scroll(pos.x as f32);
+                    }
+                    _ => (),
+                },
+                WindowEvent::CursorMoved { position, .. } => {
+                    self.update_mouse_position(position.x, position.y);
+                }
+                _ => (),
+            },
+            Event::MainEventsCleared => {
+                // Application update code.
+
+                // Queue a RedrawRequested event.
+                //
+                // You only need to call this if you've determined that you need to redraw, in
+                // applications which do not always need to. Applications that redraw continuously
+                // can just render here instead.
+                //window.request_redraw();
+                let keyboard = self.keyboard();
+                let mouse = self.mouse();
+                let clock = self.clock();
+
+                if keyboard.q_key_pressed() {
+                    *control_flow = ControlFlow::Exit;
+                }
+
+                if mouse.left_button().down() {
+                    println!("Mouse position: {:?}", mouse.position());
+                }
+
+                if mouse.right_button().down() {
+                    let now = clock.now();
+                    let resolution = clock.resolution();
+                    println!("Current time: {:?}", now.seconds());
+                    println!("Current resolution: {:?}", resolution);
+                }
+
+                clock.update();
+            }
+            _ => (),
+        }
+    }
+}
+
+pub struct EnvironmentBuilder {
+    window: Window,
+    mouse: Mouse,
+    keyboard: Keyboard,
+    clock: Clock,
+}
+
+impl EnvironmentBuilder {
+    pub fn new(event_loop: &EventLoop<()>, title: &str, width: u32, height: u32) -> Self {
+        let window = WindowBuilder::new()
+            .with_title(title)
+            .with_inner_size(tao::dpi::PhysicalSize::new(width, height))
+            .with_resizable(true)
+            .build(&event_loop)
+            .unwrap();
+        let mouse = Mouse::default();
+        let keyboard = Keyboard::new();
+        let clock = Clock::new();
+
+        Self {
+            window,
+            mouse,
+            keyboard,
+            clock,
+        }
+    }
+
+    pub fn build(self) -> Environment {
+        Environment {
+            initialized: Cell::new(false),
+            quit: Cell::new(false),
+            keyboard: self.keyboard,
+            mouse: self.mouse,
+            clock: self.clock,
+            window: self.window,
+        }
     }
 }

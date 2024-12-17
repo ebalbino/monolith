@@ -1,5 +1,5 @@
-use core::cell::Cell;
-use libc::{clock_getres, clock_gettime, timespec, CLOCK_MONOTONIC};
+use crate::env::Delta;
+use libc::{clock_getres, clock_gettime, timespec, CLOCK_MONOTONIC, CLOCK_REALTIME};
 
 fn get_time() -> u64 {
     let mut ts = timespec {
@@ -9,7 +9,8 @@ fn get_time() -> u64 {
     unsafe {
         clock_gettime(CLOCK_MONOTONIC, &mut ts);
     }
-    ts.tv_sec as u64 * 1_000_000_000 + ts.tv_nsec as u64
+
+    (ts.tv_sec as u64 * 1_000_000_000) + ts.tv_nsec as u64
 }
 
 fn get_resolution() -> u64 {
@@ -18,9 +19,9 @@ fn get_resolution() -> u64 {
         tv_nsec: 0,
     };
     unsafe {
-        clock_getres(CLOCK_MONOTONIC, &mut ts);
+        clock_getres(CLOCK_REALTIME, &mut ts);
     }
-    ts.tv_sec as u64 + ts.tv_nsec as u64
+    (ts.tv_sec as u64 * 1_000_000_000) + ts.tv_nsec as u64
 }
 
 pub struct Instant {
@@ -31,8 +32,7 @@ pub struct Instant {
 pub struct Clock {
     resolution: u64,
     start: u64,
-    current: Cell<u64>,
-    delta: Cell<u64>,
+    current: Delta<u64>,
 }
 
 impl Instant {
@@ -69,8 +69,7 @@ impl Clock {
         Self {
             start,
             resolution,
-            current: Cell::new(0),
-            delta: Cell::new(0),
+            current: Delta::new(0),
         }
     }
 
@@ -78,12 +77,11 @@ impl Clock {
         let current = get_time();
         let start = self.start;
 
-        self.delta.set((current - start) - self.current.get());
-        self.current.set(current - start);
+        self.current.update(current - start);
     }
 
     pub fn now(&self) -> Instant {
-        Instant::new(self.current.get(), self.resolution)
+        Instant::new(self.current.value(), self.resolution)
     }
 
     pub fn resolution(&self) -> u64 {

@@ -1,6 +1,7 @@
+use glam::Vec2;
 use monolith::draw::mesh::Element;
 use monolith::draw::mesh::{make_box, quads_to_triangles};
-use monolith::env::Environment;
+use monolith::env::EnvironmentBuilder;
 use monolith::math::*;
 use monolith::Arena;
 use tao::event::{DeviceEvent, ElementState, Event, KeyEvent, MouseScrollDelta, WindowEvent};
@@ -9,15 +10,9 @@ use tao::window::WindowBuilder;
 
 fn main() {
     let event_loop = EventLoop::new();
-    let _window_one = WindowBuilder::new()
-        .with_title("Monolith")
-        .with_inner_size(tao::dpi::PhysicalSize::new(800, 600))
-        .with_resizable(true)
-        .build(&event_loop);
+    let mut env = EnvironmentBuilder::new(&event_loop, "monolith", 800, 600).build();
 
-    let mut env = Environment::new();
-
-    event_loop.run(move |event, window_target, control_flow| {
+    event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Poll;
 
         match event {
@@ -43,9 +38,6 @@ fn main() {
                 },
                 WindowEvent::Resized(size) => {
                     //window.request_redraw();
-                }
-                WindowEvent::Focused(focused) => {
-                    env.update_focused(focused);
                 }
                 WindowEvent::MouseInput {
                     state,
@@ -101,14 +93,7 @@ fn main() {
 
                 clock.update();
             }
-            Event::RedrawRequested(_) => {
-                // Redraw the application.
-                //
-                // It's preferable for applications that do not render continuously to render in
-                // this event rather than in MainEventsCleared, since rendering in here allows
-                // the program to gracefully handle redraws requested by the OS.
-            }
             _ => (),
         }
-    });
+    })
 }
