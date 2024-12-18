@@ -1,7 +1,8 @@
-use crate::env::{Button, Delta};
 use core::cell::Cell;
-use glam::Vec2;
 use tao::event::MouseButton;
+use crate::math::Vec2;
+use super::button::Button;
+use super::delta::Delta;
 
 type Position = Vec2;
 
@@ -20,14 +21,8 @@ impl Default for Mouse {
             left_button: Cell::new(Button::default()),
             right_button: Cell::new(Button::default()),
             middle_button: Cell::new(Button::default()),
-            position: Delta {
-                value: Cell::new(Position::default()),
-                delta: Cell::new(Position::default()),
-            },
-            scroll: Delta {
-                value: Cell::new(0.0),
-                delta: Cell::new(0.0),
-            },
+            position: Delta::new(Position::default()),
+            scroll: Delta::new(0.0),
         }
     }
 }
@@ -38,11 +33,19 @@ impl Mouse {
     }
 
     pub fn position(&self) -> Position {
-        self.position.value.get()
+        self.position.value()
+    }
+
+    pub fn position_delta(&self) -> Position {
+        self.position.delta()
     }
 
     pub fn scroll(&self) -> f32 {
-        self.scroll.value.get()
+        self.scroll.value()
+    }
+
+    pub fn scroll_delta(&self) -> f32 {
+        self.scroll.delta()
     }
 
     pub fn left_button(&self) -> Button {
@@ -58,16 +61,12 @@ impl Mouse {
     }
 
     pub fn update_position(&self, position: Position) {
-        let value = self.position.value.get();
-
-        self.position.value.set(position);
-        self.position.delta.set(value - position);
+        self.position.update(position);
     }
 
     pub fn update_scroll(&self, delta: f32) {
-        let value = self.scroll.value.get();
-        self.scroll.value.set(value + delta);
-        self.scroll.delta.set(delta);
+        let value = self.scroll.value();
+        self.scroll.update(value + delta);
     }
 
     pub fn update_button(&mut self, button: MouseButton, down: bool) {

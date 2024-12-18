@@ -1,4 +1,4 @@
-use crate::env::Button;
+use super::button::Button;
 use core::cell::Cell;
 use tao::keyboard::KeyCode;
 
@@ -58,21 +58,21 @@ impl Keyboard {
 
     pub fn is_pressed(&self, key: KeyCode) -> bool {
         match self.key(key) {
-            Some(button) => button.pressed,
+            Some(button) => button.pressed(),
             None => false,
         }
     }
 
     pub fn is_released(&self, key: KeyCode) -> bool {
         match self.key(key) {
-            Some(button) => button.released,
+            Some(button) => button.released(),
             None => false,
         }
     }
 
     pub fn is_down(&self, key: KeyCode) -> bool {
         match self.key(key) {
-            Some(button) => button.down,
+            Some(button) => button.down(),
             None => false,
         }
     }
