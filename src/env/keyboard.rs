@@ -38,22 +38,14 @@ impl Keyboard {
     }
 
     pub fn update(&mut self, key: KeyCode, down: bool) {
-        let scancode = key.to_scancode();
-        match scancode {
-            Some(scancode) => {
-                let button = &mut self.keys.get_mut()[scancode as usize];
-                button.update(down);
-            }
-            None => (),
+        if let Some(scancode) = key.to_scancode() {
+            let button = &mut self.keys.get_mut()[scancode as usize];
+            button.update(down);
         }
     }
 
     pub fn key(&self, key: KeyCode) -> Option<Button> {
-        let scancode = key.to_scancode();
-        match scancode {
-            Some(scancode) => Some(self.keys.get()[scancode as usize]),
-            None => None,
-        }
+        key.to_scancode().map(|scancode| self.keys.get()[scancode as usize])
     }
 
     pub fn is_pressed(&self, key: KeyCode) -> bool {
@@ -665,4 +657,10 @@ impl Keyboard {
     key_down!(f33_down, F33);
     key_down!(f34_down, F34);
     key_down!(f35_down, F35);
+}
+
+impl Default for Keyboard {
+    fn default() -> Self {
+        Self::new()
+    }
 }

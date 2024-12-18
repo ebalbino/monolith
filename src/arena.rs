@@ -17,7 +17,7 @@ pub struct ArenaSlice<T> {
     len: usize,
 }
 
-#[derive(Debug, Clone, Eq, Ord)]
+#[derive(Debug, Clone, Eq)]
 pub struct ArenaString {
     inner: ArenaSlice<u8>,
     len: usize,
@@ -162,10 +162,9 @@ impl Arena {
     }
 
     pub fn push_slice<T>(&self, values: &[T]) -> Option<ArenaSlice<T>> {
-        let size = core::mem::size_of::<T>();
         let align = core::mem::align_of::<T>();
         let offset = (self.offset.get() + align - 1) & !(align - 1);
-        let new_offset = offset + (size * values.len());
+        let new_offset = offset + core::mem::size_of_val(values);
 
         if new_offset <= self.data.len() {
             let ptr = &self.data[offset] as *const u8 as *mut T;

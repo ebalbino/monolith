@@ -109,22 +109,10 @@ pub fn merge_meshes(arena: &Arena, meshes: &[Mesh], element_type: ElementType) -
     }
 
     if meshes.iter().any(|m| match element_type {
-        ElementType::Point => match m.elements() {
-            Element::Point(_) => false,
-            _ => true,
-        },
-        ElementType::Line => match m.elements() {
-            Element::Line(_) => false,
-            _ => true,
-        },
-        ElementType::Triangle => match m.elements() {
-            Element::Triangle(_) => false,
-            _ => true,
-        },
-        ElementType::Quad => match m.elements() {
-            Element::Quad(_) => false,
-            _ => true,
-        },
+        ElementType::Point => !matches!(m.elements(), Element::Point(_)),
+        ElementType::Line => !matches!(m.elements(), Element::Line(_)),
+        ElementType::Triangle => !matches!(m.elements(), Element::Triangle(_)),
+        ElementType::Quad => !matches!(m.elements(), Element::Quad(_)),
     }) {
         return None;
     }
@@ -277,10 +265,10 @@ pub fn merge_meshes(arena: &Arena, meshes: &[Mesh], element_type: ElementType) -
         }
 
         positions[vertex_offset..(vertex_offset + mesh.len())]
-            .copy_from_slice(&mesh.positions()[..]);
-        normals[vertex_offset..(vertex_offset + mesh.len())].copy_from_slice(&mesh.normals()[..]);
+            .copy_from_slice(mesh.positions());
+        normals[vertex_offset..(vertex_offset + mesh.len())].copy_from_slice(mesh.normals());
         texcoords[vertex_offset..(vertex_offset + mesh.len())]
-            .copy_from_slice(&mesh.texcoords()[..]);
+            .copy_from_slice(mesh.texcoords());
 
         vertex_offset += mesh.len();
     }
@@ -328,18 +316,18 @@ pub fn make_quads(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2) -> Op
         }
     }
 
-    return Some(Mesh {
+    Some(Mesh {
         vertices: VertexData {
             positions,
             normals,
             texcoords,
         },
         elements: Element::Quad(quads),
-    });
+    })
 }
 
 pub fn make_rect(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2) -> Option<Mesh> {
-    return make_quads(arena, steps, scale, uvscale);
+    make_quads(arena, steps, scale, uvscale)
 }
 
 pub fn make_bulged_rect(
@@ -367,7 +355,7 @@ pub fn make_bulged_rect(
         }
     }
 
-    return Some(rect);
+    Some(rect)
 }
 
 pub fn make_recty(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2) -> Option<Mesh> {
@@ -381,7 +369,7 @@ pub fn make_recty(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2) -> Op
         *normal = Vec3::new(normal.x, normal.z, normal.y);
     }
 
-    return Some(rect);
+    Some(rect)
 }
 
 pub fn make_bulged_recty(
@@ -401,7 +389,7 @@ pub fn make_bulged_recty(
         *normal = Vec3::new(normal.x, normal.z, normal.y);
     }
 
-    return Some(rect);
+    Some(rect)
 }
 
 pub fn make_box(arena: &Arena, steps: Vec3u, scale: Vec3, uvscale: Vec3) -> Option<Mesh> {
@@ -503,7 +491,7 @@ pub fn make_box(arena: &Arena, steps: Vec3u, scale: Vec3, uvscale: Vec3) -> Opti
     }
 
     let faces = [z_plus, z_minus, x_plus, x_minus, y_plus, y_minus];
-    return merge_meshes(arena, &faces, ElementType::Quad);
+    merge_meshes(arena, &faces, ElementType::Quad)
 }
 
 pub fn make_rounded_box(
@@ -557,7 +545,7 @@ pub fn make_rounded_box(
         }
     }
 
-    return Some(box_mesh);
+    Some(box_mesh)
 }
 
 pub fn make_rect_stack(arena: &Arena, steps: Vec3u, scale: Vec3, uvscale: Vec2) -> Option<Mesh> {
@@ -578,7 +566,7 @@ pub fn make_rect_stack(arena: &Arena, steps: Vec3u, scale: Vec3, uvscale: Vec2) 
         meshes[i as usize] = mesh;
     }
 
-    return merge_meshes(arena, &meshes, ElementType::Quad);
+    merge_meshes(arena, &meshes, ElementType::Quad)
 }
 
 pub fn make_floor(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2) -> Option<Mesh> {
@@ -592,7 +580,7 @@ pub fn make_floor(arena: &Arena, steps: Vec2u, scale: Vec2, uvscale: Vec2) -> Op
         *normal = Vec3::new(normal.x, normal.z, normal.y);
     }
 
-    return Some(mesh);
+    Some(mesh)
 }
 
 pub fn make_sphere(arena: &Arena, steps: u32, scale: f32, uvscale: f32) -> Option<Mesh> {
@@ -614,7 +602,7 @@ pub fn make_sphere(arena: &Arena, steps: u32, scale: f32, uvscale: f32) -> Optio
         *normal = pn;
     }
 
-    return Some(mesh);
+    Some(mesh)
 }
 
 pub fn make_uv_sphere(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) -> Option<Mesh> {
@@ -634,7 +622,7 @@ pub fn make_uv_sphere(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) ->
         mesh.vertices.texcoords[i] = uv * uvscale;
     }
 
-    return Some(mesh);
+    Some(mesh)
 }
 
 pub fn make_uv_sphere_y(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) -> Option<Mesh> {
@@ -661,7 +649,7 @@ pub fn make_uv_sphere_y(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) 
         *quad = Vec4u::new(quad.x, quad.w, quad.z, quad.y);
     }
 
-    return Some(mesh);
+    Some(mesh)
 }
 
 pub fn make_capped_uvsphere(
@@ -694,7 +682,7 @@ pub fn make_capped_uvsphere(
         }
     }
 
-    return Some(mesh);
+    Some(mesh)
 }
 
 pub fn make_capped_uvsphere_y(
@@ -727,7 +715,7 @@ pub fn make_capped_uvsphere_y(
         }
     }
 
-    return Some(mesh);
+    Some(mesh)
 }
 
 pub fn make_disk(arena: &Arena, steps: u32, scale: f32, uvscale: f32) -> Option<Mesh> {
@@ -759,7 +747,7 @@ pub fn make_disk(arena: &Arena, steps: u32, scale: f32, uvscale: f32) -> Option<
         *quad = Vec4u::new(quad.x, quad.w, quad.z, quad.y);
     }
 
-    return Some(mesh);
+    Some(mesh)
 }
 
 pub fn make_bulged_disk(
@@ -787,7 +775,7 @@ pub fn make_bulged_disk(
         }
     }
 
-    return Some(disk);
+    Some(disk)
 }
 
 pub fn make_uv_disk(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) -> Option<Mesh> {
@@ -802,7 +790,7 @@ pub fn make_uv_disk(arena: &Arena, steps: Vec2u, scale: f32, uvscale: Vec2) -> O
         disk.vertices.texcoords[i] = uv * uvscale;
     }
 
-    return Some(disk);
+    Some(disk)
 }
 
 pub fn make_lines(
@@ -883,7 +871,7 @@ pub fn quads_to_triangles(arena: &Arena, quads: &ArenaSlice<Vec4u>) -> Option<Ar
         }
     }
 
-    return Some(triangles);
+    Some(triangles)
 }
 
 pub fn triangles_to_quads(
@@ -891,14 +879,12 @@ pub fn triangles_to_quads(
     triangles: ArenaSlice<Vec3u>,
 ) -> Option<ArenaSlice<Vec4u>> {
     let mut quads = arena.allocate::<Vec4u>(triangles.len())?;
-    let mut quad_count = 0;
 
-    for triangle in triangles.iter() {
+    for (quad_count, triangle) in triangles.iter().enumerate() {
         quads[quad_count] = Vec4u::new(triangle.x, triangle.y, triangle.z, triangle.z);
-        quad_count += 1;
     }
 
-    return Some(quads);
+    Some(quads)
 }
 
 #[cfg(test)]

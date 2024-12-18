@@ -55,7 +55,7 @@ fn read_directory(arena: &Arena, path: &str) -> Vec<INode> {
     let mut nodes = Vec::with_capacity(16);
 
     unsafe {
-        let dirp = opendir(cstr(&arena, path));
+        let dirp = opendir(cstr(arena, path));
         let mut entry = readdir(dirp);
 
         while !entry.is_null() {
@@ -70,7 +70,7 @@ fn read_directory(arena: &Arena, path: &str) -> Vec<INode> {
                     let _ = write!(&mut file_path, "{}/{}", path, name);
                     match inner.d_type {
                         DT_DIR => {
-                            let inner_nodes = read_directory(&arena, &file_path);
+                            let inner_nodes = read_directory(arena, &file_path);
                             nodes.push(INode::Directory(inner_nodes));
                         }
                         DT_REG => {
@@ -117,7 +117,7 @@ impl<'a> Filesystem<'a> {
 
         match entry {
             None => {
-                let cpath = cstr(&self.arena, &path);
+                let cpath = cstr(&self.arena, path);
                 let handle = unsafe { open(cpath, O_RDWR | O_CREAT) };
 
                 loaded.insert(path, handle);
@@ -153,7 +153,7 @@ impl<'a> Filesystem<'a> {
     }
 }
 
-impl<'a> Drop for Filesystem<'a> {
+impl Drop for Filesystem<'_> {
     fn drop(&mut self) {
         for (_path, desc) in self.loaded.borrow().iter() {
             unsafe {
@@ -187,7 +187,7 @@ impl File {
                 self.size()
             }
             Some(stat) => {
-                return stat.st_size;
+                stat.st_size
             }
         }
     }
@@ -199,7 +199,7 @@ impl File {
                 self.blocks()
             }
             Some(stat) => {
-                return stat.st_blocks;
+                stat.st_blocks
             }
         }
     }

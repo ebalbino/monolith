@@ -88,3 +88,9 @@ impl Clock {
         self.resolution
     }
 }
+
+impl Default for Clock {
+    fn default() -> Self {
+        Self::new()
+    }
+}

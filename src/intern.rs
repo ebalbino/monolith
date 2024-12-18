@@ -21,7 +21,7 @@ impl Deref for StrIntern {
     fn deref(&self) -> &Self::Target {
         unsafe {
             core::str::from_utf8_unchecked(core::slice::from_raw_parts(
-                self.data as *const u8,
+                self.data,
                 self.len,
             ))
         }
@@ -38,16 +38,14 @@ impl StrPool {
 
     pub fn intern<'a>(&self, value: &'a str) -> Option<&'a str> {
         for intern in self.lookup.borrow().iter() {
-            if intern.len == value.len() {
-                if intern.as_bytes() == value.as_bytes() {
+            if intern.len == value.len() &&  intern.as_bytes() == value.as_bytes() {
                     let data = unsafe {
                         core::str::from_utf8_unchecked(core::slice::from_raw_parts(
-                            intern.as_ptr() as *const u8,
+                            intern.as_ptr(),
                             intern.len,
                         ))
                     };
                     return Some(data);
-                }
             }
         }
 
@@ -55,7 +53,7 @@ impl StrPool {
         let string = arena.push_string(value)?;
         let data = unsafe {
             core::str::from_utf8_unchecked(core::slice::from_raw_parts(
-                string.as_ptr() as *const u8,
+                string.as_ptr(),
                 string.len(),
             ))
         };
@@ -74,6 +72,10 @@ impl StrPool {
 
     pub fn len(&self) -> usize {
         self.lookup.borrow().len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.lookup.borrow().is_empty()
     }
 }
 

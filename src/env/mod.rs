@@ -2,28 +2,22 @@ use core::cell::Cell;
 use crate::math::Vec2;
 use tao::event::MouseButton;
 use tao::event::{ElementState, Event, KeyEvent, MouseScrollDelta, WindowEvent};
-use tao::event_loop::{ControlFlow, EventLoop};
+use tao::event_loop::{ControlFlow};
 use tao::keyboard::KeyCode;
-use tao::window::{WindowId, WindowBuilder};
+use tao::window::{WindowId};
 
+mod builder;
 mod button;
 mod delta;
 mod clock;
 mod keyboard;
 mod mouse;
 
+pub use builder::EnvironmentBuilder;
 use delta::Delta;
 use clock::Clock;
 use keyboard::Keyboard;
 use mouse::Mouse;
-
-#[derive(Clone, Copy)]
-pub struct WindowConfig {
-    title: &'static str,
-    width: u32,
-    height: u32,
-    resizable: bool,
-}
 
 #[derive(Clone, Copy)]
 pub struct WindowDef {
@@ -44,15 +38,22 @@ pub struct Environment {
     clock: Clock,
 }
 
-pub struct EnvironmentBuilder {
-    windows: Vec<WindowConfig>,
-    mouse: Mouse,
-    keyboard: Keyboard,
-    clock: Clock,
-}
-
-
 impl Environment {
+    pub fn new(windows: Vec<Cell<WindowDef>>) -> Self {
+        let mouse = Mouse::default();
+        let keyboard = Keyboard::new();
+        let clock = Clock::new();
+
+        Self {
+            initialized: Cell::new(false),
+            quit: Cell::new(false),
+            windows,
+            mouse,
+            keyboard,
+            clock,
+        }
+    }
+
     pub fn initialized(&self) -> bool {
         self.initialized.get()
     }
@@ -192,67 +193,6 @@ impl Environment {
                 clock.update();
             }
             _ => (),
-        }
-    }
-}
-
-impl EnvironmentBuilder {
-    pub fn new() -> Self {
-        let windows = Vec::new();
-        let mouse = Mouse::default();
-        let keyboard = Keyboard::new();
-        let clock = Clock::new();
-
-        Self {
-            windows,
-            mouse,
-            keyboard,
-            clock,
-        }
-    }
-
-    pub fn window(&mut self, title: &'static str, width: u32, height: u32, resizable: bool) -> &mut Self {
-        let window = WindowConfig {
-            title,
-            width,
-            height,
-            resizable,
-        };
-
-        self.windows.push(window);
-        self
-    }
-
-    pub fn build(self, event_loop: &EventLoop<()>) -> Environment {
-        let windows = self.windows.into_iter().map(|w| {
-            let title = w.title;
-            let width = w.width;
-            let height = w.height;
-            let resizable = w.resizable;
-            
-            let window = WindowBuilder::new()
-                .with_title(title)
-                .with_inner_size(tao::dpi::PhysicalSize::new(width, height))
-                .with_resizable(resizable)
-                .build(&event_loop)
-                .unwrap();
-
-            Cell::new(WindowDef {
-                id: window.id(),
-                title,
-                width,
-                height,
-                resizable,
-            })
-        }).collect();
-
-        Environment {
-            initialized: Cell::new(false),
-            quit: Cell::new(false),
-            keyboard: self.keyboard,
-            mouse: self.mouse,
-            clock: self.clock,
-            windows,
         }
     }
 }

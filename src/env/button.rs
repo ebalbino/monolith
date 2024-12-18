@@ -1,21 +1,10 @@
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Default, Clone, Copy, Debug)]
 pub struct Button {
     down: bool,
     repeat: bool,
     pressed: bool,
     released: bool,
-}
-
-impl Default for Button {
-    fn default() -> Self {
-        Self {
-            down: false,
-            repeat: false,
-            pressed: false,
-            released: false,
-        }
-    }
 }
 
 impl Button {

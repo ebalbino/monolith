@@ -254,7 +254,7 @@ pub fn cosine_lerp<T>(a: T, b: T, t: f32) -> T
 where
     T: Mul<f32, Output = T> + Add<Output = T> + Sub<Output = T> + Copy,
 {
-    let t = 0.5 - (t.fract() as f32 * core::f32::consts::PI).cos() * 0.5;
+    let t = 0.5 - (t.fract() * core::f32::consts::PI).cos() * 0.5;
     a + (b - a) * t
 }
 
