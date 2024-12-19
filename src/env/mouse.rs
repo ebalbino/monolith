@@ -1,8 +1,8 @@
-use core::cell::Cell;
-use tao::event::MouseButton;
-use crate::math::Vec2;
 use super::button::Button;
 use super::delta::Delta;
+use crate::math::Vec2;
+use core::cell::Cell;
+use tao::event::MouseButton;
 
 type Position = Vec2;
 
@@ -69,14 +69,14 @@ impl Mouse {
         self.scroll.update(value + delta);
     }
 
-    pub fn update_button(&mut self, button: MouseButton, down: bool) {
-        let button = match button {
-            MouseButton::Left => self.left_button.get_mut(),
-            MouseButton::Right => self.right_button.get_mut(),
-            MouseButton::Middle => self.middle_button.get_mut(),
-            _ => return,
-        };
-
-        button.update(down);
+    pub fn update_button(&self, mouse_button: MouseButton, down: bool) {
+        match mouse_button {
+            MouseButton::Left => self.left_button.set(self.left_button.get().update(down)),
+            MouseButton::Right => self.right_button.set(self.right_button.get().update(down)),
+            MouseButton::Middle => self
+                .middle_button
+                .set(self.middle_button.get().update(down)),
+            _ => (),
+        }
     }
 }

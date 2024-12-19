@@ -1,4 +1,3 @@
-
 #[derive(Default, Clone, Copy, Debug)]
 pub struct Button {
     down: bool,
@@ -12,12 +11,19 @@ impl Button {
         Self::default()
     }
 
-    pub fn update(&mut self, down: bool) {
+    pub fn update(&self, down: bool) -> Button {
         let was_down = self.down;
-        self.down = down;
-        self.repeat = was_down && down;
-        self.pressed = !was_down && down;
-        self.released = was_down && !down;
+        let down = down;
+        let repeat = was_down && down;
+        let pressed = !was_down && down;
+        let released = was_down && !down;
+
+        Self {
+            down,
+            repeat,
+            pressed,
+            released,
+        }
     }
 
     pub fn down(&self) -> bool {

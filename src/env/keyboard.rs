@@ -1,5 +1,5 @@
 use super::button::Button;
-use core::cell::Cell;
+use core::cell::RefCell;
 use tao::keyboard::KeyCode;
 
 macro_rules! key_pressed {
@@ -28,24 +28,25 @@ macro_rules! key_down {
 
 #[derive(Clone)]
 pub struct Keyboard {
-    keys: Cell<[Button; 512]>,
+    keys: RefCell<[Button; 512]>,
 }
 
 impl Keyboard {
     pub fn new() -> Self {
-        let keys = Cell::new([Button::default(); 512]);
+        let keys = RefCell::new([Button::default(); 512]);
         Self { keys }
     }
 
-    pub fn update(&mut self, key: KeyCode, down: bool) {
+    pub fn update(&self, key: KeyCode, down: bool) {
         if let Some(scancode) = key.to_scancode() {
-            let button = &mut self.keys.get_mut()[scancode as usize];
-            button.update(down);
+            let mut keys = self.keys.borrow_mut();
+            keys[scancode as usize] = keys[scancode as usize].update(down);
         }
     }
 
     pub fn key(&self, key: KeyCode) -> Option<Button> {
-        key.to_scancode().map(|scancode| self.keys.get()[scancode as usize])
+        key.to_scancode()
+            .map(|scancode| self.keys.borrow()[scancode as usize])
     }
 
     pub fn is_pressed(&self, key: KeyCode) -> bool {

@@ -1,21 +1,21 @@
-use core::cell::Cell;
 use crate::math::Vec2;
+use core::cell::{Cell, RefCell};
 use tao::event::MouseButton;
 use tao::event::{ElementState, Event, KeyEvent, MouseScrollDelta, WindowEvent};
-use tao::event_loop::{ControlFlow};
+use tao::event_loop::ControlFlow;
 use tao::keyboard::KeyCode;
-use tao::window::{WindowId};
+use tao::window::WindowId;
 
 mod builder;
 mod button;
-mod delta;
 mod clock;
+mod delta;
 mod keyboard;
 mod mouse;
 
 pub use builder::EnvironmentBuilder;
-use delta::Delta;
 use clock::Clock;
+use delta::Delta;
 use keyboard::Keyboard;
 use mouse::Mouse;
 
@@ -32,14 +32,15 @@ pub struct Environment {
     initialized: Cell<bool>,
     quit: Cell<bool>,
 
-    windows: Vec<Cell<WindowDef>>,
+    windows: RefCell<Vec<WindowDef>>,
     mouse: Mouse,
     keyboard: Keyboard,
     clock: Clock,
 }
 
 impl Environment {
-    pub fn new(windows: Vec<Cell<WindowDef>>) -> Self {
+    pub fn new(windows: Vec<WindowDef>) -> Self {
+        let windows = RefCell::new(windows);
         let mouse = Mouse::default();
         let keyboard = Keyboard::new();
         let clock = Clock::new();
@@ -62,20 +63,20 @@ impl Environment {
         self.quit.get()
     }
 
-    pub fn update_keyboard(&mut self, key: KeyCode, down: bool) {
+    pub fn update_keyboard(&self, key: KeyCode, down: bool) {
         self.keyboard.update(key, down);
     }
 
-    pub fn update_mouse_button(&mut self, button: MouseButton, down: bool) {
+    pub fn update_mouse_button(&self, button: MouseButton, down: bool) {
         self.mouse.update_button(button, down);
     }
 
-    pub fn update_mouse_position(&mut self, x: f64, y: f64) {
+    pub fn update_mouse_position(&self, x: f64, y: f64) {
         let position = Vec2::new(x as f32, y as f32);
         self.mouse.update_position(position);
     }
 
-    pub fn update_mouse_scroll(&mut self, delta: f32) {
+    pub fn update_mouse_scroll(&self, delta: f32) {
         self.mouse.update_scroll(delta);
     }
 
@@ -91,33 +92,31 @@ impl Environment {
         &self.clock
     }
 
-    pub fn windows(&self) -> &[Cell<WindowDef>] {
+    pub fn windows(&self) -> &RefCell<Vec<WindowDef>> {
         &self.windows
     }
 
-    pub fn window(&self, id: WindowId) -> Option<&Cell<WindowDef>> {
-        self.windows.iter().find(|w| w.get().id == id)
-    }
-
-    pub fn window_mut(&mut self, id: WindowId) -> Option<&mut Cell<WindowDef>> {
-        self.windows.iter_mut().find(|w| w.get().id == id)
+    pub fn window(&self, id: WindowId) -> Option<WindowDef> {
+        self.windows.borrow().iter().find(|w| w.id == id).copied()
     }
 
     pub fn window_title(&self, id: WindowId) -> Option<&'static str> {
-        self.window(id).map(|w| w.get().title)
+        self.window(id).map(|w| w.title)
     }
 
     pub fn window_size(&self, id: WindowId) -> Option<(u32, u32)> {
-        self.window(id).map(|w| (w.get().width, w.get().height))
+        self.window(id).map(|w| (w.width, w.height))
     }
 
     pub fn window_resizable(&self, id: WindowId) -> Option<bool> {
-        self.window(id).map(|w| w.get().resizable)
+        self.window(id).map(|w| w.resizable)
     }
 
-    pub fn update(&mut self, event: Event<()>, control_flow: &mut ControlFlow) {
+    pub fn update(&self, event: Event<()>, control_flow: &mut ControlFlow) {
         match event {
-            Event::WindowEvent { event, window_id, .. } => match event {
+            Event::WindowEvent {
+                event, window_id, ..
+            } => match event {
                 WindowEvent::CloseRequested => {
                     *control_flow = ControlFlow::Exit;
                 }
@@ -140,18 +139,17 @@ impl Environment {
                 WindowEvent::Resized(size) => {
                     let width = size.width;
                     let height = size.height;
+                    let mut windows = self.windows().borrow_mut();
 
-                        if let Some(cell) = self.window_mut(window_id) {
-                            let window = cell.get_mut();
-                            window.width = width;
-                            window.height = height;
-                        }
+                    if let Some(window) = windows.iter_mut().find(|w| w.id == window_id) {
+                        *window = WindowDef {
+                            width,
+                            height,
+                            ..*window
+                        };
+                    }
                 }
-                WindowEvent::MouseInput {
-                    state,
-                    button,
-                    ..
-                } => match state {
+                WindowEvent::MouseInput { state, button, .. } => match state {
                     ElementState::Pressed => self.update_mouse_button(button, true),
                     ElementState::Released => self.update_mouse_button(button, false),
                     _ => (),
@@ -196,4 +194,3 @@ impl Environment {
         }
     }
 }
-

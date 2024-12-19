@@ -1,5 +1,5 @@
-use core::ops::Sub;
 use core::cell::Cell;
+use core::ops::Sub;
 
 pub struct Delta<T: Copy + Sub<Output = T>> {
     value: Cell<T>,
