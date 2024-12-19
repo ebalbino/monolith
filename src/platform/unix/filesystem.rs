@@ -186,9 +186,7 @@ impl File {
                 self.stat();
                 self.size()
             }
-            Some(stat) => {
-                stat.st_size
-            }
+            Some(stat) => stat.st_size,
         }
     }
 
@@ -198,9 +196,7 @@ impl File {
                 self.stat();
                 self.blocks()
             }
-            Some(stat) => {
-                stat.st_blocks
-            }
+            Some(stat) => stat.st_blocks,
         }
     }
 

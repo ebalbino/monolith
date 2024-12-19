@@ -19,12 +19,7 @@ impl Deref for StrIntern {
     type Target = str;
 
     fn deref(&self) -> &Self::Target {
-        unsafe {
-            core::str::from_utf8_unchecked(core::slice::from_raw_parts(
-                self.data,
-                self.len,
-            ))
-        }
+        unsafe { core::str::from_utf8_unchecked(core::slice::from_raw_parts(self.data, self.len)) }
     }
 }
 
@@ -38,14 +33,14 @@ impl StrPool {
 
     pub fn intern<'a>(&self, value: &'a str) -> Option<&'a str> {
         for intern in self.lookup.borrow().iter() {
-            if intern.len == value.len() &&  intern.as_bytes() == value.as_bytes() {
-                    let data = unsafe {
-                        core::str::from_utf8_unchecked(core::slice::from_raw_parts(
-                            intern.as_ptr(),
-                            intern.len,
-                        ))
-                    };
-                    return Some(data);
+            if intern.len == value.len() && intern.as_bytes() == value.as_bytes() {
+                let data = unsafe {
+                    core::str::from_utf8_unchecked(core::slice::from_raw_parts(
+                        intern.as_ptr(),
+                        intern.len,
+                    ))
+                };
+                return Some(data);
             }
         }
 

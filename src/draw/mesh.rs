@@ -264,11 +264,9 @@ pub fn merge_meshes(arena: &Arena, meshes: &[Mesh], element_type: ElementType) -
             },
         }
 
-        positions[vertex_offset..(vertex_offset + mesh.len())]
-            .copy_from_slice(mesh.positions());
+        positions[vertex_offset..(vertex_offset + mesh.len())].copy_from_slice(mesh.positions());
         normals[vertex_offset..(vertex_offset + mesh.len())].copy_from_slice(mesh.normals());
-        texcoords[vertex_offset..(vertex_offset + mesh.len())]
-            .copy_from_slice(mesh.texcoords());
+        texcoords[vertex_offset..(vertex_offset + mesh.len())].copy_from_slice(mesh.texcoords());
 
         vertex_offset += mesh.len();
     }
