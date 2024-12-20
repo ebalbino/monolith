@@ -45,7 +45,7 @@ impl Instant {
     }
 
     pub fn nanoseconds(&self) -> u64 {
-        self.ticks / self.resolution
+        self.ticks * self.resolution
     }
 
     pub fn microseconds(&self) -> u64 {
@@ -57,7 +57,7 @@ impl Instant {
     }
 
     pub fn seconds(&self) -> f64 {
-        self.milliseconds() as f64 / 1_000.0
+        (self.milliseconds() as f64 / 1_000.0) / self.resolution as f64
     }
 }
 
