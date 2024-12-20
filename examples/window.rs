@@ -1,7 +1,7 @@
 use glam::Vec2;
 use monolith::draw::mesh::Element;
 use monolith::draw::mesh::{make_box, quads_to_triangles};
-use monolith::env::EnvironmentBuilder;
+use monolith::env::Environment;
 use monolith::math::*;
 use monolith::Arena;
 use tao::event::{DeviceEvent, ElementState, Event, KeyEvent, MouseScrollDelta, WindowEvent};
@@ -9,8 +9,20 @@ use tao::event_loop::{ControlFlow, EventLoop};
 use tao::window::WindowBuilder;
 
 fn main() {
+    let title = "Monolith";
+    let width = 800;
+    let height = 600;
+    let resizable = true;
+    
     let event_loop = EventLoop::new();
-    let mut env = EnvironmentBuilder::new(&event_loop, "monolith", 800, 600).build();
+    let window = WindowBuilder::new()
+        .with_title(title)
+        .with_inner_size(tao::dpi::PhysicalSize::new(width, height))
+        .with_resizable(resizable)
+        .build(&event_loop)
+        .unwrap();
+
+    let mut env = Environment::new(window);
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = ControlFlow::Poll;
