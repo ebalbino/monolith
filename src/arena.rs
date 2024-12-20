@@ -37,6 +37,12 @@ impl<T> DerefMut for ArenaSlice<T> {
     }
 }
 
+impl<T> AsRef<[T]> for ArenaSlice<T> {
+    fn as_ref(&self) -> &[T] {
+        self.deref()
+    }
+}
+
 impl<T> Clone for ArenaSlice<T> {
     fn clone(&self) -> Self {
         let new_ptr = unsafe { (*self.arena).push_slice(&self[..]).unwrap().as_ptr() as *mut T };
@@ -60,6 +66,12 @@ impl Deref for ArenaString {
 impl DerefMut for ArenaString {
     fn deref_mut(&mut self) -> &mut Self::Target {
         unsafe { core::str::from_utf8_unchecked_mut(&mut self.inner) }
+    }
+}
+
+impl AsRef<str> for ArenaString {
+    fn as_ref(&self) -> &str {
+        self.deref()
     }
 }
 
