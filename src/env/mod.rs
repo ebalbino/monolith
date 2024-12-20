@@ -4,43 +4,31 @@ use tao::event::MouseButton;
 use tao::event::{ElementState, Event, KeyEvent, MouseScrollDelta, WindowEvent};
 use tao::event_loop::ControlFlow;
 use tao::keyboard::KeyCode;
-use tao::window::WindowId;
+use tao::window::Window;
 
-mod builder;
 mod button;
 mod clock;
 mod delta;
 mod keyboard;
 mod mouse;
 
-pub use builder::EnvironmentBuilder;
 use clock::Clock;
 use delta::Delta;
 use keyboard::Keyboard;
 use mouse::Mouse;
 
-#[derive(Clone, Copy)]
-pub struct WindowDef {
-    id: WindowId,
-    title: &'static str,
-    width: u32,
-    height: u32,
-    resizable: bool,
-}
-
 pub struct Environment {
     initialized: Cell<bool>,
     quit: Cell<bool>,
 
-    windows: RefCell<Vec<WindowDef>>,
+    window: Window,
     mouse: Mouse,
     keyboard: Keyboard,
     clock: Clock,
 }
 
 impl Environment {
-    pub fn new(windows: Vec<WindowDef>) -> Self {
-        let windows = RefCell::new(windows);
+    pub fn new(window: Window) -> Self {
         let mouse = Mouse::default();
         let keyboard = Keyboard::new();
         let clock = Clock::new();
@@ -48,7 +36,7 @@ impl Environment {
         Self {
             initialized: Cell::new(false),
             quit: Cell::new(false),
-            windows,
+            window,
             mouse,
             keyboard,
             clock,
@@ -92,24 +80,17 @@ impl Environment {
         &self.clock
     }
 
-    pub fn windows(&self) -> &RefCell<Vec<WindowDef>> {
-        &self.windows
+    pub fn window_title(&self) -> String {
+        self.window.title()
     }
 
-    pub fn window(&self, id: WindowId) -> Option<WindowDef> {
-        self.windows.borrow().iter().find(|w| w.id == id).copied()
+    pub fn window_size(&self) -> (u32, u32) {
+        let size = self.window.inner_size();
+        (size.width, size.height)
     }
 
-    pub fn window_title(&self, id: WindowId) -> Option<&'static str> {
-        self.window(id).map(|w| w.title)
-    }
-
-    pub fn window_size(&self, id: WindowId) -> Option<(u32, u32)> {
-        self.window(id).map(|w| (w.width, w.height))
-    }
-
-    pub fn window_resizable(&self, id: WindowId) -> Option<bool> {
-        self.window(id).map(|w| w.resizable)
+    pub fn window_resizable(&self) -> bool {
+        self.window.is_resizable()
     }
 
     pub fn update(&self, event: Event<()>, control_flow: &mut ControlFlow) {
@@ -136,19 +117,6 @@ impl Environment {
                     ElementState::Released => self.update_keyboard(physical_key, false),
                     _ => (),
                 },
-                WindowEvent::Resized(size) => {
-                    let width = size.width;
-                    let height = size.height;
-                    let mut windows = self.windows().borrow_mut();
-
-                    if let Some(window) = windows.iter_mut().find(|w| w.id == window_id) {
-                        *window = WindowDef {
-                            width,
-                            height,
-                            ..*window
-                        };
-                    }
-                }
                 WindowEvent::MouseInput { state, button, .. } => match state {
                     ElementState::Pressed => self.update_mouse_button(button, true),
                     ElementState::Released => self.update_mouse_button(button, false),
