@@ -1,7 +1,7 @@
 use crate::arena::{Arena, ArenaSlice, ArenaString};
 use crate::intern::StrPool;
 use alloc::collections::BTreeMap;
-use alloc::fmt::Write;
+use core::fmt::Write;
 use alloc::vec::Vec;
 use core::cell::{OnceCell, Ref, RefCell};
 use core::mem;
@@ -74,7 +74,7 @@ fn read_directory(arena: &Arena, path: &str) -> Vec<INode> {
                             nodes.push(INode::Directory(inner_nodes));
                         }
                         DT_REG => {
-                            nodes.push(INode::File(arena.push_string(&file_path).unwrap()));
+                            nodes.push(INode::File(file_path));
                         }
                         _ => {}
                     }
@@ -236,7 +236,7 @@ impl File {
 
     pub fn read_to_string(&self, arena: &Arena) -> ArenaString {
         let inner = self.read(arena);
-        ArenaString::from_view(inner)
+        ArenaString::from_slice(inner)
     }
 
     pub fn append(&self, data: &[u8]) {

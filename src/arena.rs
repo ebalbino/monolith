@@ -107,7 +107,7 @@ impl Write for ArenaString {
 }
 
 impl ArenaString {
-    pub fn from_view(view: ArenaSlice<u8>) -> ArenaString {
+    pub fn from_slice(view: ArenaSlice<u8>) -> ArenaString {
         ArenaString {
             inner: view,
             len: 0,
